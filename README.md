@@ -68,7 +68,7 @@ Every 25 extra chapacity after the first 25 adds another 1 weight to the module.
 ```mermaid
 xychart-beta
     title "Weight Curve"
-    x-axis [1, 25, 35, 51, 76, 100]
+    x-axis "Capacity" [1, 25, 35, 51, 76, 100]
     y-axis "Weight" 0 --> 6
     bar [3, 3, 4, 5, 6, 6]
 ```
