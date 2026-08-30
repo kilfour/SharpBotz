@@ -2,7 +2,7 @@ using QuickPulse.Explains;
 using SharpBotz.Botz.BotModules;
 using SharpBotz.Botz.BotModules.Reactors;
 
-namespace SharpBotz.Tests.Docs.B_Bot.A_Modules.B_Reactor;
+namespace SharpBotz.Tests.Docs.B_Bot.A_Modules.A_Reactor;
 
 
 [DocFile]
