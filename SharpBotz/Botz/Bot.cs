@@ -49,7 +49,7 @@ public class Bot
 
     //     if (!ReferenceEquals(this, attacker))
     //     {
-    //         attacker.DamageDealt = checked(
+    //         attacker.DamageDealt = (
     //             attacker.DamageDealt + previousHitPoints - HitPoints);
     //         if (wasAlive && !IsAlive)
     //         {
@@ -94,11 +94,11 @@ public class Bot
     //         .DefaultIfEmpty()
     //         .Max();
 
-    // public int ScannerViewSize => checked((ScannerRange * 2) + 1);
+    // public int ScannerViewSize => ((ScannerRange * 2) + 1);
 
     // public void ApplyState(Position nextPosition, Direction nextDirection)
     // {
-    //     DistanceTravelled = checked(
+    //     DistanceTravelled = (
     //         DistanceTravelled +
     //         Math.Abs(nextPosition.X - position.X) +
     //         Math.Abs(nextPosition.Y - position.Y));

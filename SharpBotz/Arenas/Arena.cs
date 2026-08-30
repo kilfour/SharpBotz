@@ -47,7 +47,7 @@ public class Arena
         return this;
     }
 
-    // internal ArenaTileType[,] GetSlice(Position center, int size)
+    // public ArenaTileType[,] GetSlice(Position center, int size)
     // {
     //     if (size < 1)
     //     {
@@ -72,7 +72,7 @@ public class Arena
     //     return slice;
     // }
 
-    // internal ScanResult[,] GetScan(
+    // public ScanResult[,] GetScan(
     //     Bot observer,
     //     int size,
     //     ILookup<(int X, int Y), Bot> botsByPosition)
@@ -122,7 +122,7 @@ public class Arena
     //             "The arena contains a bot tile without a corresponding bot."),
     //     };
 
-    // internal IReadOnlyList<Position> GetAvailableSpawnPositions(IEnumerable<Bot> bots)
+    // public IReadOnlyList<Position> GetAvailableSpawnPositions(IEnumerable<Bot> bots)
     // {
     //     ArgumentNullException.ThrowIfNull(bots);
 
@@ -179,7 +179,7 @@ public class Arena
     //     IsInBounds(position.X, position.Y) &&
     //     grid[position.X, position.Y] == tileType;
 
-    // internal bool IsTraversable(Position position) =>
+    // public bool IsTraversable(Position position) =>
     //     IsInBounds(position.X, position.Y) &&
     //     grid[position.X, position.Y] != ArenaTileType.Wall;
 

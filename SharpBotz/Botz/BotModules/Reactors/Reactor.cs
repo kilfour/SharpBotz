@@ -19,17 +19,17 @@ public class Reactor : BotModule
 
     public int CurrentOutput { get; private set; }
 
-    internal void SetOutput(int output) => CurrentOutput = output;
+    public void SetOutput(int output) => CurrentOutput = output;
 
-    private protected override ModuleInfo CreateInfo(int totalWeight) =>
+    protected override ModuleInfo CreateInfo(int totalWeight) =>
         new ReactorInfo(Id, Weight, MaximumOutput, CurrentOutput);
 
     private static int GetWeight(int outputPerTurn)
     {
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(outputPerTurn);
-        var outputSquared = checked((long)outputPerTurn * outputPerTurn);
+        var outputSquared = (long)outputPerTurn * outputPerTurn;
         var outputWeight = (outputSquared / 25) +
                            (outputSquared % 25 == 0 ? 0 : 1);
-        return checked(2 + (int)outputWeight);
+        return 2 + (int)outputWeight;
     }
 }

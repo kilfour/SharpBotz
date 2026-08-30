@@ -28,13 +28,13 @@ public class Battery : BotModule
 
     public void Empty() => Charge = 0;
 
-    private protected override ModuleInfo CreateInfo(int totalWeight) =>
+    protected override ModuleInfo CreateInfo(int totalWeight) =>
         new BatteryInfo(Id, Weight, Capacity, Charge);
 
     private static int GetWeight(int capacity)
     {
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(capacity);
         var capacityWeight = (capacity / 25) + (capacity % 25 == 0 ? 0 : 1);
-        return checked(2 + capacityWeight);
+        return 2 + capacityWeight;
     }
 }

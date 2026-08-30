@@ -4,7 +4,7 @@ public abstract class BotModule
 {
     private bool installed;
 
-    private protected BotModule(
+    protected BotModule(
         ModuleId id,
         int weight)
     {
@@ -23,5 +23,5 @@ public abstract class BotModule
 
     public ModuleInfo GetInfo(int totalWeight) => CreateInfo(totalWeight);
 
-    private protected abstract ModuleInfo CreateInfo(int totalWeight);
+    protected abstract ModuleInfo CreateInfo(int totalWeight);
 }
