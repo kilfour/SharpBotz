@@ -39,8 +39,6 @@ public class Arena
 
     public ArenaTileType this[int x, int y] => grid[x, y];
 
-
-
     public Arena AddWallAt(int x, int y)
     {
         if (grid[x, y] != ArenaTileType.Empty)

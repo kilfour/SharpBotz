@@ -51,3 +51,24 @@ Containing the following message:
 ```
 ## Bot
 ### Modules
+Every module is defined by a `ModuleId`.  
+```csharp
+ModuleId.Is("my-module")
+```
+A `ModuleId` can not be `null`, `string.Empty` or consist only of whitespace.  
+#### Battery
+A Battery is created by passing in it's capacity along with a ModuleId.  
+```csharp
+Battery.Create(ModuleId.Is("battery"), 100);
+```
+It's initial Charge is set to zero.  
+A Battery with a capacity of zero throws upon construction.  
+A Battery with a capacity of 1 has a weight of 3.  
+Every 25 extra chapacity after the first 25 adds another 1 weight to the module.   
+```mermaid
+xychart-beta
+    title "Weight Curve"
+    x-axis [1, 25, 35, 51, 76, 100]
+    y-axis "Weight" 0 --> 6
+    bar [3, 3, 4, 5, 6, 6]
+```
