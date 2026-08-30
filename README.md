@@ -49,3 +49,5 @@ Containing the following message:
 ```text
 "Tried adding a wall to non empty tile at [1, 1].";
 ```
+## Bot
+### Modules

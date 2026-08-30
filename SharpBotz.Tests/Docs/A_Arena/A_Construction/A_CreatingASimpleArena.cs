@@ -1,7 +1,7 @@
 using QuickPulse.Explains;
 using SharpBotz.Arenas;
 
-namespace SharpBotz.Tests.Docs.Arenas.A_Construction;
+namespace SharpBotz.Tests.Docs.A_Arena.A_Construction;
 
 [DocFile]
 public class A_CreatingASimpleArena
