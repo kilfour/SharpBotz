@@ -16,7 +16,7 @@ Wall      Wall
 Wall Wall Wall
 ```
 Both `ArenaWidth` and `ArenaHeight` must be greater than 2  
-#### Adding Walls
+### Adding Walls
 This can be achieved in the following way:  
 ```csharp
 Arena
