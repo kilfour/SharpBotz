@@ -8,8 +8,8 @@ public class Battery : BotModule
         Capacity = capacity;
     }
 
-    public static Battery Create(ModuleId id, int capacity)
-        => new(id, capacity);
+    public static Battery Create(string moduleId, int capacity)
+        => new(ModuleId.Is(moduleId), capacity);
 
     public int Capacity { get; }
 

@@ -1,7 +1,7 @@
 namespace SharpBotz.Botz;
 
 
-public sealed class Bot
+public class Bot
 {
     public const int MaximumHitPoints = 100;
     public const int MaximumWeight = 100;
