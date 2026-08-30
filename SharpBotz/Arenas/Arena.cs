@@ -43,6 +43,8 @@ public class Arena
 
     public Arena AddWallAt(int x, int y)
     {
+        if (grid[x, y] != ArenaTileType.Empty)
+            throw new ArenaConstructionException($"Tried adding a wall to non empty tile at [{x}, {y}].");
         grid[x, y] = ArenaTileType.Wall;
         return this;
     }

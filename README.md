@@ -32,3 +32,20 @@ Wall Wall Wall Wall Wall
 Wall Wall      Wall Wall
 Wall Wall Wall Wall Wall
 ```
+Placing a wall where one is already present:  
+```csharp
+Arena
+    .Create(
+        ArenaWidth.Is(5),
+        ArenaHeight.Is(3))
+    .AddWallAt(1, 1)
+    .AddWallAt(3, 1);
+```
+Throws a:  
+```csharp
+ArenaConstructionException
+```
+Containing the following message:  
+```text
+"Tried adding a wall to non empty tile at [1, 1].";
+```

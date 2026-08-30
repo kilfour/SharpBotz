@@ -92,4 +92,43 @@ The outer tiles are set up as *Walls*
             { ArenaTileType.Wall, ArenaTileType.Wall, ArenaTileType.Empty, ArenaTileType.Wall, ArenaTileType.Wall },
             { ArenaTileType.Wall, ArenaTileType.Wall, ArenaTileType.Wall, ArenaTileType.Wall, ArenaTileType.Wall }
         };
+
+    [Fact]
+    [DocContent("Placing a wall where one is already present:")]
+    [DocExample(typeof(A_CreatingASimpleArena), nameof(GetArenaWitWallAlreadyExists))]
+    [DocContent("Throws a:")]
+    [DocExample(typeof(A_CreatingASimpleArena), nameof(WallAlreadyExistsExceptionType))]
+    [DocContent("Containing the following message:")]
+    [DocExample(typeof(A_CreatingASimpleArena), nameof(WallAlreadyExistsExceptionMessage), "text")]
+    public void AddingWallsThrowsIfOneExistsAlready()
+    {
+        var ex = Assert.ThrowsAny<Exception>(() =>
+             Arena
+            .Create(
+                ArenaWidth.Is(3),
+                ArenaHeight.Is(3))
+            .AddWallAt(1, 1)
+            .AddWallAt(1, 1));
+        Assert.IsType(WallAlreadyExistsExceptionType(), ex);
+        Assert.Equal(WallAlreadyExistsExceptionMessage(), ex.Message);
+    }
+
+    [CodeSnippet]
+    private static Arena GetArenaWitWallAlreadyExists() =>
+        Arena
+            .Create(
+                ArenaWidth.Is(5),
+                ArenaHeight.Is(3))
+            .AddWallAt(1, 1)
+            .AddWallAt(3, 1);
+
+    [CodeSnippet]
+    [CodeRemove("typeof(")]
+    [CodeRemove(");")]
+    private static Type WallAlreadyExistsExceptionType() =>
+        typeof(ArenaConstructionException);
+
+    [CodeSnippet]
+    private static string WallAlreadyExistsExceptionMessage() =>
+        "Tried adding a wall to non empty tile at [1, 1].";
 }
