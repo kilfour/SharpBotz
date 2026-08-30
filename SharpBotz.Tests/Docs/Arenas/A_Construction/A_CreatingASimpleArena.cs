@@ -88,10 +88,8 @@ The outer tiles are set up as *Walls*
     private static ArenaTileType[,] ExpectedGridWithWalls() =>
         new ArenaTileType[,]
         {
-            { ArenaTileType.Wall, ArenaTileType.Wall, ArenaTileType.Wall },
-            { ArenaTileType.Wall, ArenaTileType.Wall, ArenaTileType.Wall },
-            { ArenaTileType.Wall, ArenaTileType.Empty, ArenaTileType.Wall },
-            { ArenaTileType.Wall, ArenaTileType.Wall, ArenaTileType.Wall },
-            { ArenaTileType.Wall, ArenaTileType.Wall, ArenaTileType.Wall }
+            { ArenaTileType.Wall, ArenaTileType.Wall, ArenaTileType.Wall, ArenaTileType.Wall, ArenaTileType.Wall },
+            { ArenaTileType.Wall, ArenaTileType.Wall, ArenaTileType.Empty, ArenaTileType.Wall, ArenaTileType.Wall },
+            { ArenaTileType.Wall, ArenaTileType.Wall, ArenaTileType.Wall, ArenaTileType.Wall, ArenaTileType.Wall }
         };
 }
