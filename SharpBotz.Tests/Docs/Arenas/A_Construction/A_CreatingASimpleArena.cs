@@ -62,7 +62,8 @@ The outer tiles are set up as *Walls*
     }
 
     [Fact]
-    [DocContent("Walls can be added in the following way:")]
+    [DocHeader("Adding Walls")]
+    [DocContent("This can be achieved in the following way:")]
     [DocExample(typeof(A_CreatingASimpleArena), nameof(GetArenaWithWalls))]
     [DocContent("This creates:")]
     [DocExample(typeof(A_CreatingASimpleArena), nameof(ExpectedGridWithWalls), "text")]

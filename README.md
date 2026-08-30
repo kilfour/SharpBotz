@@ -16,7 +16,8 @@ Wall      Wall
 Wall Wall Wall
 ```
 Both `ArenaWidth` and `ArenaHeight` must be greater than 2  
-Walls can be added in the following way:  
+#### Adding Walls
+This can be achieved in the following way:  
 ```csharp
 Arena
     .Create(
