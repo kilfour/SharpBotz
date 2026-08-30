@@ -20,7 +20,7 @@ This creates a 3 by 3 grid.
 The outer tiles are set up as *Walls*
 """
     )]
-    [DocExample(typeof(A_CreatingASimpleArena), nameof(ExpectedGrid))]
+    [DocExample(typeof(A_CreatingASimpleArena), nameof(ExpectedGrid), "text")]
     public void Construction()
     {
         var arena = GetArena();
@@ -63,7 +63,9 @@ The outer tiles are set up as *Walls*
 
     [Fact]
     [DocContent("Walls can be added in the following way:")]
-    [DocExample(typeof(A_CreatingASimpleArena), nameof(ExpectedGridWithWalls))]
+    [DocExample(typeof(A_CreatingASimpleArena), nameof(GetArenaWithWalls))]
+    [DocContent("This creates:")]
+    [DocExample(typeof(A_CreatingASimpleArena), nameof(ExpectedGridWithWalls), "text")]
     public void AddingWalls()
     {
         var arena = GetArenaWithWalls();
@@ -71,6 +73,7 @@ The outer tiles are set up as *Walls*
         AssertGrid.Equal(expectedGrid, arena);
     }
 
+    [CodeSnippet]
     private static Arena GetArenaWithWalls() =>
         Arena
             .Create(

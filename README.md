@@ -10,7 +10,7 @@ Arena.Create(
 ```
 This creates a 3 by 3 grid.  
 The outer tiles are set up as *Walls*  
-```csharp
+```text
 Wall Wall Wall
 Wall      Wall
 Wall Wall Wall
@@ -18,18 +18,16 @@ Wall Wall Wall
 Both `ArenaWidth` and `ArenaHeight` must be greater than 2  
 Walls can be added in the following way:  
 ```csharp
-Wall
-Wall
-Wall
-Wall
-Wall
-Wall
-Wall
-Wall
-Wall
-Wall
-Wall
-Wall
-Wall
-Wall
+Arena
+    .Create(
+        ArenaWidth.Is(5),
+        ArenaHeight.Is(3))
+    .AddWallAt(1, 1)
+    .AddWallAt(3, 1);
+```
+This creates:  
+```text
+Wall Wall Wall Wall Wall
+Wall Wall      Wall Wall
+Wall Wall Wall Wall Wall
 ```
