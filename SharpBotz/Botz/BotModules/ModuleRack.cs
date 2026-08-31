@@ -56,14 +56,20 @@ public class ModuleRack
         new([.. modules.Select(module => module.GetInfo(TotalWeight))]);
 
 
-    public ModuleEffect[] Translate(PowerPlan plan) =>
-        GetEffects(plan.Generations.Sum(a => a.Power), plan);
-
-    private ModuleEffect[] GetEffects(int generatedPower, PowerPlan plan)
+    public ModuleEffect[] Resolve(PowerPlan plan)
     {
-        var remaining = generatedPower;
         var batteryCount = batteries.Length;
         var effects = new List<ModuleEffect>();
+
+        var remaining = 0;
+        foreach (var (id, power) in plan.Generations)
+        {
+            if (power > reactors.Single(a => a.Id == id).MaximumOutput)
+                effects.Add(new ReactorOverLoadedEffect(id));
+            else
+                remaining += power;
+        }
+
         foreach (var (id, power) in plan.Allocations)
         {
             var needs = power;
@@ -84,7 +90,10 @@ public class ModuleRack
             {
                 var drain = firstNeed ? firstNeedBattery : needsPerBattery;
                 firstNeed = false;
-                if (battery.Drain(drain, effects))
+                var batteryEffect = battery.Drain(drain);
+                if (batteryEffect is not null)
+                    effects.Add(batteryEffect);
+                else
                     needs -= drain;
             }
             if (needs == 0)
@@ -92,13 +101,15 @@ public class ModuleRack
         }
 
         var storePerBattery = remaining / batteryCount;
-        var firstStoreBattery = storePerBattery + storePerBattery % batteryCount;
+        var firstStoreBattery = storePerBattery + remaining % batteryCount;
         var firstStore = true;
         foreach (var battery in batteries)
         {
             var store = firstStore ? firstStoreBattery : storePerBattery;
             firstStore = false;
-            battery.Store(store, effects);
+            var batteryEffect = battery.Store(store);
+            if (batteryEffect is not null)
+                effects.Add(batteryEffect);
         }
 
         return [.. effects];

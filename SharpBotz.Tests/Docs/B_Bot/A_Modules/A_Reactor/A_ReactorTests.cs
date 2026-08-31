@@ -20,6 +20,7 @@ It is created by passing in it's maximum output along with a ModuleId (supplied 
     public void Construction()
     {
         var reactor = ConstructionExample();
+        Assert.Equal(10, reactor.MaximumOutput);
     }
 
     [CodeSnippet]

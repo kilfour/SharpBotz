@@ -1,5 +1,6 @@
 namespace SharpBotz.Botz.BotModules.Batteries;
 
+
 public class Battery : BotModule
 {
     private Battery(ModuleId id, int capacity)
@@ -21,29 +22,27 @@ public class Battery : BotModule
 
     public int Charge { get; private set; }
 
-    public void Store(int amount, List<ModuleEffect> effects)
+    public ModuleEffect? Store(int amount)
     {
         Charge += amount;
         if (Charge > Capacity)
         {
             Charge = 0;
-            effects.Add(new BatteryOverChargedEffect(Id));
+            return new BatteryOverChargedEffect(Id);
         }
+        return null;
     }
 
-    public bool Drain(int amount, List<ModuleEffect> effects)
+    public ModuleEffect? Drain(int amount)
     {
         if (amount > Charge)
         {
             Charge = 0;
-            effects.Add(new BatteryDrainedEffect(Id));
-            return false;
+            return new BatteryDrainedEffect(Id);
         }
         Charge -= amount;
-        return true;
+        return null;
     }
-
-    public void Empty() => Charge = 0;
 
     protected override ModuleInfo CreateInfo(int totalWeight) =>
         new BatteryInfo(Id, Weight, Capacity, Charge);

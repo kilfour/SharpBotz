@@ -19,7 +19,7 @@ public class Spike
             );
         var control = rack.GetModuleControl();
         var plan = new PowerPlan(control.RequireModule<ReactorInfo>().SetOutput(10));
-        var effects = rack.Translate(plan);
+        var effects = rack.Resolve(plan);
         Assert.Empty(effects);
         Assert.Equal(10, rack.BatteryLevel);
     }
@@ -34,7 +34,7 @@ public class Spike
             );
         var control = rack.GetModuleControl();
         var plan = new PowerPlan(control.RequireModule<ReactorInfo>().SetOutput(10));
-        var effects = rack.Translate(plan);
+        var effects = rack.Resolve(plan);
         var effect = Assert.Single(effects);
         Assert.IsType<BatteryOverChargedEffect>(effect);
         Assert.Equal(0, rack.BatteryLevel);
@@ -53,7 +53,7 @@ public class Spike
         var plan = new PowerPlan(
             control.RequireModule<ReactorInfo>().SetOutput(10),
             control.RequireModule<DrivingInfo>().Move(1));
-        var effects = rack.Translate(plan);
+        var effects = rack.Resolve(plan);
         var effect = Assert.Single(effects);
         var thrustEffect = Assert.IsType<ThrustEffect>(effect);
         Assert.Equal(1, thrustEffect.Speed);
@@ -73,7 +73,7 @@ public class Spike
         var plan = new PowerPlan(
             control.RequireModule<ReactorInfo>().SetOutput(1),
             control.RequireModule<DrivingInfo>().Move(1));
-        var effects = rack.Translate(plan);
+        var effects = rack.Resolve(plan);
         var effect = Assert.Single(effects);
         Assert.IsType<BatteryDrainedEffect>(effect);
         Assert.Equal(0, rack.BatteryLevel);

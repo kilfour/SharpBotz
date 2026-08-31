@@ -18,14 +18,8 @@ public class Reactor : BotModule
     }
     // ------------------------------------------------------------------------------
 
-
     public int MaximumOutput { get; }
 
-    public PowerGeneration SetOutput(int output)
-    {
-        ArgumentOutOfRangeException.ThrowIfNegative(output);
-        return new(Id, output);
-    }
 
     protected override ModuleInfo CreateInfo(int totalWeight) =>
         new ReactorInfo(Id, MaximumOutput);
