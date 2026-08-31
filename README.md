@@ -11,7 +11,9 @@ Arena.Create(
 This creates a 3 by 3 grid.  
 The outer tiles are set up as *Walls*  
 ```text
-
+Wall Wall Wall
+Wall      Wall
+Wall Wall Wall
 ```
 Both `ArenaWidth` and `ArenaHeight` must be greater than 2  
 ### Adding Walls
@@ -26,7 +28,9 @@ Arena
 ```
 This creates:  
 ```text
-
+Wall Wall Wall Wall Wall
+Wall Wall      Wall Wall
+Wall Wall Wall Wall Wall
 ```
 Placing a wall where one is already present:  
 ```csharp
@@ -57,7 +61,9 @@ Arena
 ```
 This creates:  
 ```text
-
+Wall Wall Wall Wall Wall
+Wall BotDirectionUp      BotDirectionUp Wall
+Wall Wall Wall Wall Wall
 ```
 Placing a bot where a wall is already present:  
 ```csharp

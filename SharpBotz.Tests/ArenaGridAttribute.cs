@@ -31,6 +31,6 @@ public partial class ArenaGridFormatter : ICodeFormatter
     private static string FormatTile(string tile) =>
         tile == "Empty" ? "    " : tile;
 
-    [GeneratedRegex(@"ArenaTileType\.(?<name>\w+)")]
+    [GeneratedRegex(@"ArenaTile\.(?<name>\w+)")]
     private static partial Regex ArenaTileRegex();
 }
