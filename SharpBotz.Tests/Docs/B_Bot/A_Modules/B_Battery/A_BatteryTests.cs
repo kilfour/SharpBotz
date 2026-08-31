@@ -28,14 +28,14 @@ It is created by passing in it's capacity along with a ModuleId (supplied as str
 
     [CodeSnippet]
     private static Battery ConstructionExample() =>
-         Battery.Create("battery", 100);
+         Battery.Named("battery").Capacity(100);
 
     [Fact]
     [DocContent("A battery with a capacity of zero or negative throws upon construction.")]
     public void Invalid()
     {
-        Assert.Throws<ArgumentOutOfRangeException>(() => Battery.Create("battery", 0));
-        var ex = Assert.Throws<ArgumentOutOfRangeException>(() => Battery.Create("battery", -1));
+        Assert.Throws<ArgumentOutOfRangeException>(() => Battery.Named("battery").Capacity(0));
+        var ex = Assert.Throws<ArgumentOutOfRangeException>(() => Battery.Named("battery").Capacity(-1));
         Assert.Equal("""
         capacity ('-1') must be a non-negative and non-zero value. (Parameter 'capacity')
         Actual value was -1.
@@ -59,17 +59,17 @@ xychart-beta
 """, "mermaid")]
     public void WeightCurve()
     {
-        var battery = Battery.Create("battery", 1);
+        var battery = Battery.Named("battery").Capacity(1);
         Assert.Equal(3, battery.Weight);
-        battery = Battery.Create("battery", 25);
+        battery = Battery.Named("battery").Capacity(25);
         Assert.Equal(3, battery.Weight);
-        battery = Battery.Create("battery", 35);
+        battery = Battery.Named("battery").Capacity(35);
         Assert.Equal(4, battery.Weight);
-        battery = Battery.Create("battery", 51);
+        battery = Battery.Named("battery").Capacity(51);
         Assert.Equal(5, battery.Weight);
-        battery = Battery.Create("battery", 76);
+        battery = Battery.Named("battery").Capacity(76);
         Assert.Equal(6, battery.Weight);
-        battery = Battery.Create("battery", 100);
+        battery = Battery.Named("battery").Capacity(100);
         Assert.Equal(6, battery.Weight);
     }
 
@@ -91,6 +91,6 @@ The total energy capacity of the rack is then the sum of all Battery capacities.
     [CodeSnippet]
     private static ModuleRack MultipleExample() =>
         ModuleRack.Create(
-            Battery.Create("battery-one", 25),
-            Battery.Create("battery-two", 25));
+            Battery.Named("battery-one").Capacity(25),
+            Battery.Named("battery-two").Capacity(25));
 }

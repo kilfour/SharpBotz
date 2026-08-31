@@ -27,14 +27,15 @@ It is created by passing in it's maximum output along with a ModuleId (supplied 
 
     [CodeSnippet]
     private static Reactor ConstructionExample() =>
-         Reactor.Create("reactor", 10);
+         Reactor.Named("reactor")
+            .MaximumOutput(10);
 
     [Fact]
     [DocContent("A reactor with a maximum output of zero or negative throws upon construction.")]
     public void Invalid()
     {
-        Assert.Throws<ArgumentOutOfRangeException>(() => Reactor.Create("reactor", 0));
-        var ex = Assert.Throws<ArgumentOutOfRangeException>(() => Reactor.Create("reactor", -1));
+        Assert.Throws<ArgumentOutOfRangeException>(() => Reactor.Named("reactor").MaximumOutput(0));
+        var ex = Assert.Throws<ArgumentOutOfRangeException>(() => Reactor.Named("reactor").MaximumOutput(-1));
         Assert.Equal("""
         outputPerTurn ('-1') must be a non-negative and non-zero value. (Parameter 'outputPerTurn')
         Actual value was -1.
@@ -58,25 +59,25 @@ xychart-beta
 """, "mermaid")]
     public void WeightCurve()
     {
-        var reactor = Reactor.Create("reactor", 1);
+        var reactor = Reactor.Named("reactor").MaximumOutput(1);
         Assert.Equal(3, reactor.Weight);
-        reactor = Reactor.Create("reactor", 2);
+        reactor = Reactor.Named("reactor").MaximumOutput(2);
         Assert.Equal(3, reactor.Weight);
-        reactor = Reactor.Create("reactor", 3);
+        reactor = Reactor.Named("reactor").MaximumOutput(3);
         Assert.Equal(3, reactor.Weight);
-        reactor = Reactor.Create("reactor", 4);
+        reactor = Reactor.Named("reactor").MaximumOutput(4);
         Assert.Equal(3, reactor.Weight);
-        reactor = Reactor.Create("reactor", 5);
+        reactor = Reactor.Named("reactor").MaximumOutput(5);
         Assert.Equal(3, reactor.Weight);
-        reactor = Reactor.Create("reactor", 6);
+        reactor = Reactor.Named("reactor").MaximumOutput(6);
         Assert.Equal(4, reactor.Weight);
-        reactor = Reactor.Create("reactor", 7);
+        reactor = Reactor.Named("reactor").MaximumOutput(7);
         Assert.Equal(4, reactor.Weight);
-        reactor = Reactor.Create("reactor", 8);
+        reactor = Reactor.Named("reactor").MaximumOutput(8);
         Assert.Equal(5, reactor.Weight);
-        reactor = Reactor.Create("reactor", 9);
+        reactor = Reactor.Named("reactor").MaximumOutput(9);
         Assert.Equal(6, reactor.Weight);
-        reactor = Reactor.Create("reactor", 10);
+        reactor = Reactor.Named("reactor").MaximumOutput(10);
         Assert.Equal(6, reactor.Weight);
     }
 
@@ -99,6 +100,6 @@ The total maximum output of the rack is then the sum of all reactors maximum out
     [CodeSnippet]
     private static ModuleRack MultipleExample() =>
         ModuleRack.Create(
-            Reactor.Create("reactor-one", 10),
-            Reactor.Create("reactor-two", 10));
+            Reactor.Named("reactor-one").MaximumOutput(10),
+            Reactor.Named("reactor-two").MaximumOutput(10));
 }

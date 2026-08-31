@@ -3,15 +3,21 @@ namespace SharpBotz.Botz.BotModules.Reactors;
 
 public class Reactor : BotModule
 {
-    private Reactor(ModuleId id, int outputPerTurn)
-        : base(id, GetWeight(outputPerTurn))
+    private Reactor(ModuleId id, int maximumOutput)
+        : base(id, GetWeight(maximumOutput))
     {
-        MaximumOutput = outputPerTurn;
-        CurrentOutput = outputPerTurn;
+        MaximumOutput = maximumOutput;
+        CurrentOutput = maximumOutput;
     }
 
-    public static Reactor Create(string moduleId, int capacity)
-        => new(ModuleId.Is(moduleId), capacity);
+    public static ReactorMaximumOutput Named(string moduleId) =>
+        new(ModuleId.Is(moduleId));
+
+    public class ReactorMaximumOutput(ModuleId id)
+    {
+        public Reactor MaximumOutput(int maximumOutput) =>
+            new(id, maximumOutput);
+    }
 
     public int MaximumOutput { get; }
 
