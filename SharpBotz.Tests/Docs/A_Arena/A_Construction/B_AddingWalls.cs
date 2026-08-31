@@ -29,42 +29,36 @@ public class B_AddingWalls
 
     [CodeSnippet]
     [ArenaGrid]
-    private static ArenaTileType[,] ExpectedGridWithWalls() =>
-        new ArenaTileType[,]
+    private static ArenaTile[,] ExpectedGridWithWalls() =>
+        new ArenaTile[,]
         {
-            { ArenaTileType.Wall, ArenaTileType.Wall, ArenaTileType.Wall, ArenaTileType.Wall, ArenaTileType.Wall },
-            { ArenaTileType.Wall, ArenaTileType.Wall, ArenaTileType.Empty, ArenaTileType.Wall, ArenaTileType.Wall },
-            { ArenaTileType.Wall, ArenaTileType.Wall, ArenaTileType.Wall, ArenaTileType.Wall, ArenaTileType.Wall }
+            { ArenaTile.Wall, ArenaTile.Wall, ArenaTile.Wall, ArenaTile.Wall, ArenaTile.Wall },
+            { ArenaTile.Wall, ArenaTile.Wall, ArenaTile.Empty, ArenaTile.Wall, ArenaTile.Wall },
+            { ArenaTile.Wall, ArenaTile.Wall, ArenaTile.Wall, ArenaTile.Wall, ArenaTile.Wall }
         };
 
     [Fact]
     [DocContent("Placing a wall where one is already present:")]
-    [DocExample(typeof(B_AddingWalls), nameof(GetArenaWitWallAlreadyExists))]
+    [DocExample(typeof(B_AddingWalls), nameof(GetArenaWithWallAlreadyExists))]
     [DocContent("Throws a:")]
     [DocExample(typeof(B_AddingWalls), nameof(WallAlreadyExistsExceptionType))]
     [DocContent("Containing the following message:")]
     [DocExample(typeof(B_AddingWalls), nameof(WallAlreadyExistsExceptionMessage), "text")]
     public void AddingWallsThrowsIfOneExistsAlready()
     {
-        var ex = Assert.ThrowsAny<Exception>(() =>
-             Arena
-            .Create(
-                ArenaWidth.Is(3),
-                ArenaHeight.Is(3))
-            .AddWallAt(1, 1)
-            .AddWallAt(1, 1));
+        var ex = Assert.ThrowsAny<Exception>(() => GetArenaWithWallAlreadyExists());
         Assert.IsType(WallAlreadyExistsExceptionType(), ex);
         Assert.Equal(WallAlreadyExistsExceptionMessage(), ex.Message);
     }
 
     [CodeSnippet]
-    private static Arena GetArenaWitWallAlreadyExists() =>
+    private static Arena GetArenaWithWallAlreadyExists() =>
         Arena
             .Create(
                 ArenaWidth.Is(5),
                 ArenaHeight.Is(3))
             .AddWallAt(1, 1)
-            .AddWallAt(3, 1);
+            .AddWallAt(1, 1);
 
     [CodeSnippet]
     [CodeRemove("typeof(")]
@@ -74,5 +68,5 @@ public class B_AddingWalls
 
     [CodeSnippet]
     private static string WallAlreadyExistsExceptionMessage() =>
-        "Tried adding a wall to non empty tile at [1, 1].";
+        "Tried adding a wall to a non empty tile at [1, 1].";
 }

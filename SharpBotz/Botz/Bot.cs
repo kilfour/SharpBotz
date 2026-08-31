@@ -1,40 +1,40 @@
-namespace SharpBotz.Botz;
+using SharpBotz.Botz.BotModules;
 
+namespace SharpBotz.Botz;
 
 public class Bot
 {
     public const int MaximumHitPoints = 100;
+
+    // move this to Scenario
     public const int MaximumWeight = 100;
 
-    // private readonly BotBrain brain;
+    private readonly BotBrain brain;
     // private IReadOnlyList<ModuleEffect> activeEffects = [];
 
-    // public Bot(BotBrain brain)
-    //     : this(brain, BotModuleRack.Standard()) { }
+    public Bot(BotBrain brain, ModuleRack moduleRack)
+    {
+        ArgumentNullException.ThrowIfNull(brain);
+        ArgumentNullException.ThrowIfNull(moduleRack);
 
-    // public Bot(BotBrain brain, BotModuleRack moduleRack)
-    // {
-    //     ArgumentNullException.ThrowIfNull(brain);
-    //     ArgumentNullException.ThrowIfNull(moduleRack);
+        if (moduleRack.TotalWeight > MaximumWeight)
+        {
+            throw new ArgumentException(
+                $"A bot cannot weigh more than {MaximumWeight}; " +
+                $"this module rack weighs {moduleRack.TotalWeight}.",
+                nameof(moduleRack));
+        }
 
-    //     if (moduleRack.TotalWeight > MaximumWeight)
-    //     {
-    //         throw new ArgumentException(
-    //             $"A bot cannot weigh more than {MaximumWeight}; " +
-    //             $"this module rack weighs {moduleRack.TotalWeight}.",
-    //             nameof(moduleRack));
-    //     }
-
-    //     moduleRack.Attach();
-    //     this.brain = brain;
-    //     ModuleRack = moduleRack;
-    // }
+        moduleRack.Attach();
+        this.brain = brain;
+        ModuleRack = moduleRack;
+    }
 
     // public string Name => brain.Name;
 
-    // public BotBrain Brain => brain;
+    public BotBrain Brain => brain;
 
-    // public BotModuleRack ModuleRack { get; }
+    public ModuleRack ModuleRack { get; }
 
     public int HitPoints { get; private set; } = MaximumHitPoints;
 

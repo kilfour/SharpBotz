@@ -30,12 +30,12 @@ public static class DirectionExtensions
         _ => throw new ArgumentOutOfRangeException(nameof(direction), direction, null),
     };
 
-    public static ArenaTileType ToBotDirectionTileType(this Direction direction) => direction switch
+    public static ArenaTile ToBotDirectionTile(this Direction direction) => direction switch
     {
-        Direction.Up => ArenaTileType.BotDirectionUp,
-        Direction.Down => ArenaTileType.BotDirectionDown,
-        Direction.Left => ArenaTileType.BotDirectionLeft,
-        Direction.Right => ArenaTileType.BotDirectionRight,
+        Direction.Up => ArenaTile.BotDirectionUp,
+        Direction.Down => ArenaTile.BotDirectionDown,
+        Direction.Left => ArenaTile.BotDirectionLeft,
+        Direction.Right => ArenaTile.BotDirectionRight,
         _ => throw new ArgumentOutOfRangeException(nameof(direction), direction, null)
     };
 }

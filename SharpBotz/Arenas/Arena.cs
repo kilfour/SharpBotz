@@ -1,10 +1,14 @@
-﻿namespace SharpBotz.Arenas;
+﻿using SharpBotz.Botz;
+
+namespace SharpBotz.Arenas;
 
 public class Arena
 {
     // private static readonly ScanResult EmptyScanResult = new ScanResult.Empty();
     // private static readonly ScanResult WallScanResult = new ScanResult.Wall();
     // private static readonly ScanResult OutOfBoundsScanResult = new ScanResult.OutOfBounds();
+
+    private List<BotPosition> botPositions = [];
 
     private readonly ArenaTileType[,] grid;
 
@@ -42,9 +46,34 @@ public class Arena
     public Arena AddWallAt(int x, int y)
     {
         if (grid[x, y] != ArenaTileType.Empty)
-            throw new ArenaConstructionException($"Tried adding a wall to non empty tile at [{x}, {y}].");
+            throw new ArenaConstructionException($"Tried adding a wall to a non empty tile at [{x}, {y}].");
         grid[x, y] = ArenaTileType.Wall;
         return this;
+    }
+
+    public Arena SpawnBotAt(Bot bot, int x, int y)
+    {
+        if (grid[x, y] != ArenaTileType.Empty || botPositions.Any(a => a.X == x && a.Y == y))
+            throw new ArenaConstructionException($"Tried adding a bot to a non empty tile at [{x}, {y}].");
+        botPositions.Add(new(bot, x, y));
+        return this;
+    }
+
+    public ArenaTile[,] GetGrid()
+    {
+        var snapshot = new ArenaTile[Width, Height];
+        for (var x = 0; x < Width; x++)
+        {
+            for (var y = 0; y < Height; y++)
+            {
+                snapshot[x, y] = grid[x, y].ToArenaTile();
+            }
+        }
+        foreach (var position in botPositions)
+        {
+            snapshot[position.X, position.Y] = position.Bot.Facing.ToBotDirectionTile();
+        }
+        return snapshot;
     }
 
     // public ArenaTileType[,] GetSlice(Position center, int size)

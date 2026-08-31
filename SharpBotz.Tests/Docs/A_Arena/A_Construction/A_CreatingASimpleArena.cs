@@ -36,12 +36,12 @@ The outer tiles are set up as *Walls*
 
     [CodeSnippet]
     [ArenaGrid]
-    private static ArenaTileType[,] ExpectedGrid() =>
-        new ArenaTileType[,]
+    private static ArenaTile[,] ExpectedGrid() =>
+        new ArenaTile[,]
         {
-            { ArenaTileType.Wall, ArenaTileType.Wall, ArenaTileType.Wall },
-            { ArenaTileType.Wall, ArenaTileType.Empty, ArenaTileType.Wall },
-            { ArenaTileType.Wall, ArenaTileType.Wall, ArenaTileType.Wall }
+            { ArenaTile.Wall, ArenaTile.Wall, ArenaTile.Wall },
+            { ArenaTile.Wall, ArenaTile.Empty, ArenaTile.Wall },
+            { ArenaTile.Wall, ArenaTile.Wall, ArenaTile.Wall }
         };
 
     [Theory]
