@@ -20,7 +20,6 @@ public class Reactor : BotModule
 
 
     public int MaximumOutput { get; }
-    public int CurrentOutput { get; }
 
     public PowerGeneration SetOutput(int output)
     {

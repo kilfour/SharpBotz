@@ -91,7 +91,6 @@ The total maximum output of the rack is then the sum of all reactors maximum out
     {
         var rack = MultipleExample();
         Assert.Equal(20, rack.MaximumReactorOutput);
-        Assert.Equal(0, rack.ReactorOutput);
     }
 
     [CodeSnippet]

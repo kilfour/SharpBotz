@@ -35,7 +35,12 @@ public class Drive : PoweredModule
 
     public override IEnumerable<ModuleEffect> CreateEffects(int power, int totalBotWeight)
     {
-        yield return new ThrustEffect(Id, power * thrustPerPower, maximumPower);
+        if (power > maximumPower)
+        {
+            yield return new DriveOverChargedEffect(Id);
+            yield break;
+        }
+        yield return new ThrustEffect(Id, power * thrustPerPower / totalBotWeight);
     }
 
     private static int GetWeight(int thrustPerPower, int maximumPower)

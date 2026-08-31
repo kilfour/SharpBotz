@@ -9,7 +9,7 @@ public class ModuleRack
     private readonly BotModule[] modules;
     private readonly IReadOnlyDictionary<ModuleId, BotModule> modulesById;
     private readonly Reactor[] reactors;
-    private readonly PoweredModule[] poweredModules;
+    // private readonly PoweredModule[] poweredModules;
     private readonly Battery[] batteries;
     private bool isAttached;
 
@@ -23,7 +23,7 @@ public class ModuleRack
         }
         modulesById = this.modules.ToDictionary(module => module.Id);
         reactors = [.. this.modules.OfType<Reactor>()];
-        poweredModules = [.. this.modules.OfType<PoweredModule>()];
+        // poweredModules = [.. this.modules.OfType<PoweredModule>()];
         batteries = [.. this.modules.OfType<Battery>()];
     }
 
@@ -46,20 +46,18 @@ public class ModuleRack
 
     public int TotalWeight { get; }
     public int BatteryLevel => batteries.Sum(battery => battery.Charge);
+
+    // only used in tests for now
     public int BatteryCapacity => batteries.Sum(battery => battery.Capacity);
-    public int ReactorOutput => reactors.Sum(reactor => reactor.CurrentOutput);
+    // only used in tests for now
     public int MaximumReactorOutput => reactors.Sum(reactor => reactor.MaximumOutput);
-    public int CurrentReactorOutput { get; private set; }
 
     public ModuleControl GetModuleControl() =>
         new([.. modules.Select(module => module.GetInfo(TotalWeight))]);
 
 
-    public ModuleEffect[] Translate(PowerPlan plan)
-    {
-
-        return GetEffects(plan.Generations.Sum(a => a.Power), plan);
-    }
+    public ModuleEffect[] Translate(PowerPlan plan) =>
+        GetEffects(plan.Generations.Sum(a => a.Power), plan);
 
     private ModuleEffect[] GetEffects(int generatedPower, PowerPlan plan)
     {
@@ -70,7 +68,10 @@ public class ModuleRack
         {
             var needs = power;
             if (needs <= remaining)
+            {
                 remaining -= needs;
+                needs = 0;
+            }
             else
             {
                 needs -= remaining;
@@ -103,71 +104,6 @@ public class ModuleRack
         return [.. effects];
     }
 
-    // public bool TryValidate(PowerPlan plan, out ValidatedPowerPlan validated)
-    // {
-    //     var allocatedModules = new HashSet<ModuleId>();
-    //     var allocations = new List<(PoweredModule Module, int Power)>();
-    //     var reactorOutputs = new List<(Reactor Reactor, int Output)>();
-    //     long totalPower = 0;
-
-    //     foreach (var allocation in plan.Allocations)
-    //     {
-    //         if (!modulesById.TryGetValue(allocation.Module, out var installedModule) ||
-    //             !allocatedModules.Add(allocation.Module) ||
-    //             allocation.Power < 0)
-    //         {
-    //             validated = default;
-    //             return false;
-    //         }
-
-    //         if (installedModule is Reactor reactor)
-    //         {
-    //             if (allocation.Power > reactor.MaximumOutput)
-    //             {
-    //                 validated = default;
-    //                 return false;
-    //             }
-
-    //             reactorOutputs.Add((reactor, allocation.Power));
-    //             continue;
-    //         }
-
-    //         if (installedModule is not PoweredModule module ||
-    //             allocation.Power > module.GetLoadedMaximumPower(TotalWeight))
-    //         {
-    //             validated = default;
-    //             return false;
-    //         }
-
-    //         totalPower += allocation.Power;
-    //         if (totalPower > int.MaxValue)
-    //         {
-    //             validated = default;
-    //             return false;
-    //         }
-
-    //         allocations.Add((module, allocation.Power));
-    //     }
-
-    //     validated = new((int)totalPower, allocations, reactorOutputs);
-    //     return true;
-    // }
-
-    // public void SetReactorOutputs(ValidatedPowerPlan plan)
-    // {
-    //     foreach (var reactor in reactors)
-    //     {
-    //         reactor.SetOutput(reactor.MaximumOutput);
-    //     }
-
-    //     foreach (var (reactor, output) in plan.ReactorOutputs)
-    //     {
-    //         reactor.SetOutput(output);
-    //     }
-    // }
-
-
-
     public void Attach()
     {
         if (isAttached)
@@ -177,39 +113,4 @@ public class ModuleRack
 
         isAttached = true;
     }
-
-    // public IReadOnlyList<ModuleEffect> Apply(ValidatedPowerPlan plan)
-    // {
-    //     Disconnect();
-
-    //     foreach (var (module, power) in plan.Allocations)
-    //     {
-    //         module.Supply(power);
-    //     }
-
-    //     return poweredModules
-    //         .SelectMany(module => module.GetEffects(TotalWeight))
-    //         .ToArray();
-    // }
-
-    // public void Disconnect()
-    // {
-    //     foreach (var module in poweredModules)
-    //     {
-    //         module.Disconnect();
-    //     }
-    // }
-
-    private void EmptyBatteries()
-    {
-        foreach (var battery in batteries)
-        {
-            battery.Empty();
-        }
-    }
 }
-
-// public readonly record struct ValidatedPowerPlan(
-//     int TotalPower,
-//     IReadOnlyList<(PoweredModule Module, int Power)> Allocations,
-//     IReadOnlyList<(Reactor Reactor, int Output)> ReactorOutputs);

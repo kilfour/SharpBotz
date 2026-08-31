@@ -6,13 +6,7 @@ using SharpBotz.Botz.BotModules.Reactors;
 
 namespace SharpBotz.Tests;
 
-// Steps
-//   1. Generate Power
-//   2. Scan
-//   2. Rotate
-//   3. Move
-//   4. Weapons
-//   5. Store Power
+
 public class Spike
 {
     [Fact]
@@ -43,6 +37,45 @@ public class Spike
         var effects = rack.Translate(plan);
         var effect = Assert.Single(effects);
         Assert.IsType<BatteryOverChargedEffect>(effect);
+        Assert.Equal(0, rack.BatteryLevel);
+    }
+
+    [Fact]
+    public void BotMove()
+    {
+        var rack =
+            ModuleRack.Create(
+                Reactor.Named("reactor").MaximumOutput(10),
+                Battery.Named("battery").Capacity(50),
+                Drive.Named("drive").ThrustPerPower(8).MaximumPower(10)
+            );
+        var control = rack.GetModuleControl();
+        var plan = new PowerPlan(
+            control.RequireModule<ReactorInfo>().SetOutput(10),
+            control.RequireModule<DrivingInfo>().Move(1));
+        var effects = rack.Translate(plan);
+        var effect = Assert.Single(effects);
+        var thrustEffect = Assert.IsType<ThrustEffect>(effect);
+        Assert.Equal(1, thrustEffect.Speed);
+        Assert.Equal(0, rack.BatteryLevel);
+    }
+
+    [Fact]
+    public void BotDrained()
+    {
+        var rack =
+            ModuleRack.Create(
+                Reactor.Named("reactor").MaximumOutput(10),
+                Battery.Named("battery").Capacity(5),
+                Drive.Named("drive").ThrustPerPower(5).MaximumPower(10)
+            );
+        var control = rack.GetModuleControl();
+        var plan = new PowerPlan(
+            control.RequireModule<ReactorInfo>().SetOutput(1),
+            control.RequireModule<DrivingInfo>().Move(1));
+        var effects = rack.Translate(plan);
+        var effect = Assert.Single(effects);
+        Assert.IsType<BatteryDrainedEffect>(effect);
         Assert.Equal(0, rack.BatteryLevel);
     }
 }
