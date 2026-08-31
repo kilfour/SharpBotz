@@ -29,7 +29,15 @@ public partial class ArenaGridFormatter : ICodeFormatter
     }
 
     private static string FormatTile(string tile) =>
-        tile == "Empty" ? "    " : tile;
+        tile switch
+        {
+            "Empty" => "    ",
+            "BotDirectionUp" => " ↑↑ ",
+            "BotDirectionDown" => " ↓↓ ",
+            "BotDirectionLeft" => " ←← ",
+            "BotDirectionRight" => " →→ ",
+            _ => tile
+        };
 
     [GeneratedRegex(@"ArenaTile\.(?<name>\w+)")]
     private static partial Regex ArenaTileRegex();

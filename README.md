@@ -62,7 +62,7 @@ Arena
 This creates:  
 ```text
 Wall Wall Wall Wall Wall
-Wall BotDirectionUp      BotDirectionUp Wall
+Wall  ↑↑        ↑↑  Wall
 Wall Wall Wall Wall Wall
 ```
 Placing a bot where a wall is already present:  
