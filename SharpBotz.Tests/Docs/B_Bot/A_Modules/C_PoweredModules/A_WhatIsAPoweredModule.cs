@@ -20,7 +20,7 @@ public class A_WhatIsAPoweredModule
 public class DeadWeight : PoweredModule
 {
     public DeadWeight(ModuleId id, int weight, int activationPower, int maximumPower)
-        : base(id, weight, activationPower, maximumPower)
+        : base(id, weight)
     {
     }
 

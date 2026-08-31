@@ -5,4 +5,4 @@ public record BatteryInfo(
     int Weight,
     int Capacity,
     int Charge)
-    : ModuleInfo(Id, Weight);
+    : ModuleInfo(Id);

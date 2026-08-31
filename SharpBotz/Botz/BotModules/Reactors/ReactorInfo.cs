@@ -6,7 +6,7 @@ public record ReactorInfo(
     int Weight,
     int MaximumOutput,
     int CurrentOutput)
-    : ModuleInfo(Id, Weight)
+    : ModuleInfo(Id)
 {
     public int OutputPerTurn => MaximumOutput;
 
