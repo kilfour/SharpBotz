@@ -30,14 +30,12 @@ public class Drive : PoweredModule
             new(id, thrustPerPower, maximumPower);
     }
 
-    public int CurrentThrust => CurrentPower * thrustPerPower;
-
     protected override ModuleInfo CreateInfo(int totalWeight) =>
         new DrivingInfo(Id, thrustPerPower, maximumPower, totalWeight);
 
-    protected override IEnumerable<ModuleEffect> CreateEffects()
+    public override IEnumerable<ModuleEffect> CreateEffects(int power, int totalBotWeight)
     {
-        yield return new ThrustEffect(Id, CurrentThrust, maximumPower);
+        yield return new ThrustEffect(Id, power * thrustPerPower, maximumPower);
     }
 
     private static int GetWeight(int thrustPerPower, int maximumPower)

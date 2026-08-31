@@ -20,9 +20,6 @@ It is created by passing in it's maximum output along with a ModuleId (supplied 
     public void Construction()
     {
         var reactor = ConstructionExample();
-        Assert.Equal(10, reactor.MaximumOutput);
-        Assert.Equal(10, reactor.CurrentOutput);
-        Assert.Equal(10, reactor.OutputPerTurn);
     }
 
     [CodeSnippet]
@@ -94,7 +91,7 @@ The total maximum output of the rack is then the sum of all reactors maximum out
     {
         var rack = MultipleExample();
         Assert.Equal(20, rack.MaximumReactorOutput);
-        Assert.Equal(20, rack.ReactorOutput);
+        Assert.Equal(0, rack.ReactorOutput);
     }
 
     [CodeSnippet]

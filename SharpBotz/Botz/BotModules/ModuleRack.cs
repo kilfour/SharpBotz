@@ -3,15 +3,14 @@ using SharpBotz.Botz.BotModules.Reactors;
 
 namespace SharpBotz.Botz.BotModules;
 
-
 public class ModuleRack
 {
     public const int ChassisWeight = 10;
     private readonly BotModule[] modules;
     private readonly IReadOnlyDictionary<ModuleId, BotModule> modulesById;
-    // private readonly PoweredModule[] poweredModules;
-    private readonly Battery[] batteries;
     private readonly Reactor[] reactors;
+    private readonly PoweredModule[] poweredModules;
+    private readonly Battery[] batteries;
     private bool isAttached;
 
     private ModuleRack(params BotModule[] modules)
@@ -23,9 +22,9 @@ public class ModuleRack
             module.Install();
         }
         modulesById = this.modules.ToDictionary(module => module.Id);
-        // poweredModules = this.modules.OfType<PoweredModule>().ToArray();
-        batteries = [.. this.modules.OfType<Battery>()];
         reactors = [.. this.modules.OfType<Reactor>()];
+        poweredModules = [.. this.modules.OfType<PoweredModule>()];
+        batteries = [.. this.modules.OfType<Battery>()];
     }
 
     public static ModuleRack Create(params BotModule[] modules)
@@ -46,17 +45,63 @@ public class ModuleRack
     }
 
     public int TotalWeight { get; }
-
     public int BatteryLevel => batteries.Sum(battery => battery.Charge);
-
     public int BatteryCapacity => batteries.Sum(battery => battery.Capacity);
-
     public int ReactorOutput => reactors.Sum(reactor => reactor.CurrentOutput);
-
     public int MaximumReactorOutput => reactors.Sum(reactor => reactor.MaximumOutput);
+    public int CurrentReactorOutput { get; private set; }
 
-    public IReadOnlyList<ModuleInfo> Modules =>
-        [.. modules.Select(module => module.GetInfo(TotalWeight))];
+    public ModuleControl GetModuleControl() =>
+        new([.. modules.Select(module => module.GetInfo(TotalWeight))]);
+
+
+    public ModuleEffect[] Translate(PowerPlan plan)
+    {
+
+        return GetEffects(plan.Generations.Sum(a => a.Power), plan);
+    }
+
+    private ModuleEffect[] GetEffects(int generatedPower, PowerPlan plan)
+    {
+        var remaining = generatedPower;
+        var batteryCount = batteries.Length;
+        var effects = new List<ModuleEffect>();
+        foreach (var (id, power) in plan.Allocations)
+        {
+            var needs = power;
+            if (needs <= remaining)
+                remaining -= needs;
+            else
+            {
+                needs -= remaining;
+                remaining = 0;
+            }
+            var needsPerBattery = needs / batteryCount;
+            var firstNeedBattery = needsPerBattery + needs % batteryCount;
+            var firstNeed = true;
+            foreach (var battery in batteries)
+            {
+                var drain = firstNeed ? firstNeedBattery : needsPerBattery;
+                firstNeed = false;
+                if (battery.Drain(drain, effects))
+                    needs -= drain;
+            }
+            if (needs == 0)
+                effects.AddRange((modulesById[id] as PoweredModule)!.Supply(power, TotalWeight));
+        }
+
+        var storePerBattery = remaining / batteryCount;
+        var firstStoreBattery = storePerBattery + storePerBattery % batteryCount;
+        var firstStore = true;
+        foreach (var battery in batteries)
+        {
+            var store = firstStore ? firstStoreBattery : storePerBattery;
+            firstStore = false;
+            battery.Store(store, effects);
+        }
+
+        return [.. effects];
+    }
 
     // public bool TryValidate(PowerPlan plan, out ValidatedPowerPlan validated)
     // {
@@ -121,44 +166,7 @@ public class ModuleRack
     //     }
     // }
 
-    public bool TryGeneratePower()
-    {
-        var output = reactors.Sum(reactor => reactor.CurrentOutput);
-        var availableCapacity = batteries.Sum(battery => battery.AvailableCapacity);
 
-        if (output > availableCapacity)
-        {
-            EmptyBatteries();
-            return false;
-        }
-
-        var remaining = output;
-        foreach (var battery in batteries)
-        {
-            var stored = Math.Min(remaining, battery.AvailableCapacity);
-            battery.Store(stored);
-            remaining -= stored;
-        }
-
-        return true;
-    }
-
-    public bool TryConsumePower(int amount)
-    {
-        if (amount > BatteryLevel)
-        {
-            EmptyBatteries();
-            return false;
-        }
-
-        var remaining = amount;
-        foreach (var battery in batteries)
-        {
-            remaining -= battery.Drain(remaining);
-        }
-
-        return true;
-    }
 
     public void Attach()
     {

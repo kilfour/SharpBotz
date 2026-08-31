@@ -21,15 +21,26 @@ public class Battery : BotModule
 
     public int Charge { get; private set; }
 
-    public int AvailableCapacity => Capacity - Charge;
-
-    public void Store(int amount) => Charge += amount;
-
-    public int Drain(int amount)
+    public void Store(int amount, List<ModuleEffect> effects)
     {
-        var drained = Math.Min(amount, Charge);
-        Charge -= drained;
-        return drained;
+        Charge += amount;
+        if (Charge > Capacity)
+        {
+            Charge = 0;
+            effects.Add(new BatteryOverChargedEffect(Id));
+        }
+    }
+
+    public bool Drain(int amount, List<ModuleEffect> effects)
+    {
+        if (amount > Charge)
+        {
+            Charge = 0;
+            effects.Add(new BatteryDrainedEffect(Id));
+            return false;
+        }
+        Charge -= amount;
+        return true;
     }
 
     public void Empty() => Charge = 0;

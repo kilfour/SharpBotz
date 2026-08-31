@@ -22,7 +22,6 @@ It is created by passing in it's capacity along with a ModuleId (supplied as str
     {
         var battery = ConstructionExample();
         Assert.Equal(100, battery.Capacity);
-        Assert.Equal(100, battery.AvailableCapacity);
         Assert.Equal(0, battery.Charge);
     }
 

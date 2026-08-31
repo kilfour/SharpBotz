@@ -5,22 +5,19 @@ public abstract record RotatorInfo(
     ModuleId Id,
     int Weight,
     int ActivationPower,
-    int MaximumPower,
-    int CurrentPower)
+    int MaximumPower)
     : PoweredModuleInfo(Id/*, Weight, ActivationPower, MaximumPower, CurrentPower */);
 
 public sealed record LeftRotatorInfo(
     ModuleId Id,
     int Weight,
     int ActivationPower,
-    int MaximumPower,
-    int CurrentPower)
-    : RotatorInfo(Id, Weight, ActivationPower, MaximumPower, CurrentPower);
+    int MaximumPower)
+    : RotatorInfo(Id, Weight, ActivationPower, MaximumPower);
 
 public sealed record RightRotatorInfo(
     ModuleId Id,
     int Weight,
     int ActivationPower,
-    int MaximumPower,
-    int CurrentPower)
-    : RotatorInfo(Id, Weight, ActivationPower, MaximumPower, CurrentPower);
+    int MaximumPower)
+    : RotatorInfo(Id, Weight, ActivationPower, MaximumPower);

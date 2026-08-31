@@ -19,12 +19,12 @@ public class A_WhatIsAPoweredModule
 
 public class DeadWeight : PoweredModule
 {
-    public DeadWeight(ModuleId id, int weight, int activationPower, int maximumPower)
+    public DeadWeight(ModuleId id, int weight)
         : base(id, weight)
     {
     }
 
-    protected override IEnumerable<ModuleEffect> CreateEffects()
+    public override IEnumerable<ModuleEffect> CreateEffects(int power, int totalBotWeight)
     {
         throw new NotImplementedException();
     }

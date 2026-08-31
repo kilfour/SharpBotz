@@ -28,8 +28,8 @@ public sealed class Rotator : PoweredModule
     {
         var requiredPower = 0;// GetLoadedActivationPower(totalWeight);
         return rotation == Rotation.Left
-            ? new LeftRotatorInfo(Id, Weight, requiredPower, requiredPower, CurrentPower)
-            : new RightRotatorInfo(Id, Weight, requiredPower, requiredPower, CurrentPower);
+            ? new LeftRotatorInfo(Id, Weight, requiredPower, requiredPower)
+            : new RightRotatorInfo(Id, Weight, requiredPower, requiredPower);
     }
 
     // protected override int CalculateActivationPower(int totalWeight) =>
@@ -38,7 +38,7 @@ public sealed class Rotator : PoweredModule
     // protected override int CalculateMaximumPower(int totalWeight) =>
     //     GetRequiredPower(totalWeight);
 
-    protected override IEnumerable<ModuleEffect> CreateEffects()
+    public override IEnumerable<ModuleEffect> CreateEffects(int power, int totalBotWeight)
     {
         yield return new RotateEffect(Id, rotation);
     }
@@ -54,13 +54,4 @@ public sealed class Rotator : PoweredModule
 
     private static int DivideRoundingUp(int value, int divisor) =>
         (value / divisor) + (value % divisor == 0 ? 0 : 1);
-
-    private int GetRequiredPower(int totalWeight)
-    {
-        // ArgumentOutOfRangeException.ThrowIfNegativeOrZero(totalWeight);
-        // var scaledPower = DivideRoundingUp(
-        //     totalWeight * ActivationPower, RatedBotWeight);
-        // return Math.Max(ActivationPower, scaledPower);
-        return 0;
-    }
 }

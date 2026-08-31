@@ -14,9 +14,24 @@ A drive is needed in order to move your board across the arena.
 
 It is created by passing in it's thrustPerPower and maximumPower along with a ModuleId (supplied as string).
 """)]
-    // [DocExample(typeof(B_DriveTests), nameof(ConstructionExample))]
-    [DocContent("It's initial Charge is set to zero.")]
+    [DocExample(typeof(B_DriveTests), nameof(ConstructionExample))]
+    [DocContent("TODO.")]
     public void Construction()
+    {
+        var drive = ConstructionExample();
+        // Assert.Equal(100, drive.);
+        // Assert.Equal(100, drive.AvailableCapacity);
+        // Assert.Equal(0, drive.Charge);
+    }
+
+    [CodeSnippet]
+    private static Drive ConstructionExample() =>
+         Drive.Named("drive")
+            .ThrustPerPower(10)
+            .MaximumPower(15);
+
+    [Fact]
+    public void PowerConsumption()
     {
         var drive = ConstructionExample();
         var info = (DrivingInfo)drive.GetInfo(50);
@@ -32,11 +47,4 @@ It is created by passing in it's thrustPerPower and maximumPower along with a Mo
         // Assert.Equal(100, drive.AvailableCapacity);
         // Assert.Equal(0, drive.Charge);
     }
-
-    [CodeSnippet]
-    private static Drive ConstructionExample() =>
-         // bot weighs 50, so speed 1 => 5 power, 2 => 10 Power
-         Drive.Named("drive")
-            .ThrustPerPower(10)
-            .MaximumPower(15);
 }
