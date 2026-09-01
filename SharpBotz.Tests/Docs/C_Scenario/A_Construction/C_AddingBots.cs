@@ -29,10 +29,10 @@ public class C_AddingBots
                     ArenaWidth.Is(5),
                     ArenaHeight.Is(3))
                 .Build())
-            .Spawn(() => new Bot(new DummyBrain(), ModuleRack.Create()))
+            .Spawn(() => new DummyBot())
                 .At(1, 1)
                 .Facing(Direction.Up)
-            .Spawn(() => new Bot(new DummyBrain(), ModuleRack.Create()))
+            .Spawn(() => new DummyBot())
                 .At(3, 1)
                 .Facing(Direction.Up);
 

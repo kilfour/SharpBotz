@@ -16,7 +16,7 @@ public abstract class BotBrain
         return fuzzr(state).Value;
     }
 
-    public PowerPlan Decide(BotObservation observation, State state)
+    public PowerPlan Decide(ModuleControl modules, BotObservation observation, State state)
     {
         ArgumentNullException.ThrowIfNull(state);
         if (fuzzrState is not null)
@@ -28,7 +28,7 @@ public abstract class BotBrain
         fuzzrState = state;
         try
         {
-            return RoutePower(observation) ?? throw new InvalidOperationException(
+            return RoutePower(modules, observation) ?? throw new InvalidOperationException(
                 $"Bot returned a null power plan.");
         }
         finally
@@ -37,5 +37,5 @@ public abstract class BotBrain
         }
     }
 
-    protected abstract PowerPlan RoutePower(BotObservation observation);
+    protected abstract PowerPlan RoutePower(ModuleControl modules, BotObservation observation);
 }

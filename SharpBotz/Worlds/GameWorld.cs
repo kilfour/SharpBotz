@@ -1,3 +1,4 @@
+using System.Numerics;
 using QuickFuzzr.UnderTheHood;
 using SharpBotz.Arenas;
 using SharpBotz.Botz;
@@ -54,6 +55,7 @@ public class GameWorld
     public void Update()
     {
         Turn++;
+        var botEffects = Bots.Select(a => (BotState: a, Plan: a.Bot.GetEffects(new BotObservation(), fuzzrState)));
         // var coolingDownAtStart = bots.Where(bot => bot.Cooldown > 0).ToArray();
         // modules.Handle(writeLog);
         // Arena.RedrawBots(bots);

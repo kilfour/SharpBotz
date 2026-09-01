@@ -5,6 +5,8 @@ namespace SharpBotz.Tests;
 
 public class DummyBrain : BotBrain
 {
-    protected override PowerPlan RoutePower(BotObservation observation) =>
+    protected override PowerPlan RoutePower(ModuleControl modules, BotObservation observation) =>
         PowerPlan.Empty;
 }
+
+public class DummyBot() : Bot(new DummyBrain(), ModuleRack.Create());

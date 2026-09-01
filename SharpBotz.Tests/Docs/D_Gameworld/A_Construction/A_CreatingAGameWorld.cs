@@ -25,7 +25,7 @@ public class A_CreatingAGameWorld
                     ArenaHeight.Is(3))
                 .Build();
         var botState = new BotState(
-            new Bot(new DummyBrain(), ModuleRack.Create()),
+            new DummyBot(),
             new Position(1, 1),
             Direction.Right);
 
@@ -43,10 +43,4 @@ public class A_CreatingAGameWorld
             arena,
             [botState],
             seed: 1234);
-
-    private sealed class DummyBrain : BotBrain
-    {
-        protected override PowerPlan RoutePower(BotObservation observation) =>
-            PowerPlan.Empty;
-    }
 }

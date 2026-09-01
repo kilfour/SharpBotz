@@ -1,3 +1,4 @@
+using QuickFuzzr.UnderTheHood;
 using SharpBotz.Botz.BotModules;
 
 namespace SharpBotz.Botz;
@@ -35,6 +36,10 @@ public class Bot
     public BotBrain Brain => brain;
 
     public ModuleRack ModuleRack { get; }
+
+    public ModuleEffect[] GetEffects(BotObservation observation, State state) =>
+        ModuleRack.Resolve(
+            Brain.Decide(ModuleRack.GetModuleControl(), observation, state));
 
     public int HitPoints { get; private set; } = MaximumHitPoints;
 
