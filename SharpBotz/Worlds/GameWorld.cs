@@ -18,7 +18,6 @@ public class GameWorld
 
     public int Turn { get; private set; }
 
-
     private static State CreateState(int? seed) =>
         seed is null ? new() : new(seed.Value);
 
