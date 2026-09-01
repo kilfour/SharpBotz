@@ -37,9 +37,10 @@ public class Bot
 
     public ModuleRack ModuleRack { get; }
 
-    public ModuleEffect[] GetEffects(BotObservation observation, State state) =>
-        ModuleRack.Resolve(
-            Brain.Decide(ModuleRack.GetModuleControl(), observation, state));
+    public ModuleEffects GetEffects(BotObservation observation, State state) =>
+        ModuleEffects.From(
+            ModuleRack.Resolve(
+                Brain.Decide(ModuleRack.GetModuleControl(), observation, state)));
 
     public int HitPoints { get; private set; } = MaximumHitPoints;
 

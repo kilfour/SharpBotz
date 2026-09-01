@@ -2,6 +2,8 @@ using System.Numerics;
 using QuickFuzzr.UnderTheHood;
 using SharpBotz.Arenas;
 using SharpBotz.Botz;
+using SharpBotz.Botz.BotModules;
+using SharpBotz.Botz.BotModules.Reactors;
 
 namespace SharpBotz.Worlds;
 
@@ -55,7 +57,8 @@ public class GameWorld
     public void Update()
     {
         Turn++;
-        var botEffects = Bots.Select(a => (BotState: a, Plan: a.Bot.GetEffects(new BotObservation(), fuzzrState)));
+        var botEffects = Bots.Select(a => (a, a.Bot.GetEffects(new BotObservation(), fuzzrState)));
+        HandleEffects([.. botEffects]);
         // var coolingDownAtStart = bots.Where(bot => bot.Cooldown > 0).ToArray();
         // modules.Handle(writeLog);
         // Arena.RedrawBots(bots);
@@ -65,5 +68,36 @@ public class GameWorld
         // RangedAttacks.Handle(Arena, intents, writeLog);
         // Cooldowns.Handle(coolingDownAtStart);
         // Arena.RedrawBots(bots);
+    }
+
+    private static void HandleEffects((BotState BotState, ModuleEffects Effects)[] botEffects)
+    {
+        HandleReactorEffects(botEffects);
+    }
+
+    private static void HandleReactorEffects((BotState BotState, ModuleEffects Effects)[] botEffects)
+    {
+        foreach (var botEffect in botEffects)
+        {
+            HandleReactorEffect(botEffect);
+        }
+    }
+
+    private static void HandleReactorEffect((BotState BotState, ModuleEffects Effects) botEffect)
+    {
+        var bot = botEffect.BotState.Bot;
+        var reactorEffects = botEffect.Effects.ReactorEffects;
+        foreach (var effect in reactorEffects)
+        {
+            switch (effect)
+            {
+                case ReactorOverLoadedEffect:
+                    bot.TakeDamage(10);
+                    break;
+
+                default:
+                    throw new ArgumentException("Unknown reactor effect supplied.");
+            }
+        }
     }
 }

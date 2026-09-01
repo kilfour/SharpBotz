@@ -2,10 +2,9 @@
 
 namespace SharpBotz.Botz.BotModules.Rotators;
 
-public sealed class Rotator : PoweredModule
+public class Rotator : PoweredModule
 {
     private const int StandardActivationPower = 5;
-    private const int RatedBotWeight = 50;
 
     private readonly Rotation rotation;
 
@@ -26,17 +25,10 @@ public sealed class Rotator : PoweredModule
 
     protected override ModuleInfo CreateInfo(int totalWeight)
     {
-        var requiredPower = 0;// GetLoadedActivationPower(totalWeight);
         return rotation == Rotation.Left
-            ? new LeftRotatorInfo(Id, Weight, requiredPower, requiredPower)
-            : new RightRotatorInfo(Id, Weight, requiredPower, requiredPower);
+            ? new LeftRotatorInfo(Id)
+            : new RightRotatorInfo(Id);
     }
-
-    // protected override int CalculateActivationPower(int totalWeight) =>
-    //     GetRequiredPower(totalWeight);
-
-    // protected override int CalculateMaximumPower(int totalWeight) =>
-    //     GetRequiredPower(totalWeight);
 
     public override IEnumerable<ModuleEffect> CreateEffects(int power, int totalBotWeight)
     {
