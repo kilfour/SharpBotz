@@ -18,15 +18,6 @@ public class GameWorld
 
     public int Turn { get; private set; }
 
-    // public bool IsGameOver => bots.Count(bot => bot.IsAlive) <= 1;
-
-    // public Bot? Winner => IsGameOver
-    //     ? bots.SingleOrDefault(bot => bot.IsAlive)
-    //     : null;
-
-    // private readonly ModuleSystem modules;
-    // private readonly Intentions intentions;
-    // private readonly Collisions collisions;
 
     private static State CreateState(int? seed) =>
         seed is null ? new() : new(seed.Value);
@@ -46,12 +37,8 @@ public class GameWorld
         ArgumentNullException.ThrowIfNull(botStates);
         this.fuzzrState = fuzzrState;
         Arena = arena;
-        this.botStates = botStates;
+        this.botStates = [.. botStates];
         Bots = Array.AsReadOnly(this.botStates);
-
-        // modules = new ModuleSystem(this.bots);
-        // intentions = new Intentions(Arena, this.bots, fuzzrState, captureLog);
-        // collisions = new Collisions(Arena);
     }
 
     public void Update()
@@ -59,15 +46,6 @@ public class GameWorld
         Turn++;
         var botEffects = Bots.Select(a => (a, a.Bot.GetEffects(new BotObservation(), fuzzrState)));
         HandleEffects([.. botEffects]);
-        // var coolingDownAtStart = bots.Where(bot => bot.Cooldown > 0).ToArray();
-        // modules.Handle(writeLog);
-        // Arena.RedrawBots(bots);
-        // var intents = intentions.Handle(writeLog);
-        // collisions.Handle(intents, writeLog);
-        // MeleeAttacks.Handle(intents, writeLog);
-        // RangedAttacks.Handle(Arena, intents, writeLog);
-        // Cooldowns.Handle(coolingDownAtStart);
-        // Arena.RedrawBots(bots);
     }
 
     private static void HandleEffects((BotState BotState, ModuleEffects Effects)[] botEffects)
