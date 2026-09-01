@@ -115,8 +115,7 @@ ModuleRack.Create(
 #### What Is A Powered Module
 We already saw the modules related to energy generation and storage.  
 All other modules consume power. The are all powered modules.
-
-Let's explain the main mechanics by defining a (useless) one for demonstration purposes.  
+  
 #### Drive
 A drive is needed in order to move your board across the arena.
 
