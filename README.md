@@ -158,3 +158,12 @@ Drive.Named("drive")
    .MaximumPower(15);
 ```
 TODO.  
+## Scenario
+A scenario describes repeatable initial arena terrain and bot placement.   
+### Arena Definition
+```csharp
+Scenario.Named("My Scenario")
+    .ArenaSize(
+        ArenaWidth.Is(3),
+        ArenaHeight.Is(3));
+```

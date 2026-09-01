@@ -7,11 +7,4 @@ namespace SharpBotz.Tests.Docs.C_Scenario;
 """
 A scenario describes repeatable initial arena terrain and bot placement. 
 """)]
-public class ScenarioTests
-{
-    [Fact]
-    public void Spike()
-    {
-
-    }
-}
+public class ScenarioTests;
