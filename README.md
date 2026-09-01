@@ -155,3 +155,20 @@ Wall Wall Wall Wall Wall
 Wall  ↑↑        ↑↑  Wall
 Wall Wall Wall Wall Wall
 ```
+## Game World
+A game world contains the mutable state of a running game.  
+### Creating A Game World
+A game world is created from immutable arena terrain and the initial state of its bots.
+A seed can be supplied to make the game repeatable.  
+```csharp
+new(
+            arena,
+            [botState],
+            seed: 1234);
+```
+A newly created game starts at turn zero.  
+### Advancing Turns
+Updating the game world advances it by one turn.  
+```csharp
+world.Update();
+```
