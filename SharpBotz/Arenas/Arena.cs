@@ -11,6 +11,13 @@ public class Arena
 
     public ArenaTileType this[int x, int y] => grid[x, y];
 
+    public bool IsTraversable(Position position) =>
+        position.X >= 0 &&
+        position.X < Width &&
+        position.Y >= 0 &&
+        position.Y < Height &&
+        grid[position.X, position.Y] == ArenaTileType.Empty;
+
     public ArenaTile[,] GetGrid()
     {
         var snapshot = new ArenaTile[Width, Height];

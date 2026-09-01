@@ -1,14 +1,14 @@
-using System.Numerics;
 using QuickFuzzr.UnderTheHood;
 using SharpBotz.Arenas;
 using SharpBotz.Botz;
-using SharpBotz.Botz.BotModules;
 using SharpBotz.Botz.BotModules.Reactors;
+using SharpBotz.Worlds.EffectResolving;
 
 namespace SharpBotz.Worlds;
 
 public class GameWorld
 {
+
     public Arena Arena { get; }
     public IReadOnlyList<BotState> Bots { get; }
 
@@ -44,38 +44,13 @@ public class GameWorld
     public void Update()
     {
         Turn++;
-        var botEffects = Bots.Select(a => (a, a.Bot.GetEffects(new BotObservation(), fuzzrState)));
+        var botEffects = Bots.Select(a => new BotStateEffect(a, a.Bot.GetEffects(new BotObservation(), fuzzrState)));
         HandleEffects([.. botEffects]);
     }
 
-    private static void HandleEffects((BotState BotState, ModuleEffects Effects)[] botEffects)
+    private void HandleEffects(BotStateEffect[] botEffects)
     {
-        HandleReactorEffects(botEffects);
-    }
-
-    private static void HandleReactorEffects((BotState BotState, ModuleEffects Effects)[] botEffects)
-    {
-        foreach (var botEffect in botEffects)
-        {
-            HandleReactorEffect(botEffect);
-        }
-    }
-
-    private static void HandleReactorEffect((BotState BotState, ModuleEffects Effects) botEffect)
-    {
-        var bot = botEffect.BotState.Bot;
-        var reactorEffects = botEffect.Effects.ReactorEffects;
-        foreach (var effect in reactorEffects)
-        {
-            switch (effect)
-            {
-                case ReactorOverLoadedEffect:
-                    bot.TakeDamage(10);
-                    break;
-
-                default:
-                    throw new ArgumentException("Unknown reactor effect supplied.");
-            }
-        }
+        ReactorEffectsResolver.Handle(botEffects);
+        MovementEffectResolver.Handle(Arena, botStates, botEffects);
     }
 }
