@@ -1,4 +1,3 @@
-using SharpBotz.Botz;
 using SharpBotz.Botz.BotModules;
 using SharpBotz.Botz.BotModules.Batteries;
 using SharpBotz.Botz.BotModules.Drives;

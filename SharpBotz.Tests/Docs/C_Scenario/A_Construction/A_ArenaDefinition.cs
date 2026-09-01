@@ -11,15 +11,19 @@ public class A_ArenaDefinition
     [DocExample(typeof(A_ArenaDefinition), nameof(GetScenario))]
     public void Construction()
     {
-        var scenario = GetScenario();
+        var arena =
+            Arena.Sized(
+                    ArenaWidth.Is(3),
+                    ArenaHeight.Is(3))
+                .Build();
+        var scenario = GetScenario(arena);
         Assert.Equal("My Scenario", scenario.Name);
+        Assert.Same(arena, scenario.Arena);
     }
 
     [CodeSnippet]
-    private static Scenario GetScenario() =>
+    private static Scenario GetScenario(Arena arena) =>
         Scenario.Named("My Scenario")
-            .ArenaSize(
-                ArenaWidth.Is(3),
-                ArenaHeight.Is(3));
+            .Arena(arena);
 }
 

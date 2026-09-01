@@ -4,9 +4,10 @@
 Construct an `Arena` by calling the static `Create` method,
 which takes an `ArenaWidth` and an `ArenaHeight` as arguments:   
 ```csharp
-Arena.Create(
-    ArenaWidth.Is(3),
-    ArenaHeight.Is(3));
+Arena.Sized(
+        ArenaWidth.Is(3),
+        ArenaHeight.Is(3))
+    .Build();
 ```
 This creates a 3 by 3 grid.  
 The outer tiles are set up as *Walls*  
@@ -20,11 +21,12 @@ Both `ArenaWidth` and `ArenaHeight` must be greater than 2
 This can be achieved in the following way:  
 ```csharp
 Arena
-    .Create(
+    .Sized(
         ArenaWidth.Is(5),
         ArenaHeight.Is(3))
     .AddWallAt(1, 1)
-    .AddWallAt(3, 1);
+    .AddWallAt(3, 1)
+    .Build();
 ```
 This creates:  
 ```text
@@ -35,11 +37,12 @@ Wall Wall Wall Wall Wall
 Placing a wall where one is already present:  
 ```csharp
 Arena
-    .Create(
+    .Sized(
         ArenaWidth.Is(5),
         ArenaHeight.Is(3))
     .AddWallAt(1, 1)
-    .AddWallAt(1, 1);
+    .AddWallAt(1, 1)
+    .Build();
 ```
 Throws a:  
 ```csharp
@@ -48,39 +51,6 @@ ArenaConstructionException
 Containing the following message:  
 ```text
 "Tried adding a wall to a non empty tile at [1, 1].";
-```
-### Adding Bots
-This can be achieved in the following way:  
-```csharp
-Arena
-    .Create(
-        ArenaWidth.Is(5),
-        ArenaHeight.Is(3))
-    .SpawnBotAt(new Bot(new DummyBrain(), ModuleRack.Create()), 1, 1)
-    .SpawnBotAt(new Bot(new DummyBrain(), ModuleRack.Create()), 3, 1);
-```
-This creates:  
-```text
-Wall Wall Wall Wall Wall
-Wall  ↑↑        ↑↑  Wall
-Wall Wall Wall Wall Wall
-```
-Placing a bot where a wall is already present:  
-```csharp
-Arena
-    .Create(
-        ArenaWidth.Is(5),
-        ArenaHeight.Is(3))
-    .SpawnBotAt(new Bot(new DummyBrain(), ModuleRack.Create()), 1, 1)
-    .SpawnBotAt(new Bot(new DummyBrain(), ModuleRack.Create()), 1, 1);
-```
-Throws a:  
-```csharp
-ArenaConstructionException
-```
-Containing the following message:  
-```text
-"Tried adding a bot to a non empty tile at [1, 1].";
 ```
 ## Bot
 ### Modules
@@ -159,11 +129,30 @@ Drive.Named("drive")
 ```
 TODO.  
 ## Scenario
-A scenario describes repeatable initial arena terrain and bot placement.   
+A scenario describes repeatable initial arena terrain and bot placement.  
 ### Arena Definition
 ```csharp
 Scenario.Named("My Scenario")
-    .ArenaSize(
-        ArenaWidth.Is(3),
-        ArenaHeight.Is(3));
+    .Arena(arena);
+```
+### Adding Bots
+This can be achieved in the following way:  
+```csharp
+Scenario.Named("Botz")
+    .Arena(Arena.Sized(
+            ArenaWidth.Is(5),
+            ArenaHeight.Is(3))
+        .Build())
+    .Spawn(() => new Bot(new DummyBrain(), ModuleRack.Create()))
+        .At(1, 1)
+        .Facing(Direction.Up)
+    .Spawn(() => new Bot(new DummyBrain(), ModuleRack.Create()))
+        .At(3, 1)
+        .Facing(Direction.Up);
+```
+This creates:  
+```text
+Wall Wall Wall Wall Wall
+Wall  ↑↑        ↑↑  Wall
+Wall Wall Wall Wall Wall
 ```

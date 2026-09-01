@@ -21,11 +21,12 @@ public class B_AddingWalls
     [CodeSnippet]
     private static Arena GetArenaWithWalls() =>
         Arena
-            .Create(
+            .Sized(
                 ArenaWidth.Is(5),
                 ArenaHeight.Is(3))
             .AddWallAt(1, 1)
-            .AddWallAt(3, 1);
+            .AddWallAt(3, 1)
+            .Build();
 
     [CodeSnippet]
     [ArenaGrid]
@@ -54,11 +55,12 @@ public class B_AddingWalls
     [CodeSnippet]
     private static Arena GetArenaWithWallAlreadyExists() =>
         Arena
-            .Create(
+            .Sized(
                 ArenaWidth.Is(5),
                 ArenaHeight.Is(3))
             .AddWallAt(1, 1)
-            .AddWallAt(1, 1);
+            .AddWallAt(1, 1)
+            .Build();
 
     [CodeSnippet]
     [CodeRemove("typeof(")]

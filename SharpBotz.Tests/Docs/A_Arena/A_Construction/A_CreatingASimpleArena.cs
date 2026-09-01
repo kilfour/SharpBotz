@@ -30,9 +30,10 @@ The outer tiles are set up as *Walls*
 
     [CodeSnippet]
     private static Arena GetArena() =>
-        Arena.Create(
-            ArenaWidth.Is(3),
-            ArenaHeight.Is(3));
+        Arena.Sized(
+                ArenaWidth.Is(3),
+                ArenaHeight.Is(3))
+            .Build();
 
     [CodeSnippet]
     [ArenaGrid]

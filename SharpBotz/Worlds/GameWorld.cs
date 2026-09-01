@@ -1,28 +1,25 @@
-using QuickFuzzr;
 using QuickFuzzr.UnderTheHood;
 using SharpBotz.Arenas;
 using SharpBotz.Botz;
 
-namespace SharpBots.Engine;
+namespace SharpBotz.Worlds;
 
 public class GameWorld
 {
-    public int Seed => fuzzrState.Seed;
-
     public Arena Arena { get; }
+    public IReadOnlyList<BotState> Bots { get; }
 
-    public IReadOnlyList<Bot> Bots { get; }
+    public int Seed => fuzzrState.Seed;
+    private readonly State fuzzrState;
+    private readonly BotState[] botStates;
 
     public int Turn { get; private set; }
 
-    public bool IsGameOver => bots.Count(bot => bot.IsAlive) <= 1;
+    // public bool IsGameOver => bots.Count(bot => bot.IsAlive) <= 1;
 
-    public Bot? Winner => IsGameOver
-        ? bots.SingleOrDefault(bot => bot.IsAlive)
-        : null;
-
-    private readonly Bot[] bots;
-    private readonly State fuzzrState;
+    // public Bot? Winner => IsGameOver
+    //     ? bots.SingleOrDefault(bot => bot.IsAlive)
+    //     : null;
 
     // private readonly ModuleSystem modules;
     // private readonly Intentions intentions;
@@ -33,18 +30,21 @@ public class GameWorld
 
     public GameWorld(
         Arena arena,
+        BotState[] botStates,
         int? seed = null)
-        : this(arena, CreateState(seed)) { }
+        : this(arena, botStates, CreateState(seed)) { }
 
     private GameWorld(
         Arena arena,
+        BotState[] botStates,
         State fuzzrState)
     {
         ArgumentNullException.ThrowIfNull(arena);
-        ArgumentNullException.ThrowIfNull(bots);
+        ArgumentNullException.ThrowIfNull(botStates);
         this.fuzzrState = fuzzrState;
         Arena = arena;
-        Bots = Array.AsReadOnly(this.bots);
+        this.botStates = botStates;
+        Bots = Array.AsReadOnly(this.botStates);
 
         // modules = new ModuleSystem(this.bots);
         // intentions = new Intentions(Arena, this.bots, fuzzrState, captureLog);
