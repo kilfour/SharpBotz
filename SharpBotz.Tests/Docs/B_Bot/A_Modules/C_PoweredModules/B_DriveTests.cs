@@ -65,7 +65,6 @@ public class B_DriveTests
     """
     A powered drive moves the bot in the direction it is facing.
     """)]
-    [DocExample(typeof(B_DriveTests), nameof(CreateMovingWorld))]
     public void MoveOneTile()
     {
         var world = CreateMovingWorld();
