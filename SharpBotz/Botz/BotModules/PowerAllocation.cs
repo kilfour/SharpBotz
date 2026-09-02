@@ -7,6 +7,13 @@ public class PowerPlan
     public PowerPlan(params PowerModuleIntent[] intentions)
     {
         ArgumentNullException.ThrowIfNull(intentions);
+        if (intentions.Select(intention => intention.ModuleId).Distinct().Count() != intentions.Length)
+        {
+            throw new ArgumentException(
+                "A module can only be activated once per power plan.",
+                nameof(intentions));
+        }
+
         Generations = Array.AsReadOnly([.. intentions.Where(a => a is PowerGeneration).Cast<PowerGeneration>()]);
         Allocations = Array.AsReadOnly([.. intentions.Where(a => a is PowerAllocation).Cast<PowerAllocation>()]);
     }

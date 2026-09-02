@@ -52,33 +52,62 @@ public class F_ScannerTests
     [Fact]
     [DocContent(
     """
-    A scanner's base weight is 2 at the standard efficiency of 3 power per range.
-    Reducing the power required per range adds weight.
+    A scanner's base weight is 2.
+    Supporting a larger maximum range adds weight following the triangular number curve.
     """)]
     [DocBarChart(
         typeof(F_ScannerTests),
-        nameof(WeightCurve),
+        nameof(MaximumRangeWeightCurve),
+        "Weight by maximum range",
+        "Maximum Range",
+        "Weight",
+        0, 17)]
+    [DocContent(
+    """
+    A scanner's standard efficiency is 3 power per range.
+    Reducing the required power adds weight. This example keeps maximum range at 5.
+    """)]
+    [DocBarChart(
+        typeof(F_ScannerTests),
+        nameof(PowerPerRangeWeightCurve),
         "Weight by power per range",
         "Power Per Range",
         "Weight",
-        0, 4)]
+        0, 19)]
     public void WeightCurveTest()
     {
-        foreach (var (powerPerRange, weight) in WeightCurve)
+        foreach (var (maximumRange, weight) in MaximumRangeWeightCurve)
         {
-            Assert.Equal(weight, CreateScanner(powerPerRange).Weight);
+            Assert.Equal(weight, CreateScanner(powerPerRange: 3, maximumRange).Weight);
+        }
+
+        foreach (var (powerPerRange, weight) in PowerPerRangeWeightCurve)
+        {
+            Assert.Equal(weight, CreateScanner(powerPerRange, maximumRange: 5).Weight);
         }
     }
 
-    private static readonly (int PowerPerRange, int Weight)[] WeightCurve =
+    private static readonly (int MaximumRange, int Weight)[] MaximumRangeWeightCurve =
         [
-            (1, 4),
-            (2, 3),
-            (3, 2),
-            (4, 2),
-            (5, 2)
+            (1, 3),
+            (2, 5),
+            (3, 8),
+            (4, 12),
+            (5, 17)
         ];
 
-    private static Scanner CreateScanner(int powerPerRange) =>
-        new(ModuleId.Is("scanner"), powerPerRange, maximumPower: 10);
+    private static readonly (int PowerPerRange, int Weight)[] PowerPerRangeWeightCurve =
+        [
+            (1, 19),
+            (2, 18),
+            (3, 17),
+            (4, 17),
+            (5, 17)
+        ];
+
+    private static Scanner CreateScanner(int powerPerRange, int maximumRange) =>
+        new(
+            ModuleId.Is("scanner"),
+            powerPerRange,
+            maximumPower: powerPerRange * maximumRange);
 }

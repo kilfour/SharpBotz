@@ -323,14 +323,23 @@ new Scanner(
 ```
 Call `Scan` on the module info from your BotBrain to request a scan.
 Its power consumption is the requested range multiplied by power per range.  
-A scanner's base weight is 2 at the standard efficiency of 3 power per range.
-Reducing the power required per range adds weight.  
+A scanner's base weight is 2.
+Supporting a larger maximum range adds weight following the triangular number curve.  
+```mermaid
+xychart-beta
+    title "Weight by maximum range"
+    x-axis "Maximum Range" [1, 2, 3, 4, 5]
+    y-axis "Weight" 0 --> 17
+    bar [3, 5, 8, 12, 17]
+```
+A scanner's standard efficiency is 3 power per range.
+Reducing the required power adds weight. This example keeps maximum range at 5.  
 ```mermaid
 xychart-beta
     title "Weight by power per range"
     x-axis "Power Per Range" [1, 2, 3, 4, 5]
-    y-axis "Weight" 0 --> 4
-    bar [4, 3, 2, 2, 2]
+    y-axis "Weight" 0 --> 19
+    bar [19, 18, 17, 17, 17]
 ```
 ## Scenario
 A scenario describes repeatable initial arena terrain and bot placement.  
