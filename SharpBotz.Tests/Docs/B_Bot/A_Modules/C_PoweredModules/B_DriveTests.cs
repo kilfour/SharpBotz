@@ -19,9 +19,7 @@ It is created by passing in it's thrustPerPower and maximumPower along with a Mo
     public void Construction()
     {
         var drive = ConstructionExample();
-        // Assert.Equal(100, drive.);
-        // Assert.Equal(100, drive.AvailableCapacity);
-        // Assert.Equal(0, drive.Charge);
+        Assert.Equal("drive", drive.Id.ToString());
     }
 
     [CodeSnippet]
@@ -43,8 +41,5 @@ It is created by passing in it's thrustPerPower and maximumPower along with a Mo
         Assert.Equal(15, allocation.Power);
         allocation = info.Move(4);
         Assert.Equal(20, allocation.Power);
-        // Assert.Equal(100, drive.Capacity);
-        // Assert.Equal(100, drive.AvailableCapacity);
-        // Assert.Equal(0, drive.Charge);
     }
 }

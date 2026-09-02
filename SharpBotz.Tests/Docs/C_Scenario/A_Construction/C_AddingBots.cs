@@ -1,7 +1,6 @@
 using QuickPulse.Explains;
 using SharpBotz.Arenas;
 using SharpBotz.Botz;
-using SharpBotz.Botz.BotModules;
 using SharpBotz.Scenarios;
 
 namespace SharpBotz.Tests.Docs.C_Scenario.A_Construction;

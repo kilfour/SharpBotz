@@ -127,6 +127,71 @@ Drive.Named("drive")
    .MaximumPower(15);
 ```
 TODO.  
+#### Rotator
+A rotator is needed in order to turn your bot.
+
+
+It is created by passing in its torque per power, maximum power and rotation along with a ModuleId (supplied as string).  
+```csharp
+Rotator.Named("rotator")
+            .TorquePerPower(10)
+            .MaximumPower(15)
+            .Left();
+```
+Multiple rotators can be installed in the same ModuleRack.
+Each rotator has its own direction and ModuleId.  
+```csharp
+ModuleRack.Create(
+            Rotator.Named("left-rotator")
+                .TorquePerPower(10)
+                .MaximumPower(1)
+                .Left(),
+            Rotator.Named("right-rotator")
+                .TorquePerPower(10)
+                .MaximumPower(1)
+                .Right());
+```
+Supplying enough power can rotate a bot more than once in a single turn.
+Here the bot starts facing up and turns right twice, ending up facing down.  
+```csharp
+new(
+            Arena.Sized(
+                    ArenaWidth.Is(3),
+                    ArenaHeight.Is(3))
+                .Build(),
+            [
+                new BotState(
+                    new Bot(
+                        new TurnTwiceBrain(),
+                        ModuleRack.Create(
+                            Reactor.Named("reactor").MaximumOutput(2),
+                            Battery.Named("battery").Capacity(10),
+                            Rotator.Named("rotator")
+                                .TorquePerPower(100)
+                                .MaximumPower(2)
+                                .Right())),
+                    new Position(1, 1),
+                    Direction.Up)
+            ]);
+```
+A rotator's base weight is 3.
+Supporting more power adds weight following the triangular number curve.  
+```mermaid
+xychart-beta
+    title "Weight by maximum power"
+    x-axis "Maximum Power" [1, 2, 3, 4, 5]
+    y-axis "Weight" 0 --> 18
+    bar [4, 6, 9, 13, 18]
+```
+Torque per power up to 10 is included in that weight.
+Above 10, every two additional torque per power add 1 weight, rounded up.  
+```mermaid
+xychart-beta
+    title "Weight by torque per power"
+    x-axis "Torque Per Power" [10, 11, 12, 13, 14, 15]
+    y-axis "Weight" 0 --> 7
+    bar [4, 5, 5, 6, 6, 7]
+```
 ## Scenario
 A scenario describes repeatable initial arena terrain and bot placement.  
 ### Arena Definition
@@ -142,10 +207,10 @@ Scenario.Named("Botz")
             ArenaWidth.Is(5),
             ArenaHeight.Is(3))
         .Build())
-    .Spawn(() => new Bot(new DummyBrain(), ModuleRack.Create()))
+    .Spawn(() => new DummyBot())
         .At(1, 1)
         .Facing(Direction.Up)
-    .Spawn(() => new Bot(new DummyBrain(), ModuleRack.Create()))
+    .Spawn(() => new DummyBot())
         .At(3, 1)
         .Facing(Direction.Up);
 ```

@@ -1,7 +1,6 @@
 using QuickFuzzr.UnderTheHood;
 using SharpBotz.Arenas;
 using SharpBotz.Botz;
-using SharpBotz.Botz.BotModules.Reactors;
 using SharpBotz.Worlds.EffectResolving;
 
 namespace SharpBotz.Worlds;
@@ -50,6 +49,7 @@ public class GameWorld
     private void HandleEffects(BotStateEffect[] botEffects)
     {
         ReactorEffectsResolver.Handle(botEffects);
+        RotatorEffectsResolver.Handle(botStates, botEffects);
         MovementEffectResolver.Handle(Arena, botStates, botEffects);
     }
 }
