@@ -34,10 +34,9 @@ public class F_ScannerTests
 
     [CodeSnippet]
     private static Scanner ConstructionExample() =>
-        new Scanner(
-            ModuleId.Is("scanner"),
-            powerPerRange: 2,
-            maximumPower: 10);
+        Scanner.Named("scanner")
+            .PowerPerRange(2)
+            .MaximumPower(10);
 
     [Fact]
     [DocContent(
@@ -93,10 +92,9 @@ public class F_ScannerTests
                         ModuleRack.Create(
                             Reactor.Named("reactor").MaximumOutput(2),
                             Battery.Named("battery").Capacity(10),
-                            new Scanner(
-                                ModuleId.Is("scanner"),
-                                powerPerRange: 1,
-                                maximumPower: 1))),
+                            Scanner.Named("scanner")
+                                .PowerPerRange(1)
+                                .MaximumPower(1))),
                     new Position(2, 2),
                     Direction.Up)
             ]);
@@ -158,10 +156,9 @@ public class F_ScannerTests
         ];
 
     private static Scanner CreateScanner(int powerPerRange, int maximumRange) =>
-        new(
-            ModuleId.Is("scanner"),
-            powerPerRange,
-            maximumPower: powerPerRange * maximumRange);
+        Scanner.Named("scanner")
+            .PowerPerRange(powerPerRange)
+            .MaximumPower(powerPerRange * maximumRange);
 
     private sealed class OneShotScanningBrain(int range) : BotBrain
     {

@@ -35,11 +35,10 @@ public class E_RangedTests
 
     [CodeSnippet]
     private static Ranged ConstructionExample() =>
-        new Ranged(
-            ModuleId.Is("ranged"),
-            range: 3,
-            damagePerPower: 10,
-            maximumPower: 5);
+        Ranged.Named("ranged")
+            .Range(3)
+            .DamagePerPower(10)
+            .MaximumPower(5);
 
     [Fact]
     [DocContent(
@@ -89,11 +88,10 @@ public class E_RangedTests
                         ModuleRack.Create(
                             Reactor.Named("reactor").MaximumOutput(2),
                             Battery.Named("battery").Capacity(10),
-                            new Ranged(
-                                ModuleId.Is("ranged"),
-                                range: 3,
-                                damagePerPower: 10,
-                                maximumPower: 1))),
+                            Ranged.Named("ranged")
+                                .Range(3)
+                                .DamagePerPower(10)
+                                .MaximumPower(1))),
                     new Position(1, 1),
                     Direction.Right),
                 new BotState(
@@ -188,7 +186,10 @@ public class E_RangedTests
         ];
 
     private static Ranged CreateRanged(int range, int damagePerPower, int maximumPower) =>
-        new(ModuleId.Is("ranged"), range, damagePerPower, maximumPower);
+        Ranged.Named("ranged")
+            .Range(range)
+            .DamagePerPower(damagePerPower)
+            .MaximumPower(maximumPower);
 
     private sealed class OverchargedRangedBrain : BotBrain
     {

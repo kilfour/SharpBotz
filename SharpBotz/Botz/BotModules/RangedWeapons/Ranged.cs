@@ -1,13 +1,44 @@
 namespace SharpBotz.Botz.BotModules.RangedWeapons;
 
-public class Ranged(
-    ModuleId id,
-    int range,
-    int damagePerPower,
-    int maximumPower) : PoweredModule(
-        id,
-        GetWeight(range, damagePerPower, maximumPower))
+public class Ranged : PoweredModule
 {
+    private readonly int range;
+    private readonly int damagePerPower;
+    private readonly int maximumPower;
+
+    private Ranged(
+        ModuleId id,
+        int range,
+        int damagePerPower,
+        int maximumPower)
+        : base(id, GetWeight(range, damagePerPower, maximumPower))
+    {
+        this.range = range;
+        this.damagePerPower = damagePerPower;
+        this.maximumPower = maximumPower;
+    }
+
+    public static RangedRange Named(string moduleId) =>
+        new(ModuleId.Is(moduleId));
+
+    public class RangedRange(ModuleId id)
+    {
+        public RangedDamagePerPower Range(int range) =>
+            new(id, range);
+    }
+
+    public class RangedDamagePerPower(ModuleId id, int range)
+    {
+        public RangedMaximumPower DamagePerPower(int damagePerPower) =>
+            new(id, range, damagePerPower);
+    }
+
+    public class RangedMaximumPower(ModuleId id, int range, int damagePerPower)
+    {
+        public Ranged MaximumPower(int maximumPower) =>
+            new(id, range, damagePerPower, maximumPower);
+    }
+
     protected override ModuleInfo CreateInfo(int totalWeight) =>
         new RangedInfo(Id, range, damagePerPower, maximumPower);
 

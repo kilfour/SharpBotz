@@ -27,7 +27,7 @@ public class GameWorld
         int? seed = null)
         : this(arena, botStates, CreateState(seed)) { }
 
-    private GameWorld(
+    public GameWorld(
         Arena arena,
         BotState[] botStates,
         State fuzzrState)

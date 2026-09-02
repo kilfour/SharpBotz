@@ -43,10 +43,9 @@ public class ModuleRackPowerResolutionTests
     [Fact]
     public void AnOverchargedAllocationStillCreatesTheModuleEffect()
     {
-        var melee = new Melee(
-            ModuleId.Is("melee"),
-            damagePerPower: 10,
-            maximumPower: 1);
+        var melee = Melee.Named("melee")
+            .DamagePerPower(10)
+            .MaximumPower(1);
         var rack = ModuleRack.Create(
             Reactor.Named("reactor").MaximumOutput(2),
             Battery.Named("battery").Capacity(10),

@@ -84,10 +84,9 @@ public class GameWorldMeleeEffectsTests
         {
             Reactor.Named("reactor").MaximumOutput(move ? 2 : 1),
             Battery.Named("battery").Capacity(10),
-            new Melee(
-                ModuleId.Is("melee"),
-                damagePerPower: 20,
-                maximumPower: 1),
+            Melee.Named("melee")
+                .DamagePerPower(20)
+                .MaximumPower(1),
         };
         if (move)
         {

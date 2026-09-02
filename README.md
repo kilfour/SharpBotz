@@ -145,14 +145,14 @@ It is created with its thrust per power and maximum power, along with a ModuleId
 Thrust per power determines how much force each unit of supplied power produces.  
 ```csharp
 Drive.Named("drive")
-   .ThrustPerPower(10)
-   .MaximumPower(15);
+            .ThrustPerPower(10)
+            .MaximumPower(5);
 ```
 Call `Move` on the module info from your BotBrain to request a speed.
 The required power is the requested speed multiplied by the bot's loaded weight, divided by thrust per power and rounded up.
 
 For a bot weighing 50 with 10 thrust per power, every unit of speed needs 5 power.
-Requesting speed 4 allocates 20 power, which exceeds this drive's maximum power of 15.  
+Requesting speed 2 allocates 10 power, which exceeds this drive's maximum power of 5.  
 A powered drive moves the bot in the direction it is facing.
 Here the bot starts at position (1, 1), facing right, and moves one tile.  
 ```csharp
@@ -225,7 +225,7 @@ It is created by passing in its torque per power, maximum power and rotation alo
 ```csharp
 Rotator.Named("rotator")
             .TorquePerPower(10)
-            .MaximumPower(15)
+            .MaximumPower(5)
             .Left();
 ```
 Multiple rotators can be installed in the same ModuleRack.
@@ -313,10 +313,9 @@ A melee weapon damages the bot directly in front of your bot.
 
 It is created with its damage per power and maximum power, along with a ModuleId.  
 ```csharp
-new Melee(
-            ModuleId.Is("melee"),
-            damagePerPower: 10,
-            maximumPower: 5);
+Melee.Named("melee")
+            .DamagePerPower(10)
+            .MaximumPower(5);
 ```
 Call `Hit` on the module info from your BotBrain to request an attack.
 The requested damage is rounded up to the next whole unit of power.  
@@ -337,10 +336,9 @@ new GameWorld(
                         ModuleRack.Create(
                             Reactor.Named("reactor").MaximumOutput(2),
                             Battery.Named("battery").Capacity(10),
-                            new Melee(
-                                ModuleId.Is("melee"),
-                                damagePerPower: 10,
-                                maximumPower: 1))),
+                            Melee.Named("melee")
+                                .DamagePerPower(10)
+                                .MaximumPower(1))),
                     new Position(1, 1),
                     Direction.Right),
                 new BotState(
@@ -377,11 +375,10 @@ The first bot in its path is hit, provided it is within range and no wall blocks
 
 It is created with its range, damage per power and maximum power, along with a ModuleId.  
 ```csharp
-new Ranged(
-            ModuleId.Is("ranged"),
-            range: 3,
-            damagePerPower: 10,
-            maximumPower: 5);
+Ranged.Named("ranged")
+            .Range(3)
+            .DamagePerPower(10)
+            .MaximumPower(5);
 ```
 Call `Fire` on the module info from your BotBrain to request a shot.
 The requested damage is rounded up to the next whole unit of power.  
@@ -402,11 +399,10 @@ new GameWorld(
                         ModuleRack.Create(
                             Reactor.Named("reactor").MaximumOutput(2),
                             Battery.Named("battery").Capacity(10),
-                            new Ranged(
-                                ModuleId.Is("ranged"),
-                                range: 3,
-                                damagePerPower: 10,
-                                maximumPower: 1))),
+                            Ranged.Named("ranged")
+                                .Range(3)
+                                .DamagePerPower(10)
+                                .MaximumPower(1))),
                     new Position(1, 1),
                     Direction.Right),
                 new BotState(
@@ -451,10 +447,9 @@ A scanner lets your bot observe a square area around itself on the following tur
 
 It is created with the power required per unit of range and its maximum power, along with a ModuleId.  
 ```csharp
-new Scanner(
-            ModuleId.Is("scanner"),
-            powerPerRange: 2,
-            maximumPower: 10);
+Scanner.Named("scanner")
+            .PowerPerRange(2)
+            .MaximumPower(10);
 ```
 Call `Scan` on the module info from your BotBrain to request a scan.
 Its power consumption is the requested range multiplied by power per range.  
@@ -475,10 +470,9 @@ new GameWorld(
                         ModuleRack.Create(
                             Reactor.Named("reactor").MaximumOutput(2),
                             Battery.Named("battery").Capacity(10),
-                            new Scanner(
-                                ModuleId.Is("scanner"),
-                                powerPerRange: 1,
-                                maximumPower: 1))),
+                            Scanner.Named("scanner")
+                                .PowerPerRange(1)
+                                .MaximumPower(1))),
                     new Position(2, 2),
                     Direction.Up)
             ]);

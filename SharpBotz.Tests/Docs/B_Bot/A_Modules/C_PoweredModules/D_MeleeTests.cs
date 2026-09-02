@@ -33,10 +33,9 @@ public class D_MeleeTests
 
     [CodeSnippet]
     private static Melee ConstructionExample() =>
-        new Melee(
-            ModuleId.Is("melee"),
-            damagePerPower: 10,
-            maximumPower: 5);
+        Melee.Named("melee")
+            .DamagePerPower(10)
+            .MaximumPower(5);
 
     [Fact]
     [DocContent(
@@ -86,10 +85,9 @@ public class D_MeleeTests
                         ModuleRack.Create(
                             Reactor.Named("reactor").MaximumOutput(2),
                             Battery.Named("battery").Capacity(10),
-                            new Melee(
-                                ModuleId.Is("melee"),
-                                damagePerPower: 10,
-                                maximumPower: 1))),
+                            Melee.Named("melee")
+                                .DamagePerPower(10)
+                                .MaximumPower(1))),
                     new Position(1, 1),
                     Direction.Right),
                 new BotState(
@@ -159,7 +157,9 @@ public class D_MeleeTests
         ];
 
     private static Melee CreateMelee(int damagePerPower, int maximumPower) =>
-        new(ModuleId.Is("melee"), damagePerPower, maximumPower);
+        Melee.Named("melee")
+            .DamagePerPower(damagePerPower)
+            .MaximumPower(maximumPower);
 
     private sealed class OverchargedMeleeBrain : BotBrain
     {

@@ -1,10 +1,36 @@
 namespace SharpBotz.Botz.BotModules.Scanners;
 
 
-public sealed class Scanner(ModuleId id, int powerPerRange, int maximumPower)
-    : PoweredModule(id, GetWeight(powerPerRange, maximumPower))
+public sealed class Scanner : PoweredModule
 {
     private const int StandardPowerPerRange = 3;
+    private readonly int powerPerRange;
+    private readonly int maximumPower;
+
+    private Scanner(
+        ModuleId id,
+        int powerPerRange,
+        int maximumPower)
+        : base(id, GetWeight(powerPerRange, maximumPower))
+    {
+        this.powerPerRange = powerPerRange;
+        this.maximumPower = maximumPower;
+    }
+
+    public static ScannerPowerPerRange Named(string moduleId) =>
+        new(ModuleId.Is(moduleId));
+
+    public class ScannerPowerPerRange(ModuleId id)
+    {
+        public ScannerMaximumPower PowerPerRange(int powerPerRange) =>
+            new(id, powerPerRange);
+    }
+
+    public class ScannerMaximumPower(ModuleId id, int powerPerRange)
+    {
+        public Scanner MaximumPower(int maximumPower) =>
+            new(id, powerPerRange, maximumPower);
+    }
 
     protected override ModuleInfo CreateInfo(int totalWeight) =>
         new ScannerInfo(Id, powerPerRange, maximumPower);

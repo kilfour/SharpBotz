@@ -1,11 +1,36 @@
 namespace SharpBotz.Botz.BotModules.MeleeWeapons;
 
 
-public class Melee(
-    ModuleId id,
-    int damagePerPower,
-    int maximumPower) : PoweredModule(id, GetWeight(damagePerPower, maximumPower))
+public class Melee : PoweredModule
 {
+    private readonly int damagePerPower;
+    private readonly int maximumPower;
+
+    private Melee(
+        ModuleId id,
+        int damagePerPower,
+        int maximumPower)
+        : base(id, GetWeight(damagePerPower, maximumPower))
+    {
+        this.damagePerPower = damagePerPower;
+        this.maximumPower = maximumPower;
+    }
+
+    public static MeleeDamagePerPower Named(string moduleId) =>
+        new(ModuleId.Is(moduleId));
+
+    public class MeleeDamagePerPower(ModuleId id)
+    {
+        public MeleeMaximumPower DamagePerPower(int damagePerPower) =>
+            new(id, damagePerPower);
+    }
+
+    public class MeleeMaximumPower(ModuleId id, int damagePerPower)
+    {
+        public Melee MaximumPower(int maximumPower) =>
+            new(id, damagePerPower, maximumPower);
+    }
+
     protected override ModuleInfo CreateInfo(int totalWeight) =>
         new MeleeInfo(Id, damagePerPower, maximumPower);
 

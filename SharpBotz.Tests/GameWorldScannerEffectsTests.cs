@@ -45,14 +45,12 @@ public class GameWorldScannerEffectsTests
             ModuleRack.Create(
                 Reactor.Named("reactor").MaximumOutput(3),
                 Battery.Named("battery").Capacity(10),
-                new Scanner(
-                    ModuleId.Is("short-scanner"),
-                    powerPerRange: 1,
-                    maximumPower: 1),
-                new Scanner(
-                    ModuleId.Is("long-scanner"),
-                    powerPerRange: 1,
-                    maximumPower: 2)));
+                Scanner.Named("short-scanner")
+                    .PowerPerRange(1)
+                    .MaximumPower(1),
+                Scanner.Named("long-scanner")
+                    .PowerPerRange(1)
+                    .MaximumPower(2)));
         var world = CreateWorld(
             CreateArena(width: 7),
             new BotState(bot, new Position(3, 2), Direction.Up));
@@ -92,10 +90,9 @@ public class GameWorldScannerEffectsTests
                     ModuleRack.Create(
                         Reactor.Named("reactor").MaximumOutput(2),
                         Battery.Named("battery").Capacity(10),
-                        new Scanner(
-                            ModuleId.Is("scanner"),
-                            powerPerRange: 1,
-                            maximumPower: 1))),
+                        Scanner.Named("scanner")
+                            .PowerPerRange(1)
+                            .MaximumPower(1))),
                 new Position(2, 2),
                 Direction.Up));
 
@@ -133,10 +130,9 @@ public class GameWorldScannerEffectsTests
                 ModuleRack.Create(
                     Reactor.Named("reactor").MaximumOutput(maximumPower),
                     Battery.Named("battery").Capacity(10),
-                    new Scanner(
-                        ModuleId.Is("scanner"),
-                        powerPerRange: 1,
-                        maximumPower))),
+                    Scanner.Named("scanner")
+                        .PowerPerRange(1)
+                        .MaximumPower(maximumPower))),
             new Position(x, y),
             facing);
 

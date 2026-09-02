@@ -29,14 +29,15 @@ public class B_DriveTests
 
         Assert.Equal("drive", drive.Id.ToString());
         Assert.Equal(10, info.ThrustPerPower);
-        Assert.Equal(15, info.MaximumPower);
+        Assert.Equal(5, info.MaximumPower);
+        Assert.Equal(18, drive.Weight);
     }
 
     [CodeSnippet]
     private static Drive ConstructionExample() =>
          Drive.Named("drive")
             .ThrustPerPower(10)
-            .MaximumPower(15);
+            .MaximumPower(5);
 
     [Fact]
     [DocContent(
@@ -45,7 +46,7 @@ public class B_DriveTests
     The required power is the requested speed multiplied by the bot's loaded weight, divided by thrust per power and rounded up.
 
     For a bot weighing 50 with 10 thrust per power, every unit of speed needs 5 power.
-    Requesting speed 4 allocates 20 power, which exceeds this drive's maximum power of 15.
+    Requesting speed 2 allocates 10 power, which exceeds this drive's maximum power of 5.
     """)]
     public void PowerConsumption()
     {

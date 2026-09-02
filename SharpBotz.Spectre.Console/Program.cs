@@ -37,14 +37,12 @@ static Bot CreateDuelist() =>
             Drive.Named("drive")
                 .ThrustPerPower(100)
                 .MaximumPower(1),
-            new Melee(
-                ModuleId.Is("melee"),
-                damagePerPower: 20,
-                maximumPower: 1),
-            new Scanner(
-                ModuleId.Is("scanner"),
-                powerPerRange: 1,
-                maximumPower: 1)));
+            Melee.Named("melee")
+                .DamagePerPower(20)
+                .MaximumPower(1),
+            Scanner.Named("scanner")
+                .PowerPerRange(1)
+                .MaximumPower(1)));
 
 sealed class DuelistBrain : BotBrain
 {

@@ -123,11 +123,10 @@ public class GameWorldRangedEffectsTests
         {
             Reactor.Named("reactor").MaximumOutput(move ? 2 : 1),
             Battery.Named("battery").Capacity(10),
-            new Ranged(
-                ModuleId.Is("ranged"),
-                range: 3,
-                damagePerPower: 20,
-                maximumPower: 1),
+            Ranged.Named("ranged")
+                .Range(3)
+                .DamagePerPower(20)
+                .MaximumPower(1),
         };
         if (move)
         {

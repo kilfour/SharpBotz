@@ -25,13 +25,14 @@ public class C_RotatorTests
     {
         var rotator = ConstructionExample();
         Assert.Equal("rotator", rotator.Id.ToString());
+        Assert.Equal(18, rotator.Weight);
     }
 
     [CodeSnippet]
     private static Rotator ConstructionExample() =>
         Rotator.Named("rotator")
             .TorquePerPower(10)
-            .MaximumPower(15)
+            .MaximumPower(5)
             .Left();
 
     [Fact]
