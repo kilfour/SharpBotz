@@ -5,6 +5,7 @@ using SharpBotz.Botz.BotModules;
 using SharpBotz.Botz.BotModules.Batteries;
 using SharpBotz.Botz.BotModules.Reactors;
 using SharpBotz.Botz.BotModules.Scanners;
+using SharpBotz.Scenarios;
 using SharpBotz.Worlds;
 
 namespace SharpBotz.Tests.Docs.B_Bot.A_Modules.C_PoweredModules;
@@ -80,24 +81,22 @@ public class F_ScannerTests
 
     [CodeSnippet]
     private static GameWorld CreateOverchargedWorld() =>
-        new GameWorld(
-            Arena.Sized(
+        Scenario.Named("Overcharged scanner")
+            .Arena(Arena.Sized(
                     ArenaWidth.Is(5),
                     ArenaHeight.Is(5))
-                .Build(),
-            [
-                new BotState(
-                    new Bot(
+                .Build())
+            .Spawn(() => new Bot(
                         new OneShotScanningBrain(range: 2),
                         ModuleRack.Create(
                             Reactor.Named("reactor").MaximumOutput(2),
                             Battery.Named("battery").Capacity(10),
                             Scanner.Named("scanner")
                                 .PowerPerRange(1)
-                                .MaximumPower(1))),
-                    new Position(2, 2),
-                    Direction.Up)
-            ]);
+                                .MaximumPower(1))))
+                .At(2, 2)
+                .Facing(Direction.Up)
+            .CreateWorld();
 
     [Fact]
     [DocContent(

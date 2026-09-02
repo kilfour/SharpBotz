@@ -1,5 +1,6 @@
 using QuickPulse.Explains;
 using SharpBotz.Arenas;
+using SharpBotz.Scenarios;
 using SharpBotz.Worlds;
 
 namespace SharpBotz.Tests.Docs.D_Gameworld.B_Turns;
@@ -28,10 +29,10 @@ public class A_AdvancingTurns
         world.Update();
 
     private static GameWorld CreateGameWorld() =>
-        new(
-            Arena.Sized(
+        Scenario.Named("Advancing turns")
+            .Arena(Arena.Sized(
                     ArenaWidth.Is(3),
                     ArenaHeight.Is(3))
-                .Build(),
-            []);
+                .Build())
+            .CreateWorld();
 }

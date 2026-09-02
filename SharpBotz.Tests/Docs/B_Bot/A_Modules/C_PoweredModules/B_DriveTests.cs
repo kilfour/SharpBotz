@@ -5,6 +5,7 @@ using SharpBotz.Botz.BotModules;
 using SharpBotz.Botz.BotModules.Batteries;
 using SharpBotz.Botz.BotModules.Drives;
 using SharpBotz.Botz.BotModules.Reactors;
+using SharpBotz.Scenarios;
 using SharpBotz.Worlds;
 
 namespace SharpBotz.Tests.Docs.B_Bot.A_Modules.C_PoweredModules;
@@ -77,24 +78,22 @@ public class B_DriveTests
 
     [CodeSnippet]
     private static GameWorld CreateMovingWorld() =>
-        new GameWorld(
-            Arena.Sized(
+        Scenario.Named("Moving one tile")
+            .Arena(Arena.Sized(
                     ArenaWidth.Is(5),
                     ArenaHeight.Is(3))
-                .Build(),
-            [
-                new BotState(
-                    new Bot(
+                .Build())
+            .Spawn(() => new Bot(
                         new MoveRightBrain(),
                         ModuleRack.Create(
                             Reactor.Named("reactor").MaximumOutput(1),
                             Battery.Named("battery").Capacity(10),
                             Drive.Named("drive")
                                 .ThrustPerPower(100)
-                                .MaximumPower(1))),
-                    new Position(1, 1),
-                    Direction.Right)
-            ]);
+                                .MaximumPower(1))))
+                .At(1, 1)
+                .Facing(Direction.Right)
+            .CreateWorld();
 
     [Fact]
     [DocContent(
@@ -117,24 +116,22 @@ public class B_DriveTests
 
     [CodeSnippet]
     private static GameWorld CreateOverchargedWorld() =>
-        new GameWorld(
-            Arena.Sized(
+        Scenario.Named("Overcharged drive")
+            .Arena(Arena.Sized(
                     ArenaWidth.Is(5),
                     ArenaHeight.Is(3))
-                .Build(),
-            [
-                new BotState(
-                    new Bot(
+                .Build())
+            .Spawn(() => new Bot(
                         new MoveRightBrain(),
                         ModuleRack.Create(
                             Reactor.Named("reactor").MaximumOutput(2),
                             Battery.Named("battery").Capacity(10),
                             Drive.Named("drive")
                                 .ThrustPerPower(20)
-                                .MaximumPower(1))),
-                    new Position(1, 1),
-                    Direction.Right)
-            ]);
+                                .MaximumPower(1))))
+                .At(1, 1)
+                .Facing(Direction.Right)
+            .CreateWorld();
 
     [Fact]
     [DocContent(

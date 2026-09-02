@@ -4,6 +4,7 @@ using SharpBotz.Botz;
 using SharpBotz.Botz.BotModules;
 using SharpBotz.Botz.BotModules.Batteries;
 using SharpBotz.Botz.BotModules.Reactors;
+using SharpBotz.Scenarios;
 using SharpBotz.Worlds;
 
 namespace SharpBotz.Tests.Docs.B_Bot.A_Modules.A_Reactor;
@@ -117,21 +118,19 @@ Increasing maximum output adds more weight exponentialy.
 
     [CodeSnippet]
     private static GameWorld CreateOverloadedWorld() =>
-        new GameWorld(
-            Arena.Sized(
+        Scenario.Named("Overloaded reactor")
+            .Arena(Arena.Sized(
                     ArenaWidth.Is(3),
                     ArenaHeight.Is(3))
-                .Build(),
-            [
-                new BotState(
-                    new Bot(
+                .Build())
+            .Spawn(() => new Bot(
                         new OverloadedReactorBrain(),
                         ModuleRack.Create(
                             Reactor.Named("reactor").MaximumOutput(1),
-                            Battery.Named("battery").Capacity(10))),
-                    new Position(1, 1),
-                    Direction.Up)
-            ]);
+                            Battery.Named("battery").Capacity(10))))
+                .At(1, 1)
+                .Facing(Direction.Up)
+            .CreateWorld();
 
     [Fact]
     [DocContent(

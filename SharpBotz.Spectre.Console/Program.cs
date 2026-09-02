@@ -24,7 +24,7 @@ var scenario = Scenario.Named("First contact")
         .At(9, 3)
         .Facing(Direction.Left);
 
-var world = scenario.Start();
+var world = scenario.CreateWorld();
 var display = new SpectreGameDisplay();
 await display.RunAsync(world, scenario.Name, maximumTurns: 20);
 

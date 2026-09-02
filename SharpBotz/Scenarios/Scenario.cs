@@ -46,12 +46,13 @@ public class Scenario
 
     private record BotPlacement(Func<Bot> BotFactory, Position Position, Direction Facing);
 
-    public GameWorld Start() =>
+    public GameWorld CreateWorld(int? seed = null) =>
         new(
             Arena,
             [.. botPlacements.Select(placement =>
                     new BotState(
                         placement.BotFactory(),
                         placement.Position,
-                        placement.Facing))]);
+                        placement.Facing))],
+            seed);
 }

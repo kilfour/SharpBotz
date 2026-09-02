@@ -5,6 +5,7 @@ using SharpBotz.Botz.BotModules;
 using SharpBotz.Botz.BotModules.Batteries;
 using SharpBotz.Botz.BotModules.MeleeWeapons;
 using SharpBotz.Botz.BotModules.Reactors;
+using SharpBotz.Scenarios;
 using SharpBotz.Worlds;
 
 namespace SharpBotz.Tests.Docs.B_Bot.A_Modules.C_PoweredModules;
@@ -73,31 +74,28 @@ public class D_MeleeTests
 
     [CodeSnippet]
     private static GameWorld CreateOverchargedWorld() =>
-        new GameWorld(
-            Arena.Sized(
+        Scenario.Named("Overcharged melee weapon")
+            .Arena(Arena.Sized(
                     ArenaWidth.Is(4),
                     ArenaHeight.Is(3))
-                .Build(),
-            [
-                new BotState(
-                    new Bot(
+                .Build())
+            .Spawn(() => new Bot(
                         new OverchargedMeleeBrain(),
                         ModuleRack.Create(
                             Reactor.Named("reactor").MaximumOutput(2),
                             Battery.Named("battery").Capacity(10),
                             Melee.Named("melee")
                                 .DamagePerPower(10)
-                                .MaximumPower(1))),
-                    new Position(1, 1),
-                    Direction.Right),
-                new BotState(
-                    new Bot(
+                                .MaximumPower(1))))
+                .At(1, 1)
+                .Facing(Direction.Right)
+            .Spawn(() => new Bot(
                         new IdleBrain(),
                         ModuleRack.Create(
-                            Battery.Named("battery").Capacity(10))),
-                    new Position(2, 1),
-                    Direction.Left)
-            ]);
+                            Battery.Named("battery").Capacity(10))))
+                .At(2, 1)
+                .Facing(Direction.Left)
+            .CreateWorld();
 
     [Fact]
     [DocContent(

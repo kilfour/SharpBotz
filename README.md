@@ -83,21 +83,19 @@ The reactor produces no power, and every excess unit of requested output deals 2
 
 Here a reactor with maximum output 1 is asked to generate 2 power, dealing 2 damage.  
 ```csharp
-new GameWorld(
-            Arena.Sized(
+Scenario.Named("Overloaded reactor")
+            .Arena(Arena.Sized(
                     ArenaWidth.Is(3),
                     ArenaHeight.Is(3))
-                .Build(),
-            [
-                new BotState(
-                    new Bot(
+                .Build())
+            .Spawn(() => new Bot(
                         new OverloadedReactorBrain(),
                         ModuleRack.Create(
                             Reactor.Named("reactor").MaximumOutput(1),
-                            Battery.Named("battery").Capacity(10))),
-                    new Position(1, 1),
-                    Direction.Up)
-            ]);
+                            Battery.Named("battery").Capacity(10))))
+                .At(1, 1)
+                .Facing(Direction.Up)
+            .CreateWorld();
 ```
 Multiple rectors can be installed in a ModuleRack.
 
@@ -156,48 +154,44 @@ Requesting speed 2 allocates 10 power, which exceeds this drive's maximum power 
 A powered drive moves the bot in the direction it is facing.
 Here the bot starts at position (1, 1), facing right, and moves one tile.  
 ```csharp
-new GameWorld(
-            Arena.Sized(
+Scenario.Named("Moving one tile")
+            .Arena(Arena.Sized(
                     ArenaWidth.Is(5),
                     ArenaHeight.Is(3))
-                .Build(),
-            [
-                new BotState(
-                    new Bot(
+                .Build())
+            .Spawn(() => new Bot(
                         new MoveRightBrain(),
                         ModuleRack.Create(
                             Reactor.Named("reactor").MaximumOutput(1),
                             Battery.Named("battery").Capacity(10),
                             Drive.Named("drive")
                                 .ThrustPerPower(100)
-                                .MaximumPower(1))),
-                    new Position(1, 1),
-                    Direction.Right)
-            ]);
+                                .MaximumPower(1))))
+                .At(1, 1)
+                .Facing(Direction.Right)
+            .CreateWorld();
 ```
 Supplying more than the drive's maximum power overcharges it.
 The movement still happens, but every excess unit of power deals 3 damage to the bot.
 
 Here a drive with maximum power 1 receives 2 power. The bot moves one tile and takes 3 damage.  
 ```csharp
-new GameWorld(
-            Arena.Sized(
+Scenario.Named("Overcharged drive")
+            .Arena(Arena.Sized(
                     ArenaWidth.Is(5),
                     ArenaHeight.Is(3))
-                .Build(),
-            [
-                new BotState(
-                    new Bot(
+                .Build())
+            .Spawn(() => new Bot(
                         new MoveRightBrain(),
                         ModuleRack.Create(
                             Reactor.Named("reactor").MaximumOutput(2),
                             Battery.Named("battery").Capacity(10),
                             Drive.Named("drive")
                                 .ThrustPerPower(20)
-                                .MaximumPower(1))),
-                    new Position(1, 1),
-                    Direction.Right)
-            ]);
+                                .MaximumPower(1))))
+                .At(1, 1)
+                .Facing(Direction.Right)
+            .CreateWorld();
 ```
 A drive's base weight is 3.
 Supporting more power adds weight following the triangular number curve.  
@@ -244,14 +238,12 @@ ModuleRack.Create(
 Supplying enough power can rotate a bot more than once in a single turn.
 Here the bot starts facing up and turns right twice, ending up facing down.  
 ```csharp
-new(
-            Arena.Sized(
+Scenario.Named("Turning twice")
+            .Arena(Arena.Sized(
                     ArenaWidth.Is(3),
                     ArenaHeight.Is(3))
-                .Build(),
-            [
-                new BotState(
-                    new Bot(
+                .Build())
+            .Spawn(() => new Bot(
                         new TurnTwiceBrain(),
                         ModuleRack.Create(
                             Reactor.Named("reactor").MaximumOutput(2),
@@ -259,24 +251,22 @@ new(
                             Rotator.Named("rotator")
                                 .TorquePerPower(100)
                                 .MaximumPower(2)
-                                .Right())),
-                    new Position(1, 1),
-                    Direction.Up)
-            ]);
+                                .Right())))
+                .At(1, 1)
+                .Facing(Direction.Up)
+            .CreateWorld();
 ```
 Supplying more than the rotator's maximum power overcharges it.
 The rotation still happens, but every excess unit of power deals 3 damage to the bot.
 
 Here a rotator with maximum power 1 receives 2 power. The bot turns right and takes 3 damage.  
 ```csharp
-new GameWorld(
-            Arena.Sized(
+Scenario.Named("Overcharged rotator")
+            .Arena(Arena.Sized(
                     ArenaWidth.Is(3),
                     ArenaHeight.Is(3))
-                .Build(),
-            [
-                new BotState(
-                    new Bot(
+                .Build())
+            .Spawn(() => new Bot(
                         new OverchargedTurnBrain(),
                         ModuleRack.Create(
                             Reactor.Named("reactor").MaximumOutput(2),
@@ -284,10 +274,10 @@ new GameWorld(
                             Rotator.Named("rotator")
                                 .TorquePerPower(20)
                                 .MaximumPower(1)
-                                .Right())),
-                    new Position(1, 1),
-                    Direction.Up)
-            ]);
+                                .Right())))
+                .At(1, 1)
+                .Facing(Direction.Up)
+            .CreateWorld();
 ```
 A rotator's base weight is 3.
 Supporting more power adds weight following the triangular number curve.  
@@ -324,31 +314,28 @@ The attack still lands, but every excess unit of power deals 3 damage to the att
 
 Here a weapon with maximum power 1 receives 2 power. It deals 20 damage and its bot takes 3 damage.  
 ```csharp
-new GameWorld(
-            Arena.Sized(
+Scenario.Named("Overcharged melee weapon")
+            .Arena(Arena.Sized(
                     ArenaWidth.Is(4),
                     ArenaHeight.Is(3))
-                .Build(),
-            [
-                new BotState(
-                    new Bot(
+                .Build())
+            .Spawn(() => new Bot(
                         new OverchargedMeleeBrain(),
                         ModuleRack.Create(
                             Reactor.Named("reactor").MaximumOutput(2),
                             Battery.Named("battery").Capacity(10),
                             Melee.Named("melee")
                                 .DamagePerPower(10)
-                                .MaximumPower(1))),
-                    new Position(1, 1),
-                    Direction.Right),
-                new BotState(
-                    new Bot(
+                                .MaximumPower(1))))
+                .At(1, 1)
+                .Facing(Direction.Right)
+            .Spawn(() => new Bot(
                         new IdleBrain(),
                         ModuleRack.Create(
-                            Battery.Named("battery").Capacity(10))),
-                    new Position(2, 1),
-                    Direction.Left)
-            ]);
+                            Battery.Named("battery").Capacity(10))))
+                .At(2, 1)
+                .Facing(Direction.Left)
+            .CreateWorld();
 ```
 A melee weapon's base weight is 2.
 Higher damage per power adds weight following a squared curve.  
@@ -387,14 +374,12 @@ The shot still lands, but every excess unit of power deals 3 damage to the attac
 
 Here a weapon with maximum power 1 receives 2 power. It deals 20 damage and its bot takes 3 damage.  
 ```csharp
-new GameWorld(
-            Arena.Sized(
+Scenario.Named("Overcharged ranged weapon")
+            .Arena(Arena.Sized(
                     ArenaWidth.Is(5),
                     ArenaHeight.Is(3))
-                .Build(),
-            [
-                new BotState(
-                    new Bot(
+                .Build())
+            .Spawn(() => new Bot(
                         new OverchargedRangedBrain(),
                         ModuleRack.Create(
                             Reactor.Named("reactor").MaximumOutput(2),
@@ -402,17 +387,16 @@ new GameWorld(
                             Ranged.Named("ranged")
                                 .Range(3)
                                 .DamagePerPower(10)
-                                .MaximumPower(1))),
-                    new Position(1, 1),
-                    Direction.Right),
-                new BotState(
-                    new Bot(
+                                .MaximumPower(1))))
+                .At(1, 1)
+                .Facing(Direction.Right)
+            .Spawn(() => new Bot(
                         new IdleBrain(),
                         ModuleRack.Create(
-                            Battery.Named("battery").Capacity(10))),
-                    new Position(3, 1),
-                    Direction.Left)
-            ]);
+                            Battery.Named("battery").Capacity(10))))
+                .At(3, 1)
+                .Facing(Direction.Left)
+            .CreateWorld();
 ```
 A ranged weapon's base weight is 3.
 Increasing range adds weight following the triangular number curve.  
@@ -458,24 +442,22 @@ The scan is still available on the following turn, but every excess unit of powe
 
 Here a scanner with maximum power 1 receives 2 power. It produces a range-2 scan and deals 3 damage.  
 ```csharp
-new GameWorld(
-            Arena.Sized(
+Scenario.Named("Overcharged scanner")
+            .Arena(Arena.Sized(
                     ArenaWidth.Is(5),
                     ArenaHeight.Is(5))
-                .Build(),
-            [
-                new BotState(
-                    new Bot(
+                .Build())
+            .Spawn(() => new Bot(
                         new OneShotScanningBrain(range: 2),
                         ModuleRack.Create(
                             Reactor.Named("reactor").MaximumOutput(2),
                             Battery.Named("battery").Capacity(10),
                             Scanner.Named("scanner")
                                 .PowerPerRange(1)
-                                .MaximumPower(1))),
-                    new Position(2, 2),
-                    Direction.Up)
-            ]);
+                                .MaximumPower(1))))
+                .At(2, 2)
+                .Facing(Direction.Up)
+            .CreateWorld();
 ```
 A scanner's base weight is 2.
 Supporting a larger maximum range adds weight following the triangular number curve.  
@@ -526,13 +508,18 @@ Wall Wall Wall Wall Wall
 ## Game World
 A game world contains the mutable state of a running game.  
 ### Creating A Game World
-A game world is created from immutable arena terrain and the initial state of its bots.
+A game world is created from a scenario containing its arena terrain and initial bot placements.
 A seed can be supplied to make the game repeatable.  
 ```csharp
-new(
-            arena,
-            [botState],
-            seed: 1234);
+Scenario.Named("Repeatable game")
+            .Arena(Arena.Sized(
+                    ArenaWidth.Is(3),
+                    ArenaHeight.Is(3))
+                .Build())
+            .Spawn(() => new DummyBot())
+                .At(1, 1)
+                .Facing(Direction.Right)
+            .CreateWorld(seed: 1234);
 ```
 A newly created game starts at turn zero.  
 ### Advancing Turns

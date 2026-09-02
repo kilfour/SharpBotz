@@ -22,8 +22,8 @@ public class ScenarioTests
                 .At(1, 1)
                 .Facing(Direction.Up);
 
-        var first = scenario.Start();
-        var second = scenario.Start();
+        var first = scenario.CreateWorld();
+        var second = scenario.CreateWorld();
 
         Assert.Same(first.Arena, second.Arena);
         Assert.NotSame(first.Bots[0].Bot, second.Bots[0].Bot);

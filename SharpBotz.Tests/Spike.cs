@@ -53,7 +53,7 @@ public class Spike
         var world = Scenario.Named("overload")
             .Arena(Arena.Sized(ArenaWidth.Is(3), ArenaHeight.Is(3)).Build())
             .Spawn(() => new Bot(new OverLoadBrain(), rack)).At(1, 1).Facing(Direction.Up)
-            .Start();
+            .CreateWorld();
         world.Update();
         var bot = Assert.Single(world.Bots).Bot;
         Assert.Equal(90, bot.HitPoints);

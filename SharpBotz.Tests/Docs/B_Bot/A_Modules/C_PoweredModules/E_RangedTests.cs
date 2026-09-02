@@ -5,6 +5,7 @@ using SharpBotz.Botz.BotModules;
 using SharpBotz.Botz.BotModules.Batteries;
 using SharpBotz.Botz.BotModules.RangedWeapons;
 using SharpBotz.Botz.BotModules.Reactors;
+using SharpBotz.Scenarios;
 using SharpBotz.Worlds;
 
 namespace SharpBotz.Tests.Docs.B_Bot.A_Modules.C_PoweredModules;
@@ -76,14 +77,12 @@ public class E_RangedTests
 
     [CodeSnippet]
     private static GameWorld CreateOverchargedWorld() =>
-        new GameWorld(
-            Arena.Sized(
+        Scenario.Named("Overcharged ranged weapon")
+            .Arena(Arena.Sized(
                     ArenaWidth.Is(5),
                     ArenaHeight.Is(3))
-                .Build(),
-            [
-                new BotState(
-                    new Bot(
+                .Build())
+            .Spawn(() => new Bot(
                         new OverchargedRangedBrain(),
                         ModuleRack.Create(
                             Reactor.Named("reactor").MaximumOutput(2),
@@ -91,17 +90,16 @@ public class E_RangedTests
                             Ranged.Named("ranged")
                                 .Range(3)
                                 .DamagePerPower(10)
-                                .MaximumPower(1))),
-                    new Position(1, 1),
-                    Direction.Right),
-                new BotState(
-                    new Bot(
+                                .MaximumPower(1))))
+                .At(1, 1)
+                .Facing(Direction.Right)
+            .Spawn(() => new Bot(
                         new IdleBrain(),
                         ModuleRack.Create(
-                            Battery.Named("battery").Capacity(10))),
-                    new Position(3, 1),
-                    Direction.Left)
-            ]);
+                            Battery.Named("battery").Capacity(10))))
+                .At(3, 1)
+                .Facing(Direction.Left)
+            .CreateWorld();
 
     [Fact]
     [DocContent(

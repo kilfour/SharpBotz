@@ -5,6 +5,7 @@ using SharpBotz.Botz.BotModules;
 using SharpBotz.Botz.BotModules.Batteries;
 using SharpBotz.Botz.BotModules.Reactors;
 using SharpBotz.Botz.BotModules.Rotators;
+using SharpBotz.Scenarios;
 using SharpBotz.Worlds;
 
 namespace SharpBotz.Tests.Docs.B_Bot.A_Modules.C_PoweredModules;
@@ -91,14 +92,12 @@ public class C_RotatorTests
 
     [CodeSnippet]
     private static GameWorld CreateTurningWorld() =>
-        new(
-            Arena.Sized(
+        Scenario.Named("Turning twice")
+            .Arena(Arena.Sized(
                     ArenaWidth.Is(3),
                     ArenaHeight.Is(3))
-                .Build(),
-            [
-                new BotState(
-                    new Bot(
+                .Build())
+            .Spawn(() => new Bot(
                         new TurnTwiceBrain(),
                         ModuleRack.Create(
                             Reactor.Named("reactor").MaximumOutput(2),
@@ -106,10 +105,10 @@ public class C_RotatorTests
                             Rotator.Named("rotator")
                                 .TorquePerPower(100)
                                 .MaximumPower(2)
-                                .Right())),
-                    new Position(1, 1),
-                    Direction.Up)
-            ]);
+                                .Right())))
+                .At(1, 1)
+                .Facing(Direction.Up)
+            .CreateWorld();
 
     [Fact]
     [DocContent(
@@ -132,14 +131,12 @@ public class C_RotatorTests
 
     [CodeSnippet]
     private static GameWorld CreateOverchargedWorld() =>
-        new GameWorld(
-            Arena.Sized(
+        Scenario.Named("Overcharged rotator")
+            .Arena(Arena.Sized(
                     ArenaWidth.Is(3),
                     ArenaHeight.Is(3))
-                .Build(),
-            [
-                new BotState(
-                    new Bot(
+                .Build())
+            .Spawn(() => new Bot(
                         new OverchargedTurnBrain(),
                         ModuleRack.Create(
                             Reactor.Named("reactor").MaximumOutput(2),
@@ -147,10 +144,10 @@ public class C_RotatorTests
                             Rotator.Named("rotator")
                                 .TorquePerPower(20)
                                 .MaximumPower(1)
-                                .Right())),
-                    new Position(1, 1),
-                    Direction.Up)
-            ]);
+                                .Right())))
+                .At(1, 1)
+                .Facing(Direction.Up)
+            .CreateWorld();
 
     [Fact]
     [DocContent(

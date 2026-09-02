@@ -15,7 +15,7 @@ public class C_AddingBots
     [DocExample(typeof(C_AddingBots), nameof(ExpectedGridWithBots), "text")]
     public void AddingBots()
     {
-        var world = GetScenarioWithBots().Start();
+        var world = GetScenarioWithBots().CreateWorld();
         Assert.Equal(2, world.Bots.Count);
         Assert.Equal(new Position(1, 1), world.Bots[0].Position);
         Assert.Equal(Direction.Up, world.Bots[0].Facing);
