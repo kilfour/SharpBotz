@@ -5,6 +5,9 @@ public readonly struct Position(int x, int y)
 {
     public int X { get; } = x;
     public int Y { get; } = y;
+
+    public (int X, int Y) ToCoordinates() => (X, Y);
+
     public Position Move(Direction direction) => direction switch
     {
         Direction.Up => new Position(X, Y - 1),

@@ -112,7 +112,7 @@ public class GameWorldDriveEffectsTests
             new Position(x, y),
             facing);
 
-    private sealed class MovingBrain(int speed) : BotBrain
+    private class MovingBrain(int speed) : BotBrain
     {
         protected override PowerPlan RoutePower(
             ModuleControl modules,
@@ -125,7 +125,7 @@ public class GameWorldDriveEffectsTests
         }
     }
 
-    private sealed class IdleBrain : BotBrain
+    private class IdleBrain : BotBrain
     {
         protected override PowerPlan RoutePower(
             ModuleControl modules,

@@ -3,22 +3,12 @@ using SharpBotz.Maths;
 namespace SharpBotz.Botz.BotModules.MeleeWeapons;
 
 
-public sealed class Melee : PoweredModule
+public class Melee(
+    ModuleId id,
+    int damagePerPower,
+    int maximumPower) : PoweredModule(id, GetWeight(damagePerPower, maximumPower))
 {
-    private const int StandardDamagePerPower = 4;
-
-    private readonly int damagePerPower;
-    private readonly int maximumPower;
-
-    public Melee(
-        ModuleId id,
-        int damagePerPower,
-        int maximumPower)
-        : base(id, GetWeight(damagePerPower, maximumPower))
-    {
-        this.damagePerPower = damagePerPower;
-        this.maximumPower = maximumPower;
-    }
+    private const int StandardDamagePerPower = 3;
 
     protected override ModuleInfo CreateInfo(int totalWeight) =>
         new MeleeInfo(Id, damagePerPower, maximumPower);
@@ -27,10 +17,8 @@ public sealed class Melee : PoweredModule
     {
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(damage);
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(activationPower);
-
         var scaledDamageSquared = checked((long)damage * damage);
-        var damageWeight = (scaledDamageSquared / 100) +
-                           (scaledDamageSquared % 100 == 0 ? 0 : 1);
+        var damageWeight = (scaledDamageSquared / 100) + (scaledDamageSquared % 100 == 0 ? 0 : 1);
         var standardPower = Divide.RoundingUp(damage, StandardDamagePerPower);
         var relativeEfficiency = Divide.RoundingUp(standardPower, activationPower);
         var efficiencyWeight = Math.Max(0, relativeEfficiency - 1);

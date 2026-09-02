@@ -1,4 +1,6 @@
 using SharpBotz.Botz.BotModules.Drives;
+using SharpBotz.Botz.BotModules.MeleeWeapons;
+using SharpBotz.Botz.BotModules.RangedWeapons;
 using SharpBotz.Botz.BotModules.Reactors;
 using SharpBotz.Botz.BotModules.Rotators;
 
@@ -12,11 +14,15 @@ public readonly record struct ModuleEffects
     private ModuleEffects(ModuleEffect[] effects)
     {
         ReactorEffects = [.. effects.Where(a => a is ReactorOverLoadedEffect)];
-        DriveEffects = [.. effects.Where(a => a is DriveEffect)];
         RotatorEffects = [.. effects.Where(a => a is RotateEffect)];
+        DriveEffects = [.. effects.Where(a => a is DriveEffect)];
+        MeleeEffects = [.. effects.Where(a => a is MeleeEffect)];
+        RangedEffects = [.. effects.Where(a => a is RangedEffect)];
     }
 
     public readonly ModuleEffect[] ReactorEffects { get; private init; }
-    public readonly ModuleEffect[] DriveEffects { get; private init; }
     public readonly ModuleEffect[] RotatorEffects { get; private init; }
+    public readonly ModuleEffect[] DriveEffects { get; private init; }
+    public readonly ModuleEffect[] MeleeEffects { get; private init; }
+    public readonly ModuleEffect[] RangedEffects { get; private init; }
 }

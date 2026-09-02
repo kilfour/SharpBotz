@@ -9,11 +9,11 @@ public static class RotatorEffectsResolver
     {
         for (var botIndex = 0; botIndex < botStateEffects.Length; botIndex++)
         {
-            HandleRotatorEffect(botIndex, botStates, botStateEffects);
+            HandleEffect(botIndex, botStates, botStateEffects);
         }
     }
 
-    private static void HandleRotatorEffect(
+    private static void HandleEffect(
         int botIndex,
         BotState[] botStates,
         BotStateEffect[] botStateEffects)

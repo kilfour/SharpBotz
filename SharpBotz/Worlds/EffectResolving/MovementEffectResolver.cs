@@ -45,7 +45,7 @@ public static class MovementEffectResolver
             .ToArray();
         var occupants = Enumerable.Range(0, botStateEffects.Length)
             .Where(index => botStateEffects[index].BotState.Bot.IsAlive)
-            .ToLookup(index => ToCoordinates(botStateEffects[index].BotState.Position));
+            .ToLookup(index => botStateEffects[index].BotState.Position.ToCoordinates());
         var targets = movers.ToDictionary(
             intent => intent.BotIndex,
             intent =>
@@ -54,7 +54,7 @@ public static class MovementEffectResolver
                 return state.Position.Move(state.Facing);
             });
         var competingMovers = movers.ToLookup(
-            intent => ToCoordinates(targets[intent.BotIndex]));
+            intent => targets[intent.BotIndex].ToCoordinates());
         var collisionVictims = new HashSet<int>();
 
         foreach (var mover in movers)
@@ -69,7 +69,7 @@ public static class MovementEffectResolver
                 collisionVictims.Add(moverIndex);
             }
 
-            foreach (var occupantIndex in occupants[ToCoordinates(target)])
+            foreach (var occupantIndex in occupants[target.ToCoordinates()])
             {
                 var occupantBot = botStateEffects[occupantIndex].BotState.Bot;
                 if (ReferenceEquals(moverBot, occupantBot))
@@ -82,7 +82,7 @@ public static class MovementEffectResolver
                 collisionVictims.Add(occupantIndex);
             }
 
-            foreach (var competitor in competingMovers[ToCoordinates(target)])
+            foreach (var competitor in competingMovers[target.ToCoordinates()])
             {
                 var competitorIndex = competitor.BotIndex;
                 var competitorBot = botStateEffects[competitorIndex].BotState.Bot;
@@ -114,9 +114,6 @@ public static class MovementEffectResolver
             botStateEffects[victimIndex].BotState.Bot.TakeDamage(CollisionDamage);
         }
     }
-
-    private static (int X, int Y) ToCoordinates(Position position) =>
-        (position.X, position.Y);
 
     private record DriveIntent(int BotIndex, int Speed);
 }

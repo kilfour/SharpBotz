@@ -51,5 +51,7 @@ public class GameWorld
         ReactorEffectsResolver.Handle(botEffects);
         RotatorEffectsResolver.Handle(botStates, botEffects);
         MovementEffectResolver.Handle(Arena, botStates, botEffects);
+        MeleeEffectsResolver.Handle(botEffects);
+        RangedEffectsResolver.Handle(Arena, botEffects);
     }
 }

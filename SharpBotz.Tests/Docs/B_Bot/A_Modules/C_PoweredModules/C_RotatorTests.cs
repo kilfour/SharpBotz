@@ -158,7 +158,7 @@ public class C_RotatorTests
             .MaximumPower(maximumPower)
             .Left();
 
-    private sealed class TurnTwiceBrain : BotBrain
+    private class TurnTwiceBrain : BotBrain
     {
         protected override PowerPlan RoutePower(
             ModuleControl modules,

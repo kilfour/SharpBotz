@@ -2,17 +2,18 @@ using SharpBotz.Botz.BotModules.Reactors;
 
 namespace SharpBotz.Worlds.EffectResolving;
 
+
 public static class ReactorEffectsResolver
 {
     public static void Handle(BotStateEffect[] botStateEffects)
     {
         foreach (var botStateEffect in botStateEffects)
         {
-            HandleReactorEffect(botStateEffect);
+            HandleEffect(botStateEffect);
         }
     }
 
-    private static void HandleReactorEffect(BotStateEffect botStateEffect)
+    private static void HandleEffect(BotStateEffect botStateEffect)
     {
         var bot = botStateEffect.BotState.Bot;
         var reactorEffects = botStateEffect.Effects.ReactorEffects;
