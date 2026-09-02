@@ -192,6 +192,99 @@ xychart-beta
     y-axis "Weight" 0 --> 7
     bar [4, 5, 5, 6, 6, 7]
 ```
+#### Melee
+A melee weapon damages the bot directly in front of your bot.
+
+
+It is created with its damage per power and maximum power, along with a ModuleId.  
+```csharp
+new Melee(
+            ModuleId.Is("melee"),
+            damagePerPower: 10,
+            maximumPower: 5);
+```
+Call `Hit` on the module info from your BotBrain to request an attack.
+The requested damage is rounded up to the next whole unit of power.  
+A melee weapon's base weight is 2.
+Higher damage per power adds weight following a squared curve.  
+```mermaid
+xychart-beta
+    title "Weight by damage per power"
+    x-axis "Damage Per Power" [1, 5, 10, 15, 20, 25]
+    y-axis "Weight" 0 --> 9
+    bar [3, 3, 3, 5, 6, 9]
+```
+Maximum power also affects efficiency. This example keeps damage per power at 20.  
+```mermaid
+xychart-beta
+    title "Weight by maximum power"
+    x-axis "Maximum Power" [1, 2, 3, 4, 5, 6, 7, 10]
+    y-axis "Weight" 0 --> 12
+    bar [12, 9, 8, 7, 7, 7, 6, 6]
+```
+#### Ranged
+A ranged weapon fires in the direction your bot is facing.
+The first bot in its path is hit, provided it is within range and no wall blocks the shot.
+
+
+It is created with its range, damage per power and maximum power, along with a ModuleId.  
+```csharp
+new Ranged(
+            ModuleId.Is("ranged"),
+            range: 3,
+            damagePerPower: 10,
+            maximumPower: 5);
+```
+Call `Fire` on the module info from your BotBrain to request a shot.
+The requested damage is rounded up to the next whole unit of power.  
+A ranged weapon's base weight is 3.
+Increasing range adds weight following the triangular number curve.  
+```mermaid
+xychart-beta
+    title "Weight by range"
+    x-axis "Range" [1, 2, 3, 4, 5]
+    y-axis "Weight" 0 --> 19
+    bar [5, 7, 10, 14, 19]
+```
+Higher damage per power adds weight following a squared curve.
+This example uses a range of 1 and maximum power of 10.  
+```mermaid
+xychart-beta
+    title "Weight by damage per power"
+    x-axis "Damage Per Power" [1, 5, 10, 15, 20]
+    y-axis "Weight" 0 --> 8
+    bar [5, 5, 5, 7, 8]
+```
+Maximum power also affects efficiency. This example uses a range of 3 and damage per power of 20.  
+```mermaid
+xychart-beta
+    title "Weight by maximum power"
+    x-axis "Maximum Power" [1, 2, 3, 4, 5, 6, 10]
+    y-axis "Weight" 0 --> 22
+    bar [22, 17, 16, 15, 14, 14, 13]
+```
+#### Scanner
+A scanner lets your bot observe a square area around itself on the following turn.
+
+
+It is created with the power required per unit of range and its maximum power, along with a ModuleId.  
+```csharp
+new Scanner(
+            ModuleId.Is("scanner"),
+            powerPerRange: 2,
+            maximumPower: 10);
+```
+Call `Scan` on the module info from your BotBrain to request a scan.
+Its power consumption is the requested range multiplied by power per range.  
+A scanner's base weight is 2 at the standard efficiency of 3 power per range.
+Reducing the power required per range adds weight.  
+```mermaid
+xychart-beta
+    title "Weight by power per range"
+    x-axis "Power Per Range" [1, 2, 3, 4, 5]
+    y-axis "Weight" 0 --> 4
+    bar [4, 3, 2, 2, 2]
+```
 ## Scenario
 A scenario describes repeatable initial arena terrain and bot placement.  
 ### Arena Definition

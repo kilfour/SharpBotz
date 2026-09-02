@@ -47,15 +47,14 @@ A reactor with a maximum output of 1 has a weight of 3.
 Increasing maximum output adds more weight exponentialy. 
 """
     )]
-    [DocCode(
-"""
-xychart-beta
-    title "Weight Curve"
-    x-axis "Maximum Output" [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-    y-axis "Weight" 0 --> 6
-    bar [3, 3, 3, 3, 3, 4, 4, 5, 6, 6]
-""", "mermaid")]
-    public void WeightCurve()
+    [DocBarChart(
+        typeof(A_ReactorTests),
+        nameof(WeightCurve),
+        "Weight Curve",
+        "Maximum Output",
+        "Weight",
+        0, 6)]
+    public void WeightCurveTest()
     {
         var reactor = Reactor.Named("reactor").MaximumOutput(1);
         Assert.Equal(3, reactor.Weight);
@@ -78,6 +77,20 @@ xychart-beta
         reactor = Reactor.Named("reactor").MaximumOutput(10);
         Assert.Equal(6, reactor.Weight);
     }
+
+    private static readonly (int MaximumOutput, int Weight)[] WeightCurve =
+        [
+            (1, 3),
+            (2, 3),
+            (3, 3),
+            (4, 3),
+            (5, 3),
+            (6, 4),
+            (7, 4),
+            (8, 5),
+            (9, 6),
+            (10, 6)
+        ];
 
     [Fact]
     [DocContent(

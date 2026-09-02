@@ -48,15 +48,14 @@ A battery with a capacity of 1 has a weight of 3.
 Every 25 extra capacity after the first 25 adds another 1 weight to the module. 
 """
     )]
-    [DocCode(
-"""
-xychart-beta
-    title "Weight Curve"
-    x-axis "Capacity" [1, 25, 35, 51, 76, 100]
-    y-axis "Weight" 0 --> 6
-    bar [3, 3, 4, 5, 6, 6]
-""", "mermaid")]
-    public void WeightCurve()
+    [DocBarChart(
+        typeof(A_BatteryTests),
+        nameof(WeightCurve),
+        "Weight Curve",
+        "Capacity",
+        "Weight",
+        0, 6)]
+    public void WeightCurveTest()
     {
         var battery = Battery.Named("battery").Capacity(1);
         Assert.Equal(3, battery.Weight);
@@ -71,6 +70,16 @@ xychart-beta
         battery = Battery.Named("battery").Capacity(100);
         Assert.Equal(6, battery.Weight);
     }
+
+    private static readonly (int Capacity, int Weight)[] WeightCurve =
+        [
+            (1, 3),
+            (25, 3),
+            (35, 4),
+            (51, 5),
+            (76, 6),
+            (100, 6)
+        ];
 
     [Fact]
     [DocContent(

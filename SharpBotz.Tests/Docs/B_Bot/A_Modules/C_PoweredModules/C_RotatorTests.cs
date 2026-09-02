@@ -116,28 +116,26 @@ public class C_RotatorTests
     A rotator's base weight is 3.
     Supporting more power adds weight following the triangular number curve.
     """)]
-    [DocCode(
-    """
-    xychart-beta
-        title "Weight by maximum power"
-        x-axis "Maximum Power" [1, 2, 3, 4, 5]
-        y-axis "Weight" 0 --> 18
-        bar [4, 6, 9, 13, 18]
-    """, "mermaid")]
+    [DocBarChart(
+        typeof(C_RotatorTests),
+        nameof(MaximumPowerWeightCurve),
+        "Weight by maximum power",
+        "Maximum Power",
+        "Weight",
+        0, 18)]
     [DocContent(
     """
     Torque per power up to 10 is included in that weight.
     Above 10, every two additional torque per power add 1 weight, rounded up.
     """)]
-    [DocCode(
-    """
-    xychart-beta
-        title "Weight by torque per power"
-        x-axis "Torque Per Power" [10, 11, 12, 13, 14, 15]
-        y-axis "Weight" 0 --> 7
-        bar [4, 5, 5, 6, 6, 7]
-    """, "mermaid")]
-    public void WeightCurve()
+    [DocBarChart(
+        typeof(C_RotatorTests),
+        nameof(TorquePerPowerWeightCurve),
+        "Weight by torque per power",
+        "Torque Per Power",
+        "Weight",
+        0, 7)]
+    public void WeightCurveTest()
     {
         Assert.Equal(4, CreateRotator(torquePerPower: 10, maximumPower: 1).Weight);
         Assert.Equal(6, CreateRotator(torquePerPower: 10, maximumPower: 2).Weight);
@@ -151,6 +149,25 @@ public class C_RotatorTests
         Assert.Equal(6, CreateRotator(torquePerPower: 14, maximumPower: 1).Weight);
         Assert.Equal(7, CreateRotator(torquePerPower: 15, maximumPower: 1).Weight);
     }
+
+    private static readonly (int MaximumPower, int Weight)[] MaximumPowerWeightCurve =
+        [
+            (1, 4),
+            (2, 6),
+            (3, 9),
+            (4, 13),
+            (5, 18)
+        ];
+
+    private static readonly (int TorquePerPower, int Weight)[] TorquePerPowerWeightCurve =
+        [
+            (10, 4),
+            (11, 5),
+            (12, 5),
+            (13, 6),
+            (14, 6),
+            (15, 7)
+        ];
 
     private static Rotator CreateRotator(int torquePerPower, int maximumPower) =>
         Rotator.Named("rotator")
