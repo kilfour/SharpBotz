@@ -1,5 +1,3 @@
-using SharpBotz.Maths;
-
 namespace SharpBotz.Botz.BotModules.RangedWeapons;
 
 public class Ranged(
@@ -10,8 +8,6 @@ public class Ranged(
         id,
         GetWeight(range, damagePerPower, maximumPower))
 {
-    private const int StandardDamagePerPower = 2;
-
     protected override ModuleInfo CreateInfo(int totalWeight) =>
         new RangedInfo(Id, range, damagePerPower, maximumPower);
 
@@ -24,19 +20,17 @@ public class Ranged(
         yield return new RangedEffect(Id, range, power * damagePerPower);
     }
 
-    private static int GetWeight(int range, int damage, int maximumPower)
+    private static int GetWeight(int range, int damagePerPower, int maximumPower)
     {
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(range);
-        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(damage);
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(damagePerPower);
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(maximumPower);
 
         var rangeWeight = checked(range * (range + 1) / 2);
-        var scaledDamageSquared = checked((long)damage * damage);
+        var powerWeight = checked(maximumPower * (maximumPower + 1) / 2);
+        var scaledDamageSquared = checked((long)damagePerPower * damagePerPower);
         var damageWeight = (scaledDamageSquared / 100) +
                            (scaledDamageSquared % 100 == 0 ? 0 : 1);
-        var standardPower = Divide.RoundingUp(damage, StandardDamagePerPower);
-        var relativeEfficiency = Divide.RoundingUp(standardPower, maximumPower);
-        var efficiencyWeight = Math.Max(0, relativeEfficiency - 1);
-        return checked(3 + rangeWeight + (int)damageWeight + efficiencyWeight);
+        return checked(3 + rangeWeight + powerWeight + (int)damageWeight);
     }
 }

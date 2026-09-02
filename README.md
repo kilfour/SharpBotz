@@ -211,16 +211,17 @@ Higher damage per power adds weight following a squared curve.
 xychart-beta
     title "Weight by damage per power"
     x-axis "Damage Per Power" [1, 5, 10, 15, 20, 25]
-    y-axis "Weight" 0 --> 9
-    bar [3, 3, 3, 5, 6, 9]
+    y-axis "Weight" 0 --> 10
+    bar [4, 4, 4, 6, 7, 10]
 ```
-Maximum power also affects efficiency. This example keeps damage per power at 20.  
+Supporting more power adds weight following the triangular number curve.
+This example keeps damage per power at 20.  
 ```mermaid
 xychart-beta
     title "Weight by maximum power"
-    x-axis "Maximum Power" [1, 2, 3, 4, 5, 6, 7, 10]
-    y-axis "Weight" 0 --> 12
-    bar [12, 9, 8, 7, 7, 7, 6, 6]
+    x-axis "Maximum Power" [1, 2, 3, 4, 5]
+    y-axis "Weight" 0 --> 21
+    bar [7, 9, 12, 16, 21]
 ```
 #### Ranged
 A ranged weapon fires in the direction your bot is facing.
@@ -243,25 +244,26 @@ Increasing range adds weight following the triangular number curve.
 xychart-beta
     title "Weight by range"
     x-axis "Range" [1, 2, 3, 4, 5]
-    y-axis "Weight" 0 --> 19
-    bar [5, 7, 10, 14, 19]
+    y-axis "Weight" 0 --> 20
+    bar [6, 8, 11, 15, 20]
 ```
 Higher damage per power adds weight following a squared curve.
-This example uses a range of 1 and maximum power of 10.  
+This example uses a range of 1 and maximum power of 1.  
 ```mermaid
 xychart-beta
     title "Weight by damage per power"
     x-axis "Damage Per Power" [1, 5, 10, 15, 20]
-    y-axis "Weight" 0 --> 8
-    bar [5, 5, 5, 7, 8]
+    y-axis "Weight" 0 --> 9
+    bar [6, 6, 6, 8, 9]
 ```
-Maximum power also affects efficiency. This example uses a range of 3 and damage per power of 20.  
+Supporting more power adds weight following the triangular number curve.
+This example uses a range of 3 and damage per power of 20.  
 ```mermaid
 xychart-beta
     title "Weight by maximum power"
-    x-axis "Maximum Power" [1, 2, 3, 4, 5, 6, 10]
-    y-axis "Weight" 0 --> 22
-    bar [22, 17, 16, 15, 14, 14, 13]
+    x-axis "Maximum Power" [1, 2, 3, 4, 5]
+    y-axis "Weight" 0 --> 28
+    bar [14, 16, 19, 23, 28]
 ```
 #### Scanner
 A scanner lets your bot observe a square area around itself on the following turn.

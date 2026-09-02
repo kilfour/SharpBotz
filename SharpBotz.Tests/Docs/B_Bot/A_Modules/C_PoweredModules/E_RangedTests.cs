@@ -63,11 +63,11 @@ public class E_RangedTests
         "Weight by range",
         "Range",
         "Weight",
-        0, 19)]
+        0, 20)]
     [DocContent(
     """
     Higher damage per power adds weight following a squared curve.
-    This example uses a range of 1 and maximum power of 10.
+    This example uses a range of 1 and maximum power of 1.
     """)]
     [DocBarChart(
         typeof(E_RangedTests),
@@ -75,10 +75,11 @@ public class E_RangedTests
         "Weight by damage per power",
         "Damage Per Power",
         "Weight",
-        0, 8)]
+        0, 9)]
     [DocContent(
     """
-    Maximum power also affects efficiency. This example uses a range of 3 and damage per power of 20.
+    Supporting more power adds weight following the triangular number curve.
+    This example uses a range of 3 and damage per power of 20.
     """)]
     [DocBarChart(
         typeof(E_RangedTests),
@@ -86,17 +87,17 @@ public class E_RangedTests
         "Weight by maximum power",
         "Maximum Power",
         "Weight",
-        0, 22)]
+        0, 28)]
     public void WeightCurveTest()
     {
         foreach (var (range, weight) in RangeWeightCurve)
         {
-            Assert.Equal(weight, CreateRanged(range, damagePerPower: 10, maximumPower: 5).Weight);
+            Assert.Equal(weight, CreateRanged(range, damagePerPower: 10, maximumPower: 1).Weight);
         }
 
         foreach (var (damagePerPower, weight) in DamagePerPowerWeightCurve)
         {
-            Assert.Equal(weight, CreateRanged(range: 1, damagePerPower, maximumPower: 10).Weight);
+            Assert.Equal(weight, CreateRanged(range: 1, damagePerPower, maximumPower: 1).Weight);
         }
 
         foreach (var (maximumPower, weight) in MaximumPowerWeightCurve)
@@ -107,31 +108,29 @@ public class E_RangedTests
 
     private static readonly (int Range, int Weight)[] RangeWeightCurve =
         [
-            (1, 5),
-            (2, 7),
-            (3, 10),
-            (4, 14),
-            (5, 19)
+            (1, 6),
+            (2, 8),
+            (3, 11),
+            (4, 15),
+            (5, 20)
         ];
 
     private static readonly (int DamagePerPower, int Weight)[] DamagePerPowerWeightCurve =
         [
-            (1, 5),
-            (5, 5),
-            (10, 5),
-            (15, 7),
-            (20, 8)
+            (1, 6),
+            (5, 6),
+            (10, 6),
+            (15, 8),
+            (20, 9)
         ];
 
     private static readonly (int MaximumPower, int Weight)[] MaximumPowerWeightCurve =
         [
-            (1, 22),
-            (2, 17),
-            (3, 16),
-            (4, 15),
-            (5, 14),
-            (6, 14),
-            (10, 13)
+            (1, 14),
+            (2, 16),
+            (3, 19),
+            (4, 23),
+            (5, 28)
         ];
 
     private static Ranged CreateRanged(int range, int damagePerPower, int maximumPower) =>

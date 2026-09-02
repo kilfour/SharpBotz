@@ -60,10 +60,11 @@ public class D_MeleeTests
         "Weight by damage per power",
         "Damage Per Power",
         "Weight",
-        0, 9)]
+        0, 10)]
     [DocContent(
     """
-    Maximum power also affects efficiency. This example keeps damage per power at 20.
+    Supporting more power adds weight following the triangular number curve.
+    This example keeps damage per power at 20.
     """)]
     [DocBarChart(
         typeof(D_MeleeTests),
@@ -71,12 +72,12 @@ public class D_MeleeTests
         "Weight by maximum power",
         "Maximum Power",
         "Weight",
-        0, 12)]
+        0, 21)]
     public void WeightCurveTest()
     {
         foreach (var (damagePerPower, weight) in DamagePerPowerWeightCurve)
         {
-            Assert.Equal(weight, CreateMelee(damagePerPower, maximumPower: 10).Weight);
+            Assert.Equal(weight, CreateMelee(damagePerPower, maximumPower: 1).Weight);
         }
 
         foreach (var (maximumPower, weight) in MaximumPowerWeightCurve)
@@ -87,24 +88,21 @@ public class D_MeleeTests
 
     private static readonly (int DamagePerPower, int Weight)[] DamagePerPowerWeightCurve =
         [
-            (1, 3),
-            (5, 3),
-            (10, 3),
-            (15, 5),
-            (20, 6),
-            (25, 9)
+            (1, 4),
+            (5, 4),
+            (10, 4),
+            (15, 6),
+            (20, 7),
+            (25, 10)
         ];
 
     private static readonly (int MaximumPower, int Weight)[] MaximumPowerWeightCurve =
         [
-            (1, 12),
+            (1, 7),
             (2, 9),
-            (3, 8),
-            (4, 7),
-            (5, 7),
-            (6, 7),
-            (7, 6),
-            (10, 6)
+            (3, 12),
+            (4, 16),
+            (5, 21)
         ];
 
     private static Melee CreateMelee(int damagePerPower, int maximumPower) =>
