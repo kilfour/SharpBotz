@@ -52,8 +52,7 @@ public class Rotator : PoweredModule
     {
         if (power > maximumPower)
         {
-            yield return new RotatorOverChargedEffect(Id);
-            yield break;
+            yield return new RotatorOverChargedEffect(Id, power - maximumPower);
         }
         yield return new RotateEffect(Id, rotation, power * torquePerPower / totalBotWeight);
     }

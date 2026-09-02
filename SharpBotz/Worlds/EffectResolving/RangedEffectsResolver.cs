@@ -16,6 +16,10 @@ public static class RangedEffectsResolver
             {
                 Fire(arena, occupants, attacker, effect);
             }
+            foreach (var effect in attacker.Effects.RangedEffects.OfType<RangedOverChargedEffect>())
+            {
+                attacker.BotState.Bot.TakeDamage(effect.ExcessPower * 3);
+            }
         }
     }
 

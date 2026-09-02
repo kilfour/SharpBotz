@@ -26,6 +26,10 @@ public static class MeleeEffectsResolver
                     receiver.BotState.Bot.TakeDamage(effect.Damage);
                 }
             }
+            foreach (var effect in attacker.Effects.MeleeEffects.OfType<MeleeOverChargedEffect>())
+            {
+                attacker.BotState.Bot.TakeDamage(effect.ExcessPower * 3);
+            }
         }
     }
 }

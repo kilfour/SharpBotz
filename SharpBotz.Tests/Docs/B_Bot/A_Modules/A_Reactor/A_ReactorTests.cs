@@ -1,6 +1,10 @@
 using QuickPulse.Explains;
+using SharpBotz.Arenas;
+using SharpBotz.Botz;
 using SharpBotz.Botz.BotModules;
+using SharpBotz.Botz.BotModules.Batteries;
 using SharpBotz.Botz.BotModules.Reactors;
+using SharpBotz.Worlds;
 
 namespace SharpBotz.Tests.Docs.B_Bot.A_Modules.A_Reactor;
 
@@ -94,6 +98,43 @@ Increasing maximum output adds more weight exponentialy.
 
     [Fact]
     [DocContent(
+    """
+    Requesting more than a reactor's maximum output overloads it.
+    The reactor produces no power, and every excess unit of requested output deals 2 damage to the bot.
+
+    Here a reactor with maximum output 1 is asked to generate 2 power, dealing 2 damage.
+    """)]
+    [DocExample(typeof(A_ReactorTests), nameof(CreateOverloadedWorld))]
+    public void Overload()
+    {
+        var world = CreateOverloadedWorld();
+
+        world.Update();
+
+        Assert.Equal(98, world.Bots[0].Bot.HitPoints);
+        Assert.Equal(0, world.Bots[0].Bot.ModuleRack.BatteryLevel);
+    }
+
+    [CodeSnippet]
+    private static GameWorld CreateOverloadedWorld() =>
+        new GameWorld(
+            Arena.Sized(
+                    ArenaWidth.Is(3),
+                    ArenaHeight.Is(3))
+                .Build(),
+            [
+                new BotState(
+                    new Bot(
+                        new OverloadedReactorBrain(),
+                        ModuleRack.Create(
+                            Reactor.Named("reactor").MaximumOutput(1),
+                            Battery.Named("battery").Capacity(10))),
+                    new Position(1, 1),
+                    Direction.Up)
+            ]);
+
+    [Fact]
+    [DocContent(
 """
 Multiple rectors can be installed in a ModuleRack.
 
@@ -112,4 +153,12 @@ The total maximum output of the rack is then the sum of all reactors maximum out
         ModuleRack.Create(
             Reactor.Named("reactor-one").MaximumOutput(10),
             Reactor.Named("reactor-two").MaximumOutput(10));
+
+    private sealed class OverloadedReactorBrain : BotBrain
+    {
+        protected override PowerPlan RoutePower(
+            ModuleControl modules,
+            BotObservation observation) =>
+            new(modules.RequireModule<ReactorInfo>().SetOutput(2));
+    }
 }

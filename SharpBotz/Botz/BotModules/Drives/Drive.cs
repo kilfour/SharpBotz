@@ -37,7 +37,7 @@ public class Drive : PoweredModule
     {
         if (power > maximumPower)
         {
-            yield return new DriveOverChargedEffect(Id);
+            yield return new DriveOverChargedEffect(Id, power - maximumPower);
         }
         yield return new DriveEffect(Id, power * thrustPerPower / totalBotWeight);
     }

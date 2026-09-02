@@ -1,6 +1,11 @@
 using QuickPulse.Explains;
+using SharpBotz.Arenas;
+using SharpBotz.Botz;
 using SharpBotz.Botz.BotModules;
+using SharpBotz.Botz.BotModules.Batteries;
 using SharpBotz.Botz.BotModules.RangedWeapons;
+using SharpBotz.Botz.BotModules.Reactors;
+using SharpBotz.Worlds;
 
 namespace SharpBotz.Tests.Docs.B_Bot.A_Modules.C_PoweredModules;
 
@@ -50,6 +55,55 @@ public class E_RangedTests
         Assert.Equal(2, info.Fire(11).Power);
         Assert.Equal(3, info.Fire(25).Power);
     }
+
+    [Fact]
+    [DocContent(
+    """
+    Supplying more than the ranged weapon's maximum power overcharges it.
+    The shot still lands, but every excess unit of power deals 3 damage to the attacking bot.
+
+    Here a weapon with maximum power 1 receives 2 power. It deals 20 damage and its bot takes 3 damage.
+    """)]
+    [DocExample(typeof(E_RangedTests), nameof(CreateOverchargedWorld))]
+    public void Overcharge()
+    {
+        var world = CreateOverchargedWorld();
+
+        world.Update();
+
+        Assert.Equal(97, world.Bots[0].Bot.HitPoints);
+        Assert.Equal(80, world.Bots[1].Bot.HitPoints);
+    }
+
+    [CodeSnippet]
+    private static GameWorld CreateOverchargedWorld() =>
+        new GameWorld(
+            Arena.Sized(
+                    ArenaWidth.Is(5),
+                    ArenaHeight.Is(3))
+                .Build(),
+            [
+                new BotState(
+                    new Bot(
+                        new OverchargedRangedBrain(),
+                        ModuleRack.Create(
+                            Reactor.Named("reactor").MaximumOutput(2),
+                            Battery.Named("battery").Capacity(10),
+                            new Ranged(
+                                ModuleId.Is("ranged"),
+                                range: 3,
+                                damagePerPower: 10,
+                                maximumPower: 1))),
+                    new Position(1, 1),
+                    Direction.Right),
+                new BotState(
+                    new Bot(
+                        new IdleBrain(),
+                        ModuleRack.Create(
+                            Battery.Named("battery").Capacity(10))),
+                    new Position(3, 1),
+                    Direction.Left)
+            ]);
 
     [Fact]
     [DocContent(
@@ -135,4 +189,27 @@ public class E_RangedTests
 
     private static Ranged CreateRanged(int range, int damagePerPower, int maximumPower) =>
         new(ModuleId.Is("ranged"), range, damagePerPower, maximumPower);
+
+    private sealed class OverchargedRangedBrain : BotBrain
+    {
+        protected override PowerPlan RoutePower(
+            ModuleControl modules,
+            BotObservation observation)
+        {
+            var reactor = modules.RequireModule<ReactorInfo>();
+            var shot = modules.RequireModule<RangedInfo>().Fire(damage: 20);
+
+            return new(
+                reactor.SetOutput(shot.Power),
+                shot);
+        }
+    }
+
+    private sealed class IdleBrain : BotBrain
+    {
+        protected override PowerPlan RoutePower(
+            ModuleControl modules,
+            BotObservation observation) =>
+            PowerPlan.Empty;
+    }
 }

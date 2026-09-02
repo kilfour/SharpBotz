@@ -27,6 +27,14 @@ public static class MovementEffectResolver
         {
             MoveOneStep(arena, botStates, botStateEffects, intents, stopped, step);
         }
+
+        foreach (var botStateEffect in botStateEffects)
+        {
+            foreach (var effect in botStateEffect.Effects.DriveEffects.OfType<DriveOverChargedEffect>())
+            {
+                botStateEffect.BotState.Bot.TakeDamage(effect.ExcessPower * 3);
+            }
+        }
     }
 
     private static void MoveOneStep(

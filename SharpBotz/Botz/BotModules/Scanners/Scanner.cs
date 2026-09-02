@@ -13,7 +13,7 @@ public sealed class Scanner(ModuleId id, int powerPerRange, int maximumPower)
     {
         if (power > maximumPower)
         {
-            yield return new ScannerOverChargedEffect(Id);
+            yield return new ScannerOverChargedEffect(Id, power - maximumPower);
         }
         yield return new ScanEffect(Id, power / powerPerRange);
     }

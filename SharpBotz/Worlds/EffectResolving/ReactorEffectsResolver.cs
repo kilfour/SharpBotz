@@ -21,8 +21,8 @@ public static class ReactorEffectsResolver
         {
             switch (effect)
             {
-                case ReactorOverLoadedEffect:
-                    bot.TakeDamage(10);
+                case ReactorOverLoadedEffect overload:
+                    bot.TakeDamage(overload.ExcessPower * 2);
                     break;
 
                 default:

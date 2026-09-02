@@ -15,7 +15,7 @@ public class Ranged(
     {
         if (power > maximumPower)
         {
-            yield return new RangedOverChargedEffect(Id);
+            yield return new RangedOverChargedEffect(Id, power - maximumPower);
         }
         yield return new RangedEffect(Id, range, power * damagePerPower);
     }

@@ -79,6 +79,28 @@ public class GameWorldDriveEffectsTests
         Assert.Equal(90, world.Bots[1].Bot.HitPoints);
     }
 
+    [Fact]
+    public void OverchargedDriveStillMovesAndDamagesItsBot()
+    {
+        var world = CreateWorld(
+            new BotState(
+                new Bot(
+                    new MovingBrain(speed: 1),
+                    ModuleRack.Create(
+                        Reactor.Named("reactor").MaximumOutput(2),
+                        Battery.Named("battery").Capacity(10),
+                        Drive.Named("drive")
+                            .ThrustPerPower(20)
+                            .MaximumPower(1))),
+                new Position(1, 1),
+                Direction.Right));
+
+        world.Update();
+
+        Assert.Equal(new Position(2, 1), world.Bots[0].Position);
+        Assert.Equal(97, world.Bots[0].Bot.HitPoints);
+    }
+
     private static GameWorld CreateWorld(params BotState[] botStates) =>
         new(
             Arena.Sized(

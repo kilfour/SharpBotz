@@ -15,11 +15,11 @@ public readonly record struct ModuleEffects
     private ModuleEffects(ModuleEffect[] effects)
     {
         ReactorEffects = [.. effects.Where(a => a is ReactorOverLoadedEffect)];
-        RotatorEffects = [.. effects.Where(a => a is RotateEffect)];
-        DriveEffects = [.. effects.Where(a => a is DriveEffect)];
-        MeleeEffects = [.. effects.Where(a => a is MeleeEffect)];
-        RangedEffects = [.. effects.Where(a => a is RangedEffect)];
-        ScannerEffects = [.. effects.Where(a => a is ScanEffect)];
+        RotatorEffects = [.. effects.Where(a => a is RotateEffect || a is RotatorOverChargedEffect)];
+        DriveEffects = [.. effects.Where(a => a is DriveEffect || a is DriveOverChargedEffect)];
+        MeleeEffects = [.. effects.Where(a => a is MeleeEffect || a is MeleeOverChargedEffect)];
+        RangedEffects = [.. effects.Where(a => a is RangedEffect || a is RangedOverChargedEffect)];
+        ScannerEffects = [.. effects.Where(a => a is ScanEffect || a is ScannerOverChargedEffect)];
     }
 
     public readonly ModuleEffect[] ReactorEffects { get; private init; }

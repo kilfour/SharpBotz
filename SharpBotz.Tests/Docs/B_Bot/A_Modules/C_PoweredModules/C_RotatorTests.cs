@@ -113,6 +113,47 @@ public class C_RotatorTests
     [Fact]
     [DocContent(
     """
+    Supplying more than the rotator's maximum power overcharges it.
+    The rotation still happens, but every excess unit of power deals 3 damage to the bot.
+
+    Here a rotator with maximum power 1 receives 2 power. The bot turns right and takes 3 damage.
+    """)]
+    [DocExample(typeof(C_RotatorTests), nameof(CreateOverchargedWorld))]
+    public void Overcharge()
+    {
+        var world = CreateOverchargedWorld();
+
+        world.Update();
+
+        Assert.Equal(Direction.Right, world.Bots[0].Facing);
+        Assert.Equal(97, world.Bots[0].Bot.HitPoints);
+    }
+
+    [CodeSnippet]
+    private static GameWorld CreateOverchargedWorld() =>
+        new GameWorld(
+            Arena.Sized(
+                    ArenaWidth.Is(3),
+                    ArenaHeight.Is(3))
+                .Build(),
+            [
+                new BotState(
+                    new Bot(
+                        new OverchargedTurnBrain(),
+                        ModuleRack.Create(
+                            Reactor.Named("reactor").MaximumOutput(2),
+                            Battery.Named("battery").Capacity(10),
+                            Rotator.Named("rotator")
+                                .TorquePerPower(20)
+                                .MaximumPower(1)
+                                .Right())),
+                    new Position(1, 1),
+                    Direction.Up)
+            ]);
+
+    [Fact]
+    [DocContent(
+    """
     A rotator's base weight is 3.
     Supporting more power adds weight following the triangular number curve.
     """)]
@@ -176,6 +217,21 @@ public class C_RotatorTests
             .Left();
 
     private class TurnTwiceBrain : BotBrain
+    {
+        protected override PowerPlan RoutePower(
+            ModuleControl modules,
+            BotObservation observation)
+        {
+            var reactor = modules.RequireModule<ReactorInfo>();
+            var rotator = modules.RequireModule<RightRotatorInfo>();
+
+            return new(
+                reactor.SetOutput(2),
+                new PowerAllocation(rotator.Id, 2));
+        }
+    }
+
+    private class OverchargedTurnBrain : BotBrain
     {
         protected override PowerPlan RoutePower(
             ModuleControl modules,

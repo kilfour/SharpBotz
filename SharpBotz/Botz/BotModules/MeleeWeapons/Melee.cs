@@ -24,7 +24,7 @@ public class Melee(
     {
         if (power > maximumPower)
         {
-            yield return new MeleeOverChargedEffect(Id);
+            yield return new MeleeOverChargedEffect(Id, power - maximumPower);
         }
         yield return new MeleeEffect(Id, power * damagePerPower);
     }

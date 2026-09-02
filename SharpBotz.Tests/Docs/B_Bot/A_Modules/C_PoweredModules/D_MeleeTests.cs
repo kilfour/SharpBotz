@@ -1,6 +1,11 @@
 using QuickPulse.Explains;
+using SharpBotz.Arenas;
+using SharpBotz.Botz;
 using SharpBotz.Botz.BotModules;
+using SharpBotz.Botz.BotModules.Batteries;
 using SharpBotz.Botz.BotModules.MeleeWeapons;
+using SharpBotz.Botz.BotModules.Reactors;
+using SharpBotz.Worlds;
 
 namespace SharpBotz.Tests.Docs.B_Bot.A_Modules.C_PoweredModules;
 
@@ -47,6 +52,54 @@ public class D_MeleeTests
         Assert.Equal(2, info.Hit(11).Power);
         Assert.Equal(3, info.Hit(25).Power);
     }
+
+    [Fact]
+    [DocContent(
+    """
+    Supplying more than the melee weapon's maximum power overcharges it.
+    The attack still lands, but every excess unit of power deals 3 damage to the attacking bot.
+
+    Here a weapon with maximum power 1 receives 2 power. It deals 20 damage and its bot takes 3 damage.
+    """)]
+    [DocExample(typeof(D_MeleeTests), nameof(CreateOverchargedWorld))]
+    public void Overcharge()
+    {
+        var world = CreateOverchargedWorld();
+
+        world.Update();
+
+        Assert.Equal(97, world.Bots[0].Bot.HitPoints);
+        Assert.Equal(80, world.Bots[1].Bot.HitPoints);
+    }
+
+    [CodeSnippet]
+    private static GameWorld CreateOverchargedWorld() =>
+        new GameWorld(
+            Arena.Sized(
+                    ArenaWidth.Is(4),
+                    ArenaHeight.Is(3))
+                .Build(),
+            [
+                new BotState(
+                    new Bot(
+                        new OverchargedMeleeBrain(),
+                        ModuleRack.Create(
+                            Reactor.Named("reactor").MaximumOutput(2),
+                            Battery.Named("battery").Capacity(10),
+                            new Melee(
+                                ModuleId.Is("melee"),
+                                damagePerPower: 10,
+                                maximumPower: 1))),
+                    new Position(1, 1),
+                    Direction.Right),
+                new BotState(
+                    new Bot(
+                        new IdleBrain(),
+                        ModuleRack.Create(
+                            Battery.Named("battery").Capacity(10))),
+                    new Position(2, 1),
+                    Direction.Left)
+            ]);
 
     [Fact]
     [DocContent(
@@ -107,4 +160,27 @@ public class D_MeleeTests
 
     private static Melee CreateMelee(int damagePerPower, int maximumPower) =>
         new(ModuleId.Is("melee"), damagePerPower, maximumPower);
+
+    private sealed class OverchargedMeleeBrain : BotBrain
+    {
+        protected override PowerPlan RoutePower(
+            ModuleControl modules,
+            BotObservation observation)
+        {
+            var reactor = modules.RequireModule<ReactorInfo>();
+            var attack = modules.RequireModule<MeleeInfo>().Hit(damage: 20);
+
+            return new(
+                reactor.SetOutput(attack.Power),
+                attack);
+        }
+    }
+
+    private sealed class IdleBrain : BotBrain
+    {
+        protected override PowerPlan RoutePower(
+            ModuleControl modules,
+            BotObservation observation) =>
+            PowerPlan.Empty;
+    }
 }

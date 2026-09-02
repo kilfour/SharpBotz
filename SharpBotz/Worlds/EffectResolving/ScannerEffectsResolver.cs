@@ -25,6 +25,14 @@ public static class ScannerEffectsResolver
             .Select(botStateEffect => botStateEffect.BotState)
             .ToArray();
 
+        foreach (var botStateEffect in botStateEffects)
+        {
+            foreach (var effect in botStateEffect.Effects.ScannerEffects.OfType<ScannerOverChargedEffect>())
+            {
+                botStateEffect.BotState.Bot.TakeDamage(effect.ExcessPower * 3);
+            }
+        }
+
         return [.. botStateEffects.Select(botStateEffect =>
         {
             var range = botStateEffect.Effects.ScannerEffects

@@ -27,8 +27,9 @@ public class Battery : BotModule
         Charge += amount;
         if (Charge > Capacity)
         {
+            var overCharge = Charge + amount - Capacity;
             Charge = 0;
-            return new BatteryOverChargedEffect(Id);
+            return new BatteryOverChargedEffect(Id, overCharge);
         }
         return null;
     }

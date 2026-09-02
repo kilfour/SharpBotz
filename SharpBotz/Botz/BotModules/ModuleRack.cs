@@ -64,8 +64,9 @@ public class ModuleRack
         var remaining = 0;
         foreach (var (id, power) in plan.Generations)
         {
-            if (power > reactors.Single(a => a.Id == id).MaximumOutput)
-                effects.Add(new ReactorOverLoadedEffect(id));
+            var maximumOutput = reactors.Single(a => a.Id == id).MaximumOutput;
+            if (power > maximumOutput)
+                effects.Add(new ReactorOverLoadedEffect(id, power - maximumOutput));
             else
                 remaining += power;
         }

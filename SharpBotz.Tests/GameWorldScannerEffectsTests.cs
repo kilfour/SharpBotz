@@ -80,6 +80,36 @@ public class GameWorldScannerEffectsTests
         Assert.IsType<ScanResult.Empty>(brain.Scans[1][6, 3]);
     }
 
+    [Fact]
+    public void OverchargedScannerStillScansAndDamagesItsBot()
+    {
+        var brain = new OneShotScanningBrain(range: 2);
+        var world = CreateWorld(
+            CreateArena(width: 5),
+            new BotState(
+                new Bot(
+                    brain,
+                    ModuleRack.Create(
+                        Reactor.Named("reactor").MaximumOutput(2),
+                        Battery.Named("battery").Capacity(10),
+                        new Scanner(
+                            ModuleId.Is("scanner"),
+                            powerPerRange: 1,
+                            maximumPower: 1))),
+                new Position(2, 2),
+                Direction.Up));
+
+        world.Update();
+        world.Update();
+
+        Assert.Equal(97, world.Bots[0].Bot.HitPoints);
+        Assert.Equal(5, brain.Scans[1].GetLength(0));
+        Assert.Equal(5, brain.Scans[1].GetLength(1));
+        Assert.Equal(
+            new ScanResult.OwnBot(Direction.Up, HitPoints: 97),
+            brain.Scans[1][2, 2]);
+    }
+
     private static Arena CreateArena(int width) =>
         Arena.Sized(
                 ArenaWidth.Is(width),
@@ -170,6 +200,27 @@ public class GameWorldScannerEffectsTests
                     .SetOutput(scans.Sum(scan => scan.Power)),
                 .. scans,
             ]);
+        }
+    }
+
+    private sealed class OneShotScanningBrain(int range) : BotBrain
+    {
+        public List<ScanResult[,]> Scans { get; } = [];
+
+        protected override PowerPlan RoutePower(
+            ModuleControl modules,
+            BotObservation observation)
+        {
+            Scans.Add(observation.Scan);
+            if (Scans.Count > 1)
+            {
+                return PowerPlan.Empty;
+            }
+
+            var scan = modules.RequireModule<ScannerInfo>().Scan(range);
+            return new(
+                modules.RequireModule<ReactorInfo>().SetOutput(scan.Power),
+                scan);
         }
     }
 

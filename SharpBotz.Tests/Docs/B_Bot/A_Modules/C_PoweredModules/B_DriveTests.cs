@@ -98,6 +98,46 @@ public class B_DriveTests
     [Fact]
     [DocContent(
     """
+    Supplying more than the drive's maximum power overcharges it.
+    The movement still happens, but every excess unit of power deals 3 damage to the bot.
+
+    Here a drive with maximum power 1 receives 2 power. The bot moves one tile and takes 3 damage.
+    """)]
+    [DocExample(typeof(B_DriveTests), nameof(CreateOverchargedWorld))]
+    public void Overcharge()
+    {
+        var world = CreateOverchargedWorld();
+
+        world.Update();
+
+        Assert.Equal(new Position(2, 1), world.Bots[0].Position);
+        Assert.Equal(97, world.Bots[0].Bot.HitPoints);
+    }
+
+    [CodeSnippet]
+    private static GameWorld CreateOverchargedWorld() =>
+        new GameWorld(
+            Arena.Sized(
+                    ArenaWidth.Is(5),
+                    ArenaHeight.Is(3))
+                .Build(),
+            [
+                new BotState(
+                    new Bot(
+                        new MoveRightBrain(),
+                        ModuleRack.Create(
+                            Reactor.Named("reactor").MaximumOutput(2),
+                            Battery.Named("battery").Capacity(10),
+                            Drive.Named("drive")
+                                .ThrustPerPower(20)
+                                .MaximumPower(1))),
+                    new Position(1, 1),
+                    Direction.Right)
+            ]);
+
+    [Fact]
+    [DocContent(
+    """
     A drive's base weight is 3.
     Supporting more power adds weight following the triangular number curve.
     """)]
