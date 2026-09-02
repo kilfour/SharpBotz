@@ -117,16 +117,61 @@ We already saw the modules related to energy generation and storage.
 All other modules consume power. The are all powered modules.
   
 #### Drive
-A drive is needed in order to move your board across the arena.
+A drive is needed to move your bot across the arena.
 
 
-It is created by passing in it's thrustPerPower and maximumPower along with a ModuleId (supplied as string).  
+It is created with its thrust per power and maximum power, along with a ModuleId.
+Thrust per power determines how much force each unit of supplied power produces.  
 ```csharp
 Drive.Named("drive")
    .ThrustPerPower(10)
    .MaximumPower(15);
 ```
-TODO.  
+Call `Move` on the module info from your BotBrain to request a speed.
+The required power is the requested speed multiplied by the bot's loaded weight, divided by thrust per power and rounded up.
+
+For a bot weighing 50 with 10 thrust per power, every unit of speed needs 5 power.
+Requesting speed 4 allocates 20 power, which exceeds this drive's maximum power of 15.  
+A powered drive moves the bot in the direction it is facing.
+Here the bot starts at position (1, 1), facing right, and moves one tile.  
+```csharp
+new GameWorld(
+            Arena.Sized(
+                    ArenaWidth.Is(5),
+                    ArenaHeight.Is(3))
+                .Build(),
+            [
+                new BotState(
+                    new Bot(
+                        new MoveRightBrain(),
+                        ModuleRack.Create(
+                            Reactor.Named("reactor").MaximumOutput(1),
+                            Battery.Named("battery").Capacity(10),
+                            Drive.Named("drive")
+                                .ThrustPerPower(100)
+                                .MaximumPower(1))),
+                    new Position(1, 1),
+                    Direction.Right)
+            ]);
+```
+A drive's base weight is 3.
+Supporting more power adds weight following the triangular number curve.  
+```mermaid
+xychart-beta
+    title "Weight by maximum power"
+    x-axis "Maximum Power" [1, 2, 3, 4, 5]
+    y-axis "Weight" 0 --> 18
+    bar [4, 6, 9, 13, 18]
+```
+Thrust per power up to 10 is included in that weight.
+Above 10, every two additional thrust per power add 1 weight, rounded up.  
+```mermaid
+xychart-beta
+    title "Weight by thrust per power"
+    x-axis "Thrust Per Power" [10, 11, 12, 13, 14, 15]
+    y-axis "Weight" 0 --> 7
+    bar [4, 5, 5, 6, 6, 7]
+```
 #### Rotator
 A rotator is needed in order to turn your bot.
 
