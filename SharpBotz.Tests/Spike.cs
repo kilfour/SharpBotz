@@ -81,7 +81,7 @@ public class Spike
             control.RequireModule<DrivingInfo>().Move(1));
         var effects = rack.Resolve(plan);
         var effect = Assert.Single(effects);
-        var thrustEffect = Assert.IsType<ThrustEffect>(effect);
+        var thrustEffect = Assert.IsType<DriveEffect>(effect);
         Assert.Equal(1, thrustEffect.Speed);
         Assert.Equal(0, rack.BatteryLevel);
     }

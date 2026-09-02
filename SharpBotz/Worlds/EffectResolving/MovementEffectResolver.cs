@@ -14,7 +14,7 @@ public static class MovementEffectResolver
             .Select((botStateEffect, botIndex) => new DriveIntent(
                 botIndex,
                 checked((int)botStateEffect.Effects.DriveEffects
-                    .OfType<ThrustEffect>()
+                    .OfType<DriveEffect>()
                     .Sum(effect => (long)effect.Speed))))
             .ToArray();
         var stopped = new HashSet<int>();

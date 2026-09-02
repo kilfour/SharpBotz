@@ -12,7 +12,7 @@ public readonly record struct ModuleEffects
     private ModuleEffects(ModuleEffect[] effects)
     {
         ReactorEffects = [.. effects.Where(a => a is ReactorOverLoadedEffect)];
-        DriveEffects = [.. effects.Where(a => a is ThrustEffect)];
+        DriveEffects = [.. effects.Where(a => a is DriveEffect)];
         RotatorEffects = [.. effects.Where(a => a is RotateEffect)];
     }
 

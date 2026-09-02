@@ -1,3 +1,5 @@
+using SharpBotz.Maths;
+
 namespace SharpBotz.Botz.BotModules.Drives;
 
 
@@ -23,10 +25,7 @@ public record DrivingInfo : PoweredModuleInfo
     public PowerAllocation Move(int speed)
     {
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(speed);
-        var requiredPower = DivideRoundingUp(speed * loadedWeight, ThrustPerPower);
+        var requiredPower = Divide.RoundingUp(speed * loadedWeight, ThrustPerPower);
         return Allocate(requiredPower);
     }
-
-    private static int DivideRoundingUp(int value, int divisor) =>
-        (value / divisor) + (value % divisor == 0 ? 0 : 1);
 }
