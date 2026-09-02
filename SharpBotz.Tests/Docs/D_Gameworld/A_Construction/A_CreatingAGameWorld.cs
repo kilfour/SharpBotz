@@ -16,7 +16,7 @@ public class A_CreatingAGameWorld
     A seed can be supplied to make the game repeatable.
     """)]
     [DocExample(typeof(A_CreatingAGameWorld), nameof(CreateGameWorld))]
-    [DocContent("A newly created game starts at turn zero.")]
+    [DocContent("A newly created game starts at turn one.")]
     public void Construction()
     {
         var world = CreateGameWorld();
@@ -28,7 +28,7 @@ public class A_CreatingAGameWorld
         Assert.Equal(new Position(1, 1), botState.Position);
         Assert.Equal(Direction.Right, botState.Facing);
         Assert.Equal(1234, world.Seed);
-        Assert.Equal(0, world.Turn);
+        Assert.Equal(1, world.Turn);
     }
 
     [CodeSnippet]

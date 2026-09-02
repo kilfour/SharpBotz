@@ -104,7 +104,6 @@ public class SpectreGameDisplay
                 cancellationToken);
         }
 
-        var turns = 0;
         AnsiConsole.Clear();
         await AnsiConsole
             .Live(new Markup("[grey]Starting scenario...[/]"))
@@ -112,29 +111,28 @@ public class SpectreGameDisplay
             .StartAsync(async context =>
             {
                 var renderer = CreateRenderer(title, context);
-                var isFinished = isComplete(world) || turns >= maximumTurns;
+                var isFinished = isComplete(world) || world.Turn >= maximumTurns;
                 await renderer(
                     world,
-                    turns,
+                    world.Turn,
                     maximumTurns,
                     isFinished,
                     cancellationToken);
 
-                while (!isFinished && turns < maximumTurns)
+                while (!isFinished && world.Turn < maximumTurns)
                 {
                     cancellationToken.ThrowIfCancellationRequested();
                     world.Update();
-                    turns++;
-                    isFinished = isComplete(world) || turns >= maximumTurns;
+                    isFinished = isComplete(world) || world.Turn >= maximumTurns;
                     await renderer(
                         world,
-                        turns,
+                        world.Turn,
                         maximumTurns,
                         isFinished,
                         cancellationToken);
                 }
             });
-        return turns;
+        return world.Turn;
     }
 
     private async Task<int> RunNonInteractiveAsync(
@@ -144,30 +142,28 @@ public class SpectreGameDisplay
         Func<GameWorld, bool> isComplete,
         CancellationToken cancellationToken)
     {
-        var turns = 0;
-        var isFinished = isComplete(world) || turns >= maximumTurns;
+        var isFinished = isComplete(world) || world.Turn >= maximumTurns;
         RenderNonInteractiveFrame(
             world,
             title,
-            turns,
+            world.Turn,
             maximumTurns,
             isFinished);
 
-        while (!isFinished && turns < maximumTurns)
+        while (!isFinished && world.Turn < maximumTurns)
         {
             await Task.Delay(CurrentSpeed.Interval, cancellationToken);
             world.Update();
-            turns++;
-            isFinished = isComplete(world) || turns >= maximumTurns;
+            isFinished = isComplete(world) || world.Turn >= maximumTurns;
             RenderNonInteractiveFrame(
                 world,
                 title,
-                turns,
+                world.Turn,
                 maximumTurns,
                 isFinished);
         }
 
-        return turns;
+        return world.Turn;
     }
 
     private void RenderNonInteractiveFrame(

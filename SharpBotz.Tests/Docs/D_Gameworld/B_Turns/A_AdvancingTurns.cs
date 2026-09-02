@@ -17,11 +17,11 @@ public class A_AdvancingTurns
 
         AdvanceOneTurn(world);
 
-        Assert.Equal(1, world.Turn);
+        Assert.Equal(2, world.Turn);
 
         AdvanceOneTurn(world);
 
-        Assert.Equal(2, world.Turn);
+        Assert.Equal(3, world.Turn);
     }
 
     [CodeSnippet]

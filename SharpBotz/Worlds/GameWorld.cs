@@ -16,7 +16,7 @@ public class GameWorld
     private readonly BotState[] botStates;
     private BotObservation[] observations;
 
-    public int Turn { get; private set; }
+    public int Turn { get; private set; } = 1;
 
     private static State CreateState(int? seed) =>
         seed is null ? new() : new(seed.Value);

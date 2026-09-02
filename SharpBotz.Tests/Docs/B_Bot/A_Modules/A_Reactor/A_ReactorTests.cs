@@ -69,16 +69,16 @@ Increasing maximum output adds more weight exponentialy.
 
     private static readonly (int MaximumOutput, int Weight)[] WeightCurve =
         [
-            (1, 3),
-            (2, 3),
-            (3, 3),
-            (4, 3),
-            (5, 3),
-            (6, 4),
-            (7, 4),
-            (8, 5),
-            (9, 6),
-            (10, 6)
+            (1, 4),
+            (2, 5),
+            (3, 6),
+            (4, 7),
+            (5, 8),
+            (6, 10),
+            (7, 11),
+            (8, 13),
+            (9, 15),
+            (10, 16)
         ];
 
     [Fact]

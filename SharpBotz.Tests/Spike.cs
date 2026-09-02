@@ -71,13 +71,14 @@ public class Spike
     {
         var rack =
             ModuleRack.Create(
-                Reactor.Named("reactor").MaximumOutput(10),
-                Battery.Named("battery").Capacity(50),
-                Drive.Named("drive").ThrustPerPower(8).MaximumPower(10)
+                Reactor.Named("reactor").MaximumOutput(15),
+                Battery.Named("battery").Capacity(10),
+                Drive.Named("drive").ThrustPerPower(14).MaximumPower(4)
             );
+        Assert.Equal(54, rack.TotalWeight);
         var control = rack.GetModuleControl();
         var plan = new PowerPlan(
-            control.RequireModule<ReactorInfo>().SetOutput(10),
+            control.RequireModule<ReactorInfo>().SetOutput(4),
             control.RequireModule<DrivingInfo>().Move(1));
         var effects = rack.Resolve(plan);
         var effect = Assert.Single(effects);

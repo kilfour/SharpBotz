@@ -351,7 +351,7 @@ Scenario.Named("Repeatable game")
         .Facing(Direction.Right)
     .CreateWorld(seed: 1234);
 ```
-A newly created game starts at turn zero.  
+A newly created game starts at turn one.  
 ### Advancing Turns
 Updating the game world advances it by one turn.  
 ```csharp

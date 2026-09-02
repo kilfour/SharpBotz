@@ -29,7 +29,7 @@ public class Reactor : BotModule
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(outputPerTurn);
         var outputSquared = (long)outputPerTurn * outputPerTurn;
         var outputWeight = (outputSquared / 25) +
-                           (outputSquared % 25 == 0 ? 0 : 1);
+                           (outputSquared % 25 == 0 ? 0 : 1) + outputPerTurn;
         return 2 + (int)outputWeight;
     }
 }
