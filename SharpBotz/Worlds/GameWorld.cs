@@ -14,6 +14,7 @@ public class GameWorld
     public int Seed => fuzzrState.Seed;
     private readonly State fuzzrState;
     private readonly BotState[] botStates;
+    private BotObservation[] observations;
 
     public int Turn { get; private set; }
 
@@ -37,12 +38,15 @@ public class GameWorld
         Arena = arena;
         this.botStates = [.. botStates];
         Bots = Array.AsReadOnly(this.botStates);
+        observations = ScannerEffectsResolver.Observe(Arena, this.botStates);
     }
 
     public void Update()
     {
         Turn++;
-        var botEffects = Bots.Select(a => new BotStateEffect(a, a.Bot.GetEffects(new BotObservation(), fuzzrState)));
+        var botEffects = Bots.Select((botState, botIndex) => new BotStateEffect(
+            botState,
+            botState.Bot.GetEffects(observations[botIndex], fuzzrState)));
         HandleEffects([.. botEffects]);
     }
 
@@ -53,5 +57,6 @@ public class GameWorld
         MovementEffectResolver.Handle(Arena, botStates, botEffects);
         MeleeEffectsResolver.Handle(botEffects);
         RangedEffectsResolver.Handle(Arena, botEffects);
+        observations = ScannerEffectsResolver.Handle(Arena, botEffects);
     }
 }
