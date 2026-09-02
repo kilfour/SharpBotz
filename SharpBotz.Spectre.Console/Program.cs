@@ -44,7 +44,7 @@ static Bot CreateDuelist() =>
                 .PowerPerRange(1)
                 .MaximumPower(1)));
 
-sealed class DuelistBrain : BotBrain
+class DuelistBrain : BotBrain
 {
     protected override PowerPlan RoutePower(
         ModuleControl modules,

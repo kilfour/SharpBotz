@@ -36,7 +36,7 @@ public class B_DriveTests
 
     [CodeSnippet]
     private static Drive ConstructionExample() =>
-         Drive.Named("drive")
+        Drive.Named("drive")
             .ThrustPerPower(10)
             .MaximumPower(5);
 
@@ -54,17 +54,16 @@ public class B_DriveTests
         var drive = ConstructionExample();
         var info = (DrivingInfo)drive.GetInfo(totalWeight: 50);
 
-        Assert.Equal(5, info.Move(speed: 1).Power);
-        Assert.Equal(10, info.Move(speed: 2).Power);
-        Assert.Equal(15, info.Move(speed: 3).Power);
-        Assert.Equal(20, info.Move(speed: 4).Power);
+        Assert.Equal(5, info.Move(1).Power);
+        Assert.Equal(10, info.Move(2).Power);
+        Assert.Equal(15, info.Move(3).Power);
+        Assert.Equal(20, info.Move(4).Power);
     }
 
     [Fact]
     [DocContent(
     """
     A powered drive moves the bot in the direction it is facing.
-    Here the bot starts at position (1, 1), facing right, and moves one tile.
     """)]
     [DocExample(typeof(B_DriveTests), nameof(CreateMovingWorld))]
     public void MoveOneTile()
@@ -76,7 +75,6 @@ public class B_DriveTests
         Assert.Equal(new Position(2, 1), world.Bots[0].Position);
     }
 
-    [CodeSnippet]
     private static GameWorld CreateMovingWorld() =>
         Scenario.Named("Moving one tile")
             .Arena(Arena.Sized(
@@ -100,10 +98,7 @@ public class B_DriveTests
     """
     Supplying more than the drive's maximum power overcharges it.
     The movement still happens, but every excess unit of power deals 3 damage to the bot.
-
-    Here a drive with maximum power 1 receives 2 power. The bot moves one tile and takes 3 damage.
     """)]
-    [DocExample(typeof(B_DriveTests), nameof(CreateOverchargedWorld))]
     public void Overcharge()
     {
         var world = CreateOverchargedWorld();
@@ -114,7 +109,6 @@ public class B_DriveTests
         Assert.Equal(97, world.Bots[0].Bot.HitPoints);
     }
 
-    [CodeSnippet]
     private static GameWorld CreateOverchargedWorld() =>
         Scenario.Named("Overcharged drive")
             .Arena(Arena.Sized(
@@ -195,7 +189,7 @@ public class B_DriveTests
             .ThrustPerPower(thrustPerPower)
             .MaximumPower(maximumPower);
 
-    private sealed class MoveRightBrain : BotBrain
+    private class MoveRightBrain : BotBrain
     {
         protected override PowerPlan RoutePower(
             ModuleControl modules,
@@ -203,7 +197,7 @@ public class B_DriveTests
         {
             var reactor = modules.RequireModule<ReactorInfo>();
             var drive = modules.RequireModule<DrivingInfo>();
-            var movement = drive.Move(speed: 1);
+            var movement = drive.Move(1);
 
             return new(
                 reactor.SetOutput(movement.Power),

@@ -11,7 +11,7 @@ public delegate Task GameWorldRenderer(
     bool isFinished,
     CancellationToken cancellationToken);
 
-public sealed class SpectreGameDisplay
+public class SpectreGameDisplay
 {
     private readonly SimulationSpeed[] speeds =
     [

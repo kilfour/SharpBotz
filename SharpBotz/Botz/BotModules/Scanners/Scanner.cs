@@ -1,7 +1,7 @@
 namespace SharpBotz.Botz.BotModules.Scanners;
 
 
-public sealed class Scanner : PoweredModule
+public class Scanner : PoweredModule
 {
     private const int StandardPowerPerRange = 3;
     private readonly int powerPerRange;

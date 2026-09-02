@@ -163,7 +163,7 @@ public class GameWorldScannerEffectsTests
             new Position(x, y),
             facing);
 
-    private sealed class ScanningBrain(int range) : BotBrain
+    private class ScanningBrain(int range) : BotBrain
     {
         public List<ScanResult[,]> Scans { get; } = [];
 
@@ -179,7 +179,7 @@ public class GameWorldScannerEffectsTests
         }
     }
 
-    private sealed class MultipleScannerBrain : BotBrain
+    private class MultipleScannerBrain : BotBrain
     {
         public List<ScanResult[,]> Scans { get; } = [];
 
@@ -199,7 +199,7 @@ public class GameWorldScannerEffectsTests
         }
     }
 
-    private sealed class OneShotScanningBrain(int range) : BotBrain
+    private class OneShotScanningBrain(int range) : BotBrain
     {
         public List<ScanResult[,]> Scans { get; } = [];
 
@@ -220,7 +220,7 @@ public class GameWorldScannerEffectsTests
         }
     }
 
-    private sealed class MovingBrain : BotBrain
+    private class MovingBrain : BotBrain
     {
         protected override PowerPlan RoutePower(
             ModuleControl modules,
@@ -233,7 +233,7 @@ public class GameWorldScannerEffectsTests
         }
     }
 
-    private sealed class IdleBrain : BotBrain
+    private class IdleBrain : BotBrain
     {
         protected override PowerPlan RoutePower(
             ModuleControl modules,

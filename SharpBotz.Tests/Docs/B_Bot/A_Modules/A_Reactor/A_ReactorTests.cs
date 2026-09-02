@@ -61,26 +61,10 @@ Increasing maximum output adds more weight exponentialy.
         0, 6)]
     public void WeightCurveTest()
     {
-        var reactor = Reactor.Named("reactor").MaximumOutput(1);
-        Assert.Equal(3, reactor.Weight);
-        reactor = Reactor.Named("reactor").MaximumOutput(2);
-        Assert.Equal(3, reactor.Weight);
-        reactor = Reactor.Named("reactor").MaximumOutput(3);
-        Assert.Equal(3, reactor.Weight);
-        reactor = Reactor.Named("reactor").MaximumOutput(4);
-        Assert.Equal(3, reactor.Weight);
-        reactor = Reactor.Named("reactor").MaximumOutput(5);
-        Assert.Equal(3, reactor.Weight);
-        reactor = Reactor.Named("reactor").MaximumOutput(6);
-        Assert.Equal(4, reactor.Weight);
-        reactor = Reactor.Named("reactor").MaximumOutput(7);
-        Assert.Equal(4, reactor.Weight);
-        reactor = Reactor.Named("reactor").MaximumOutput(8);
-        Assert.Equal(5, reactor.Weight);
-        reactor = Reactor.Named("reactor").MaximumOutput(9);
-        Assert.Equal(6, reactor.Weight);
-        reactor = Reactor.Named("reactor").MaximumOutput(10);
-        Assert.Equal(6, reactor.Weight);
+        foreach (var (maximumOutput, weight) in WeightCurve)
+        {
+            Assert.Equal(weight, Reactor.Named("reactor").MaximumOutput(maximumOutput).Weight);
+        }
     }
 
     private static readonly (int MaximumOutput, int Weight)[] WeightCurve =
@@ -102,10 +86,7 @@ Increasing maximum output adds more weight exponentialy.
     """
     Requesting more than a reactor's maximum output overloads it.
     The reactor produces no power, and every excess unit of requested output deals 2 damage to the bot.
-
-    Here a reactor with maximum output 1 is asked to generate 2 power, dealing 2 damage.
     """)]
-    [DocExample(typeof(A_ReactorTests), nameof(CreateOverloadedWorld))]
     public void Overload()
     {
         var world = CreateOverloadedWorld();
@@ -116,7 +97,6 @@ Increasing maximum output adds more weight exponentialy.
         Assert.Equal(0, world.Bots[0].Bot.ModuleRack.BatteryLevel);
     }
 
-    [CodeSnippet]
     private static GameWorld CreateOverloadedWorld() =>
         Scenario.Named("Overloaded reactor")
             .Arena(Arena.Sized(
@@ -153,7 +133,7 @@ The total maximum output of the rack is then the sum of all reactors maximum out
             Reactor.Named("reactor-one").MaximumOutput(10),
             Reactor.Named("reactor-two").MaximumOutput(10));
 
-    private sealed class OverloadedReactorBrain : BotBrain
+    private class OverloadedReactorBrain : BotBrain
     {
         protected override PowerPlan RoutePower(
             ModuleControl modules,

@@ -144,7 +144,7 @@ public class GameWorldRangedEffectsTests
             facing);
     }
 
-    private sealed class CombatBrain(bool move, bool fire) : BotBrain
+    private class CombatBrain(bool move, bool fire) : BotBrain
     {
         protected override PowerPlan RoutePower(
             ModuleControl modules,

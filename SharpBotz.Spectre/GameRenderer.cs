@@ -4,7 +4,7 @@ using Spectre.Console.Rendering;
 
 namespace SharpBotz.Spectre;
 
-internal static class GameRenderer
+public static class GameRenderer
 {
     public static IRenderable Render(
         GameWorld world,

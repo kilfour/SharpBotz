@@ -57,18 +57,10 @@ Every 25 extra capacity after the first 25 adds another 1 weight to the module.
         0, 6)]
     public void WeightCurveTest()
     {
-        var battery = Battery.Named("battery").Capacity(1);
-        Assert.Equal(3, battery.Weight);
-        battery = Battery.Named("battery").Capacity(25);
-        Assert.Equal(3, battery.Weight);
-        battery = Battery.Named("battery").Capacity(35);
-        Assert.Equal(4, battery.Weight);
-        battery = Battery.Named("battery").Capacity(51);
-        Assert.Equal(5, battery.Weight);
-        battery = Battery.Named("battery").Capacity(76);
-        Assert.Equal(6, battery.Weight);
-        battery = Battery.Named("battery").Capacity(100);
-        Assert.Equal(6, battery.Weight);
+        foreach (var (capacity, weight) in WeightCurve)
+        {
+            Assert.Equal(weight, Battery.Named("battery").Capacity(capacity).Weight);
+        }
     }
 
     private static readonly (int Capacity, int Weight)[] WeightCurve =

@@ -7,7 +7,7 @@ using System.Text;
 
 namespace SharpBotz.Spectre;
 
-internal static class ArenaRenderer
+public static class ArenaRenderer
 {
     public static IRenderable Render(Arena arena, IReadOnlyList<BotState> bots)
     {

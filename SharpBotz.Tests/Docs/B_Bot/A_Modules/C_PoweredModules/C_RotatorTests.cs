@@ -78,9 +78,8 @@ public class C_RotatorTests
     [DocContent(
     """
     Supplying enough power can rotate a bot more than once in a single turn.
-    Here the bot starts facing up and turns right twice, ending up facing down.
     """)]
-    [DocExample(typeof(C_RotatorTests), nameof(CreateTurningWorld))]
+
     public void TurnTwice()
     {
         var world = CreateTurningWorld();
@@ -90,7 +89,6 @@ public class C_RotatorTests
         Assert.Equal(Direction.Down, world.Bots[0].Facing);
     }
 
-    [CodeSnippet]
     private static GameWorld CreateTurningWorld() =>
         Scenario.Named("Turning twice")
             .Arena(Arena.Sized(
@@ -115,10 +113,7 @@ public class C_RotatorTests
     """
     Supplying more than the rotator's maximum power overcharges it.
     The rotation still happens, but every excess unit of power deals 3 damage to the bot.
-
-    Here a rotator with maximum power 1 receives 2 power. The bot turns right and takes 3 damage.
     """)]
-    [DocExample(typeof(C_RotatorTests), nameof(CreateOverchargedWorld))]
     public void Overcharge()
     {
         var world = CreateOverchargedWorld();
@@ -129,7 +124,6 @@ public class C_RotatorTests
         Assert.Equal(97, world.Bots[0].Bot.HitPoints);
     }
 
-    [CodeSnippet]
     private static GameWorld CreateOverchargedWorld() =>
         Scenario.Named("Overcharged rotator")
             .Arena(Arena.Sized(
@@ -176,17 +170,15 @@ public class C_RotatorTests
         0, 7)]
     public void WeightCurveTest()
     {
-        Assert.Equal(4, CreateRotator(torquePerPower: 10, maximumPower: 1).Weight);
-        Assert.Equal(6, CreateRotator(torquePerPower: 10, maximumPower: 2).Weight);
-        Assert.Equal(9, CreateRotator(torquePerPower: 10, maximumPower: 3).Weight);
-        Assert.Equal(13, CreateRotator(torquePerPower: 10, maximumPower: 4).Weight);
-        Assert.Equal(18, CreateRotator(torquePerPower: 10, maximumPower: 5).Weight);
+        foreach (var (maximumPower, weight) in MaximumPowerWeightCurve)
+        {
+            Assert.Equal(weight, CreateRotator(torquePerPower: 10, maximumPower).Weight);
+        }
 
-        Assert.Equal(5, CreateRotator(torquePerPower: 11, maximumPower: 1).Weight);
-        Assert.Equal(5, CreateRotator(torquePerPower: 12, maximumPower: 1).Weight);
-        Assert.Equal(6, CreateRotator(torquePerPower: 13, maximumPower: 1).Weight);
-        Assert.Equal(6, CreateRotator(torquePerPower: 14, maximumPower: 1).Weight);
-        Assert.Equal(7, CreateRotator(torquePerPower: 15, maximumPower: 1).Weight);
+        foreach (var (torquePerPower, weight) in TorquePerPowerWeightCurve)
+        {
+            Assert.Equal(weight, CreateRotator(torquePerPower, maximumPower: 1).Weight);
+        }
     }
 
     private static readonly (int MaximumPower, int Weight)[] MaximumPowerWeightCurve =

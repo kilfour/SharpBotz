@@ -39,7 +39,7 @@ public class GameWorldRotatorEffectsTests
         Assert.Equal(97, world.Bots[0].Bot.HitPoints);
     }
 
-    private sealed class TurningBrain : BotBrain
+    private class TurningBrain : BotBrain
     {
         protected override PowerPlan RoutePower(
             ModuleControl modules,

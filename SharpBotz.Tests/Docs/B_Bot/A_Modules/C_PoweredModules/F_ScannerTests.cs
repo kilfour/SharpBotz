@@ -59,10 +59,7 @@ public class F_ScannerTests
     """
     Supplying more than the scanner's maximum power overcharges it.
     The scan is still available on the following turn, but every excess unit of power deals 3 damage to the bot.
-
-    Here a scanner with maximum power 1 receives 2 power. It produces a range-2 scan and deals 3 damage.
     """)]
-    [DocExample(typeof(F_ScannerTests), nameof(CreateOverchargedWorld))]
     public void Overcharge()
     {
         var world = CreateOverchargedWorld();
@@ -79,7 +76,6 @@ public class F_ScannerTests
             brain.Scans[1][2, 2]);
     }
 
-    [CodeSnippet]
     private static GameWorld CreateOverchargedWorld() =>
         Scenario.Named("Overcharged scanner")
             .Arena(Arena.Sized(
@@ -159,7 +155,7 @@ public class F_ScannerTests
             .PowerPerRange(powerPerRange)
             .MaximumPower(powerPerRange * maximumRange);
 
-    private sealed class OneShotScanningBrain(int range) : BotBrain
+    private class OneShotScanningBrain(int range) : BotBrain
     {
         public List<ScanResult[,]> Scans { get; } = [];
 

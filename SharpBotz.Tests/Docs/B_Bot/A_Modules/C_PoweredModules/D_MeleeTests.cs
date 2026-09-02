@@ -58,10 +58,7 @@ public class D_MeleeTests
     """
     Supplying more than the melee weapon's maximum power overcharges it.
     The attack still lands, but every excess unit of power deals 3 damage to the attacking bot.
-
-    Here a weapon with maximum power 1 receives 2 power. It deals 20 damage and its bot takes 3 damage.
     """)]
-    [DocExample(typeof(D_MeleeTests), nameof(CreateOverchargedWorld))]
     public void Overcharge()
     {
         var world = CreateOverchargedWorld();
@@ -72,7 +69,6 @@ public class D_MeleeTests
         Assert.Equal(80, world.Bots[1].Bot.HitPoints);
     }
 
-    [CodeSnippet]
     private static GameWorld CreateOverchargedWorld() =>
         Scenario.Named("Overcharged melee weapon")
             .Arena(Arena.Sized(
@@ -159,7 +155,7 @@ public class D_MeleeTests
             .DamagePerPower(damagePerPower)
             .MaximumPower(maximumPower);
 
-    private sealed class OverchargedMeleeBrain : BotBrain
+    private class OverchargedMeleeBrain : BotBrain
     {
         protected override PowerPlan RoutePower(
             ModuleControl modules,
@@ -174,7 +170,7 @@ public class D_MeleeTests
         }
     }
 
-    private sealed class IdleBrain : BotBrain
+    private class IdleBrain : BotBrain
     {
         protected override PowerPlan RoutePower(
             ModuleControl modules,

@@ -1,6 +1,6 @@
 namespace SharpBotz.Spectre;
 
-internal static class BotPalette
+public static class BotPalette
 {
     public static (string Foreground, string Background) GetColors(int botIndex) =>
         (botIndex % 10) switch

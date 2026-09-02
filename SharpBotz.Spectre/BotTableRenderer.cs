@@ -4,7 +4,7 @@ using Spectre.Console.Rendering;
 
 namespace SharpBotz.Spectre;
 
-internal static class BotTableRenderer
+public static class BotTableRenderer
 {
     public static IRenderable Render(
         IReadOnlyList<BotState> bots,

@@ -61,10 +61,7 @@ public class E_RangedTests
     """
     Supplying more than the ranged weapon's maximum power overcharges it.
     The shot still lands, but every excess unit of power deals 3 damage to the attacking bot.
-
-    Here a weapon with maximum power 1 receives 2 power. It deals 20 damage and its bot takes 3 damage.
     """)]
-    [DocExample(typeof(E_RangedTests), nameof(CreateOverchargedWorld))]
     public void Overcharge()
     {
         var world = CreateOverchargedWorld();
@@ -189,7 +186,7 @@ public class E_RangedTests
             .DamagePerPower(damagePerPower)
             .MaximumPower(maximumPower);
 
-    private sealed class OverchargedRangedBrain : BotBrain
+    private class OverchargedRangedBrain : BotBrain
     {
         protected override PowerPlan RoutePower(
             ModuleControl modules,
@@ -204,7 +201,7 @@ public class E_RangedTests
         }
     }
 
-    private sealed class IdleBrain : BotBrain
+    private class IdleBrain : BotBrain
     {
         protected override PowerPlan RoutePower(
             ModuleControl modules,
