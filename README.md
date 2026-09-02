@@ -65,7 +65,7 @@ A reactor is responsible for supplying the energy required to power other module
 It is created by passing in it's maximum output along with a ModuleId (supplied as string).  
 ```csharp
 Reactor.Named("reactor")
-   .MaximumOutput(10);
+    .MaximumOutput(10);
 ```
 It's initial current output is set to maximum output.  
 A reactor with a maximum output of zero or negative throws upon construction.  
@@ -126,8 +126,8 @@ It is created with its thrust per power and maximum power, along with a ModuleId
 Thrust per power determines how much force each unit of supplied power produces.  
 ```csharp
 Drive.Named("drive")
-            .ThrustPerPower(10)
-            .MaximumPower(5);
+    .ThrustPerPower(10)
+    .MaximumPower(5);
 ```
 Call `Move` on the module info from your BotBrain to request a speed.
 The required power is the requested speed multiplied by the bot's loaded weight, divided by thrust per power and rounded up.
@@ -162,22 +162,22 @@ A rotator is needed in order to turn your bot.
 It is created by passing in its torque per power, maximum power and rotation along with a ModuleId (supplied as string).  
 ```csharp
 Rotator.Named("rotator")
-            .TorquePerPower(10)
-            .MaximumPower(5)
-            .Left();
+    .TorquePerPower(10)
+    .MaximumPower(5)
+    .Left();
 ```
 Multiple rotators can be installed in the same ModuleRack.
 Each rotator has its own direction and ModuleId.  
 ```csharp
 ModuleRack.Create(
-            Rotator.Named("left-rotator")
-                .TorquePerPower(10)
-                .MaximumPower(1)
-                .Left(),
-            Rotator.Named("right-rotator")
-                .TorquePerPower(10)
-                .MaximumPower(1)
-                .Right());
+    Rotator.Named("left-rotator")
+        .TorquePerPower(10)
+        .MaximumPower(1)
+        .Left(),
+    Rotator.Named("right-rotator")
+        .TorquePerPower(10)
+        .MaximumPower(1)
+        .Right());
 ```
 Supplying enough power can rotate a bot more than once in a single turn.  
 Supplying more than the rotator's maximum power overcharges it.
@@ -207,8 +207,8 @@ A melee weapon damages the bot directly in front of your bot.
 It is created with its damage per power and maximum power, along with a ModuleId.  
 ```csharp
 Melee.Named("melee")
-            .DamagePerPower(10)
-            .MaximumPower(5);
+    .DamagePerPower(10)
+    .MaximumPower(5);
 ```
 Call `Hit` on the module info from your BotBrain to request an attack.
 The requested damage is rounded up to the next whole unit of power.  
@@ -240,9 +240,9 @@ The first bot in its path is hit, provided it is within range and no wall blocks
 It is created with its range, damage per power and maximum power, along with a ModuleId.  
 ```csharp
 Ranged.Named("ranged")
-            .Range(3)
-            .DamagePerPower(10)
-            .MaximumPower(5);
+    .Range(3)
+    .DamagePerPower(10)
+    .MaximumPower(5);
 ```
 Call `Fire` on the module info from your BotBrain to request a shot.
 The requested damage is rounded up to the next whole unit of power.  
@@ -282,8 +282,8 @@ A scanner lets your bot observe a square area around itself on the following tur
 It is created with the power required per unit of range and its maximum power, along with a ModuleId.  
 ```csharp
 Scanner.Named("scanner")
-            .PowerPerRange(2)
-            .MaximumPower(10);
+    .PowerPerRange(2)
+    .MaximumPower(10);
 ```
 Call `Scan` on the module info from your BotBrain to request a scan.
 Its power consumption is the requested range multiplied by power per range.  
@@ -342,14 +342,14 @@ A game world is created from a scenario containing its arena terrain and initial
 A seed can be supplied to make the game repeatable.  
 ```csharp
 Scenario.Named("Repeatable game")
-            .Arena(Arena.Sized(
-                    ArenaWidth.Is(3),
-                    ArenaHeight.Is(3))
-                .Build())
-            .Spawn(() => new DummyBot())
-                .At(1, 1)
-                .Facing(Direction.Right)
-            .CreateWorld(seed: 1234);
+    .Arena(Arena.Sized(
+            ArenaWidth.Is(3),
+            ArenaHeight.Is(3))
+        .Build())
+    .Spawn(() => new DummyBot())
+        .At(1, 1)
+        .Facing(Direction.Right)
+    .CreateWorld(seed: 1234);
 ```
 A newly created game starts at turn zero.  
 ### Advancing Turns

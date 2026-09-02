@@ -30,7 +30,7 @@ It is created by passing in it's maximum output along with a ModuleId (supplied 
 
     [CodeSnippet]
     private static Reactor ConstructionExample() =>
-         Reactor.Named("reactor")
+        Reactor.Named("reactor")
             .MaximumOutput(10);
 
     [Fact]
