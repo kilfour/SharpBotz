@@ -7,22 +7,41 @@ namespace SharpBotz.Scenarios;
 
 public class Scenario
 {
-    private Scenario(string name, Arena arena)
+    private Scenario(string name, Arena arena, int maximumTurns, Func<GameWorld, bool> complete)
     {
         Name = name;
         Arena = arena;
+        MaximumTurns = maximumTurns;
+        Complete = complete;
     }
 
-    public static ScenarioNamed Named(string name) => new(name);
+    public static ScenarioArena Named(string name) => new(name);
 
-    public class ScenarioNamed(string name)
+    public class ScenarioArena(string name)
     {
-        public Scenario Arena(Arena arena)
+        public ScenarioMaximumTurns Arena(Arena arena)
             => new(name, arena);
+    }
+
+    public class ScenarioMaximumTurns(string name, Arena arena)
+    {
+        public ScenarioCompletesWhen MaximumTurns(int maximumTurns)
+        {
+            return new(name, arena, maximumTurns);
+        }
+
+    }
+
+    public class ScenarioCompletesWhen(string name, Arena arena, int maximumTurns)
+    {
+        public Scenario CompletesWhen(Func<GameWorld, bool> complete)
+            => new(name, arena, maximumTurns, complete);
     }
 
     public string Name { get; init; } = string.Empty;
     public Arena Arena { get; }
+    public int MaximumTurns { get; }
+    public Func<GameWorld, bool> Complete { get; }
 
     public SpawnBuilder Spawn(Func<Bot> botFactory)
         => new(this, botFactory);
@@ -54,5 +73,7 @@ public class Scenario
                         placement.BotFactory(),
                         placement.Position,
                         placement.Facing))],
+            MaximumTurns,
+            Complete,
             seed);
 }

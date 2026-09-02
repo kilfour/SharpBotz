@@ -24,6 +24,8 @@ public class A_ArenaDefinition
     [CodeSnippet]
     private static Scenario GetScenario(Arena arena) =>
         Scenario.Named("My Scenario")
-            .Arena(arena);
+            .Arena(arena)
+            .MaximumTurns(20)
+            .CompletesWhen(_ => false);
 }
 

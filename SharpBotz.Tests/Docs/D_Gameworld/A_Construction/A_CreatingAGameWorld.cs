@@ -38,6 +38,8 @@ public class A_CreatingAGameWorld
                     ArenaWidth.Is(3),
                     ArenaHeight.Is(3))
                 .Build())
+            .MaximumTurns(20)
+            .CompletesWhen(_ => false)
             .Spawn(() => new DummyBot())
                 .At(1, 1)
                 .Facing(Direction.Right)

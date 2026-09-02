@@ -79,6 +79,8 @@ public class E_RangedTests
                     ArenaWidth.Is(5),
                     ArenaHeight.Is(3))
                 .Build())
+            .MaximumTurns(1)
+            .CompletesWhen(_ => false)
             .Spawn(() => new Bot(
                         new OverchargedRangedBrain(),
                         ModuleRack.Create(

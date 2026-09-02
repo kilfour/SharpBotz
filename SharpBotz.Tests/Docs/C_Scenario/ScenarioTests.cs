@@ -18,6 +18,8 @@ public class ScenarioTests
                     ArenaWidth.Is(3),
                     ArenaHeight.Is(3))
                 .Build())
+            .MaximumTurns(20)
+            .CompletesWhen(_ => false)
             .Spawn(() => new Bot(new DummyBrain(), ModuleRack.Create()))
                 .At(1, 1)
                 .Facing(Direction.Up);

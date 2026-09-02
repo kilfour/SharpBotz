@@ -31,7 +31,9 @@ public class GameWorldRotatorEffectsTests
                                 .Right())),
                     new Position(1, 1),
                     Direction.Up)
-            ]);
+            ],
+            maximumTurns: 10,
+            complete: _ => false);
 
         world.Update();
 

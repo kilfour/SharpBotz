@@ -82,6 +82,8 @@ public class F_ScannerTests
                     ArenaWidth.Is(5),
                     ArenaHeight.Is(5))
                 .Build())
+            .MaximumTurns(2)
+            .CompletesWhen(_ => false)
             .Spawn(() => new Bot(
                         new OneShotScanningBrain(range: 2),
                         ModuleRack.Create(

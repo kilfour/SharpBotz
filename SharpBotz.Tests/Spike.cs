@@ -52,6 +52,8 @@ public class Spike
             );
         var world = Scenario.Named("overload")
             .Arena(Arena.Sized(ArenaWidth.Is(3), ArenaHeight.Is(3)).Build())
+            .MaximumTurns(1)
+            .CompletesWhen(_ => false)
             .Spawn(() => new Bot(new OverLoadBrain(), rack)).At(1, 1).Facing(Direction.Up)
             .CreateWorld();
         world.Update();

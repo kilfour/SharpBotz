@@ -95,6 +95,8 @@ public class C_RotatorTests
                     ArenaWidth.Is(3),
                     ArenaHeight.Is(3))
                 .Build())
+            .MaximumTurns(1)
+            .CompletesWhen(_ => false)
             .Spawn(() => new Bot(
                         new TurnTwiceBrain(),
                         ModuleRack.Create(
@@ -130,6 +132,8 @@ public class C_RotatorTests
                     ArenaWidth.Is(3),
                     ArenaHeight.Is(3))
                 .Build())
+            .MaximumTurns(1)
+            .CompletesWhen(_ => false)
             .Spawn(() => new Bot(
                         new OverchargedTurnBrain(),
                         ModuleRack.Create(

@@ -34,5 +34,7 @@ public class A_AdvancingTurns
                     ArenaWidth.Is(3),
                     ArenaHeight.Is(3))
                 .Build())
+            .MaximumTurns(10)
+            .CompletesWhen(_ => false)
             .CreateWorld();
 }

@@ -103,6 +103,8 @@ Increasing maximum output adds more weight exponentialy.
                     ArenaWidth.Is(3),
                     ArenaHeight.Is(3))
                 .Build())
+            .MaximumTurns(1)
+            .CompletesWhen(_ => false)
             .Spawn(() => new Bot(
                         new OverloadedReactorBrain(),
                         ModuleRack.Create(

@@ -17,6 +17,8 @@ var scenario = Scenario.Named("First contact")
             .AddWallAt(6, 1)
             .AddWallAt(6, 5)
             .Build())
+    .MaximumTurns(20)
+    .CompletesWhen(a => a.Bots.Count(a => a.Bot.IsAlive) < 2)
     .Spawn(CreateDuelist)
         .At(2, 3)
         .Facing(Direction.Right)
@@ -26,7 +28,7 @@ var scenario = Scenario.Named("First contact")
 
 var world = scenario.CreateWorld();
 var display = new SpectreGameDisplay();
-await display.RunAsync(world, scenario.Name, maximumTurns: 20);
+await display.RunAsync(world, scenario.Name);
 
 static Bot CreateDuelist() =>
     new(

@@ -76,7 +76,7 @@ xychart-beta
     title "Weight Curve"
     x-axis "Maximum Output" [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     y-axis "Weight" 0 --> 6
-    bar [3, 3, 3, 3, 3, 4, 4, 5, 6, 6]
+    bar [4, 5, 6, 7, 8, 10, 11, 13, 15, 16]
 ```
 Requesting more than a reactor's maximum output overloads it.
 The reactor produces no power, and every excess unit of requested output deals 2 damage to the bot.  
@@ -312,7 +312,9 @@ A scenario describes repeatable initial arena terrain and bot placement.
 ### Arena Definition
 ```csharp
 Scenario.Named("My Scenario")
-    .Arena(arena);
+    .Arena(arena)
+    .MaximumTurns(20)
+    .CompletesWhen(_ => false);
 ```
 ### Adding Bots
 This can be achieved in the following way:  
@@ -322,6 +324,8 @@ Scenario.Named("Botz")
             ArenaWidth.Is(5),
             ArenaHeight.Is(3))
         .Build())
+    .MaximumTurns(20)
+    .CompletesWhen(_ => false)
     .Spawn(() => new DummyBot())
         .At(1, 1)
         .Facing(Direction.Up)
@@ -346,6 +350,8 @@ Scenario.Named("Repeatable game")
             ArenaWidth.Is(3),
             ArenaHeight.Is(3))
         .Build())
+    .MaximumTurns(20)
+    .CompletesWhen(_ => false)
     .Spawn(() => new DummyBot())
         .At(1, 1)
         .Facing(Direction.Right)

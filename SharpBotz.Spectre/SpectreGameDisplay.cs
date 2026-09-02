@@ -84,23 +84,16 @@ public class SpectreGameDisplay
     public async Task<int> RunAsync(
         GameWorld world,
         string title,
-        int maximumTurns,
-        Func<GameWorld, bool>? isComplete = null,
         CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(world);
         ArgumentException.ThrowIfNullOrWhiteSpace(title);
-        ArgumentOutOfRangeException.ThrowIfNegative(maximumTurns);
-        isComplete ??= currentWorld =>
-            currentWorld.Bots.Count(bot => bot.Bot.IsAlive) <= 1;
 
         if (!controlsAvailable)
         {
             return await RunNonInteractiveAsync(
                 world,
                 title,
-                maximumTurns,
-                isComplete,
                 cancellationToken);
         }
 
@@ -111,23 +104,23 @@ public class SpectreGameDisplay
             .StartAsync(async context =>
             {
                 var renderer = CreateRenderer(title, context);
-                var isFinished = isComplete(world) || world.Turn >= maximumTurns;
+                var isFinished = world.IsComplete;
                 await renderer(
                     world,
                     world.Turn,
-                    maximumTurns,
+                    world.MaximumTurns,
                     isFinished,
                     cancellationToken);
 
-                while (!isFinished && world.Turn < maximumTurns)
+                while (!isFinished)
                 {
                     cancellationToken.ThrowIfCancellationRequested();
                     world.Update();
-                    isFinished = isComplete(world) || world.Turn >= maximumTurns;
+                    isFinished = world.IsComplete;
                     await renderer(
                         world,
                         world.Turn,
-                        maximumTurns,
+                        world.MaximumTurns,
                         isFinished,
                         cancellationToken);
                 }
@@ -138,28 +131,26 @@ public class SpectreGameDisplay
     private async Task<int> RunNonInteractiveAsync(
         GameWorld world,
         string title,
-        int maximumTurns,
-        Func<GameWorld, bool> isComplete,
         CancellationToken cancellationToken)
     {
-        var isFinished = isComplete(world) || world.Turn >= maximumTurns;
+        var isFinished = world.IsComplete;
         RenderNonInteractiveFrame(
             world,
             title,
             world.Turn,
-            maximumTurns,
+            world.MaximumTurns,
             isFinished);
 
-        while (!isFinished && world.Turn < maximumTurns)
+        while (!isFinished)
         {
             await Task.Delay(CurrentSpeed.Interval, cancellationToken);
             world.Update();
-            isFinished = isComplete(world) || world.Turn >= maximumTurns;
+            isFinished = world.IsComplete;
             RenderNonInteractiveFrame(
                 world,
                 title,
                 world.Turn,
-                maximumTurns,
+                world.MaximumTurns,
                 isFinished);
         }
 

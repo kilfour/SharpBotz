@@ -116,7 +116,12 @@ public class GameWorldScannerEffectsTests
     private static GameWorld CreateWorld(
         Arena arena,
         params BotState[] botStates) =>
-        new(arena, botStates, seed: 1234);
+        new(
+            arena,
+            botStates,
+            maximumTurns: 10,
+            complete: _ => false,
+            seed: 1234);
 
     private static BotState CreateScannerState(
         BotBrain brain,

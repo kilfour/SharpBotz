@@ -75,6 +75,8 @@ public class D_MeleeTests
                     ArenaWidth.Is(4),
                     ArenaHeight.Is(3))
                 .Build())
+            .MaximumTurns(1)
+            .CompletesWhen(_ => false)
             .Spawn(() => new Bot(
                         new OverchargedMeleeBrain(),
                         ModuleRack.Create(

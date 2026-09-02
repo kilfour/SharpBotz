@@ -71,6 +71,8 @@ public class GameWorldMeleeEffectsTests
                     ArenaHeight.Is(5))
                 .Build(),
             botStates,
+            maximumTurns: 10,
+            complete: _ => false,
             seed: 1234);
 
     private static BotState CreateState(
