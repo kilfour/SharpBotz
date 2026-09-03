@@ -1,6 +1,7 @@
 using QuickFuzzr.UnderTheHood;
 using SharpBotz.Arenas;
 using SharpBotz.Botz;
+using SharpBotz.Botz.BotModules;
 using SharpBotz.Worlds.EffectResolving;
 
 namespace SharpBotz.Worlds;
@@ -63,10 +64,12 @@ public class GameWorld
     }
 
     private IEnumerable<BotStateEffect> GetBotStateEffects() =>
-        Bots.Select((botState, botIndex) =>
-            new BotStateEffect(
-                botState,
-                botState.Bot.GetEffects(observations[botIndex], fuzzrState)));
+    Bots.Select((botState, botIndex) =>
+        new BotStateEffect(
+            botState,
+            botState.Bot.IsAlive
+                ? botState.Bot.GetEffects(observations[botIndex], fuzzrState)
+                : ModuleEffects.From([])));
 
     private void IncrementTurn()
     {
