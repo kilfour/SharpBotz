@@ -1,5 +1,5 @@
 # <img src='icon.png' width='40' align='top'/> SharpBotz
-> **Need a tag line**  
+> **The Machine Rages Back**  
 
 
 [![Docs](https://img.shields.io/badge/docs-SharpBotz-blue?style=flat-square&logo=readthedocs)](https://github.com/kilfour/SharpBotz/blob/main/Docs/ToC.md)
