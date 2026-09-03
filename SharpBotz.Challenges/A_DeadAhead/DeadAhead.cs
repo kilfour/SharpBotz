@@ -4,7 +4,7 @@ using SharpBotz.Scenarios;
 
 namespace SharpBotz.Challenges.A_DeadAhead;
 
-public class DeadAhead
+public class DeadAhead : Challenge
 {
     public static Scenario Challenge =>
         Scenario.Named("Dead Ahead")
@@ -14,8 +14,7 @@ public class DeadAhead
                     ArenaHeight.Is(3))
                 .Build())
             .MaximumTurns(20)
-            .CompletesWhen(world =>
-                world.Bots.Count(bot => bot.Bot.IsAlive) < 2)
+            .CompletesWhen(OnlyFirstBotLives)
             .Spawn(() => new AheadBot()).At(1, 1).Facing(Direction.Right)
             .Spawn(() => new DummyBot()).At(13, 1).Facing(Direction.Right);
 }

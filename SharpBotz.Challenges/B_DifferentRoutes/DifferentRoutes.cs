@@ -4,7 +4,7 @@ using SharpBotz.Scenarios;
 
 namespace SharpBotz.Challenges.B_DifferentRoutes;
 
-public class DifferentRoutes
+public class DifferentRoutes : Challenge
 {
     public static Scenario RouteOne =>
         Scenario.Named("Route One")
@@ -21,9 +21,8 @@ public class DifferentRoutes
                     .AddWallAt(4, 4)
                     .AddWallAt(4, 5)
                 .Build())
-            .MaximumTurns(20)
-            .CompletesWhen(world =>
-                world.Bots.Count(bot => bot.Bot.IsAlive) < 2)
+            .MaximumTurns(30)
+            .CompletesWhen(OnlyFirstBotLives)
             .Spawn(() => new RouteBot()).At(1, 1).Facing(Direction.Right)
             .Spawn(() => new DummyBot()).At(5, 5).Facing(Direction.Right);
 
@@ -42,9 +41,8 @@ public class DifferentRoutes
                     .AddWallAt(4, 4)
                     .AddWallAt(5, 4)
                 .Build())
-            .MaximumTurns(20)
-            .CompletesWhen(world =>
-                world.Bots.Count(bot => bot.Bot.IsAlive) < 2)
+            .MaximumTurns(30)
+            .CompletesWhen(OnlyFirstBotLives)
             .Spawn(() => new RouteBot()).At(1, 1).Facing(Direction.Right)
             .Spawn(() => new DummyBot()).At(5, 5).Facing(Direction.Right);
 }
