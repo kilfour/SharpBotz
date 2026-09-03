@@ -13,7 +13,7 @@
       - [Ranged](B_Bot/A_Modules/C_PoweredModules/E_RangedTests.md)
       - [Scanner](B_Bot/A_Modules/C_PoweredModules/F_ScannerTests.md)
     - [Building A Bot Brain](B_Bot/B_BuildingABotBrain/BotBrainTests.md)
-    - [ModuleRack Exampless](B_Bot/Q_ModuleRackExamples/ModuleRackExamples.md)
+    - [Example Module Racks](B_Bot/Q_ModuleRackExamples/ModuleRackExamples.md)
   - [Scenario](C_Scenario/ScenarioTests.md)
     - [Arena Definition](C_Scenario/A_Construction/A_ArenaDefinition.md)
     - [Adding Bots](C_Scenario/A_Construction/C_AddingBots.md)
