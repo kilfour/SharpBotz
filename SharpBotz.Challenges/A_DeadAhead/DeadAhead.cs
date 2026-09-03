@@ -10,12 +10,12 @@ public class DeadAhead
         Scenario.Named("Dead Ahead")
             .Arena(
                 Arena.Sized(
-                    ArenaWidth.Is(7),
+                    ArenaWidth.Is(15),
                     ArenaHeight.Is(3))
                 .Build())
             .MaximumTurns(20)
             .CompletesWhen(a => a.Bots.Count < 2)
             .Spawn(() => new ChallengeBot()).At(1, 1).Facing(Direction.Right)
-            .Spawn(() => new DummyBot()).At(5, 1).Facing(Direction.Right);
+            .Spawn(() => new DummyBot()).At(13, 1).Facing(Direction.Right);
 }
 

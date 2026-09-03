@@ -1,4 +1,3 @@
-using SharpBotz.Botz;
 using SharpBotz.Botz.BotModules.MeleeWeapons;
 
 namespace SharpBotz.Worlds.EffectResolving;

@@ -17,6 +17,8 @@ public class GameWorld
 
     private readonly Func<GameWorld, bool> complete;
 
+    public bool GoalReached => complete(this);
+
     private readonly State fuzzrState;
     private readonly BotState[] botStates;
     private BotObservation[] observations;
