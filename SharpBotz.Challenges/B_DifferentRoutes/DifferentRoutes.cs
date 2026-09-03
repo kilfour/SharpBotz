@@ -12,10 +12,14 @@ public class DifferentRoutes
                 Arena.Sized(
                     ArenaWidth.Is(7),
                     ArenaHeight.Is(7))
-                    .AddWallAt(3, 1)
-                    .AddWallAt(3, 2)
-                    .AddWallAt(3, 3)
-                    .AddWallAt(3, 5)
+                    .AddWallAt(2, 1)
+                    .AddWallAt(2, 2)
+                    .AddWallAt(2, 3)
+                    .AddWallAt(2, 5)
+                    .AddWallAt(4, 1)
+                    .AddWallAt(4, 3)
+                    .AddWallAt(4, 4)
+                    .AddWallAt(4, 5)
                 .Build())
             .MaximumTurns(20)
             .CompletesWhen(world =>
