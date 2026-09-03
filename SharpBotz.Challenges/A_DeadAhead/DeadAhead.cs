@@ -14,7 +14,8 @@ public class DeadAhead
                     ArenaHeight.Is(3))
                 .Build())
             .MaximumTurns(20)
-            .CompletesWhen(a => a.Bots.Count < 2)
+            .CompletesWhen(world =>
+                world.Bots.Count(bot => bot.Bot.IsAlive) < 2)
             .Spawn(() => new ChallengeBot()).At(1, 1).Facing(Direction.Right)
             .Spawn(() => new DummyBot()).At(13, 1).Facing(Direction.Right);
 }
