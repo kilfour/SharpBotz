@@ -1,11 +1,11 @@
 using SharpBotz.Botz;
 using SharpBotz.Botz.BotModules;
 
-namespace SharpBotz.Challenges.A_DeadAhead;
+namespace SharpBotz.Challenges.B_DifferentRoutes;
 
-public class ChallengeBot() : Bot(new ChallengeBrain(), ModuleRack.Create())
+public class RouteBot() : Bot(new RouteBrain(), ModuleRack.Create())
 {
-    public class ChallengeBrain : BotBrain
+    public class RouteBrain : BotBrain
     {
         protected override PowerPlan RoutePower(ModuleControl modules, BotObservation observation) =>
             PowerPlan.Empty;
