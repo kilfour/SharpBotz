@@ -9,21 +9,15 @@ public static class GameRenderer
     public static IRenderable Render(
         GameWorld world,
         string title,
-        int turns,
-        int maximumTurns,
-        bool isFinished,
         string speed,
-        bool isPaused,
-        bool controlsAvailable)
+        bool isPaused)
     {
-        var state = isFinished
+        var state = world.IsComplete
             ? "[bold green]Finished[/]"
             : isPaused
                 ? "[bold yellow]Paused[/]"
                 : "[bold green]Running[/]";
-        var controls = controlsAvailable
-            ? "[grey]| ←/→ speed | Space pause | Enter step[/]"
-            : "[grey]| controls unavailable[/]";
+        var controls = "[grey]| ←/→ speed | Space pause | Enter step[/]";
 
         return new Rows(
             new Panel(ArenaRenderer.Render(world.Arena, world.Bots))
@@ -37,7 +31,7 @@ public static class GameRenderer
                 state,
                 speed,
                 controls,
-                turns,
-                maximumTurns));
+                world.Turn,
+                world.MaximumTurns));
     }
 }

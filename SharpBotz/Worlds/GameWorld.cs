@@ -7,7 +7,6 @@ namespace SharpBotz.Worlds;
 
 public class GameWorld
 {
-
     public Arena Arena { get; }
     public int MaximumTurns { get; }
 
@@ -59,16 +58,24 @@ public class GameWorld
 
     public void Update()
     {
+        IncrementTurn();
+        HandleEffects([.. GetBotStateEffects()]);
+    }
+
+    private IEnumerable<BotStateEffect> GetBotStateEffects() =>
+        Bots.Select((botState, botIndex) =>
+            new BotStateEffect(
+                botState,
+                botState.Bot.GetEffects(observations[botIndex], fuzzrState)));
+
+    private void IncrementTurn()
+    {
         if (Turn == MaximumTurns)
             maximumTurnsReached = true;
         else
             Turn++;
-
-        var botEffects = Bots.Select((botState, botIndex) => new BotStateEffect(
-            botState,
-            botState.Bot.GetEffects(observations[botIndex], fuzzrState)));
-        HandleEffects([.. botEffects]);
     }
+
 
     private void HandleEffects(BotStateEffect[] botEffects)
     {
