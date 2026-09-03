@@ -75,6 +75,7 @@ public class GameWorld
         MovementEffectResolver.Handle(Arena, botStates, botEffects);
         MeleeEffectsResolver.Handle(botEffects);
         RangedEffectsResolver.Handle(Arena, botEffects);
+        BatteryEffectsResolver.Handle(botEffects);
         observations = ScannerEffectsResolver.Handle(Arena, botEffects);
     }
 }

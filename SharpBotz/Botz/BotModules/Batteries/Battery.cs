@@ -39,7 +39,7 @@ public class Battery : BotModule
         if (amount > Charge)
         {
             Charge = 0;
-            return new BatteryDrainedEffect(Id);
+            return new BatteryDrainedEffect(Id, amount - Charge);
         }
         Charge -= amount;
         return null;

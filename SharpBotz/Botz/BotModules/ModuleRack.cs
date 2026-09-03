@@ -84,36 +84,57 @@ public class ModuleRack
                 needs -= remaining;
                 remaining = 0;
             }
-            var needsPerBattery = needs / batteryCount;
-            var firstNeedBattery = needsPerBattery + needs % batteryCount;
-            var firstNeed = true;
-            foreach (var battery in batteries)
+            if (needs > 0 && batteryCount > 0)
             {
-                var drain = firstNeed ? firstNeedBattery : needsPerBattery;
-                firstNeed = false;
-                var batteryEffect = battery.Drain(drain);
-                if (batteryEffect is not null)
-                    effects.Add(batteryEffect);
-                else
-                    needs -= drain;
+                foreach (var (battery, drain) in DistributeEvenly(needs, batteries))
+                {
+                    var batteryEffect = battery.Drain(drain);
+                    if (batteryEffect is not null)
+                        effects.Add(batteryEffect);
+                    else
+                        needs -= drain;
+                }
             }
             if (needs == 0)
                 effects.AddRange((modulesById[id] as PoweredModule)!.Supply(power, TotalWeight));
         }
-
-        var storePerBattery = remaining / batteryCount;
-        var firstStoreBattery = storePerBattery + remaining % batteryCount;
-        var firstStore = true;
-        foreach (var battery in batteries)
+        if (remaining == 0)
+            return [.. effects];
+        if (batteryCount == 0)
         {
-            var store = firstStore ? firstStoreBattery : storePerBattery;
-            firstStore = false;
+            foreach (var (reactor, excessPower) in DistributeEvenly(remaining, reactors))
+            {
+                effects.Add(new PowerCannotBeStoredEffect(reactor.Id, excessPower));
+            }
+
+            return [.. effects];
+        }
+
+        foreach (var (battery, store) in DistributeEvenly(remaining, batteries))
+        {
             var batteryEffect = battery.Store(store);
             if (batteryEffect is not null)
                 effects.Add(batteryEffect);
         }
 
         return [.. effects];
+    }
+
+    private static IEnumerable<(T Recipient, int Amount)> DistributeEvenly<T>(
+        int amount,
+        IReadOnlyList<T> recipients)
+    {
+        var amountPerRecipient = amount / recipients.Count;
+        var recipientsWithOneMore = amount % recipients.Count;
+        for (var index = 0; index < recipients.Count; index++)
+        {
+            var recipientAmount = amountPerRecipient;
+            if (index < recipientsWithOneMore)
+                recipientAmount++;
+
+            if (recipientAmount > 0)
+                yield return (recipients[index], recipientAmount);
+        }
     }
 
     public void Attach()

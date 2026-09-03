@@ -1,3 +1,4 @@
+using SharpBotz.Botz.BotModules.Batteries;
 using SharpBotz.Botz.BotModules.Drives;
 using SharpBotz.Botz.BotModules.MeleeWeapons;
 using SharpBotz.Botz.BotModules.RangedWeapons;
@@ -19,6 +20,10 @@ public readonly record struct ModuleEffects
         DriveEffects = [.. effects.Where(a => a is DriveEffect || a is DriveOverChargedEffect)];
         MeleeEffects = [.. effects.Where(a => a is MeleeEffect || a is MeleeOverChargedEffect)];
         RangedEffects = [.. effects.Where(a => a is RangedEffect || a is RangedOverChargedEffect)];
+        BatteryEffects = [.. effects.Where(a =>
+            a is PowerCannotBeStoredEffect ||
+            a is BatteryDrainedEffect ||
+            a is BatteryOverChargedEffect)];
         ScannerEffects = [.. effects.Where(a => a is ScanEffect || a is ScannerOverChargedEffect)];
     }
 
@@ -27,5 +32,6 @@ public readonly record struct ModuleEffects
     public readonly ModuleEffect[] DriveEffects { get; private init; }
     public readonly ModuleEffect[] MeleeEffects { get; private init; }
     public readonly ModuleEffect[] RangedEffects { get; private init; }
+    public readonly ModuleEffect[] BatteryEffects { get; private init; }
     public readonly ModuleEffect[] ScannerEffects { get; private init; }
 }
