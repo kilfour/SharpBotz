@@ -17,6 +17,7 @@ public class MoveForwardBrain : BotBrain
         var reactor = modules.RequireModule<ReactorInfo>();
         var drive = modules.RequireModule<DrivingInfo>();
         var movement = drive.Move(speed: 1);
+
         return new PowerPlan(
             reactor.SetOutput(movement.Power),
             movement);

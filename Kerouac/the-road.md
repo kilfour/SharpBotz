@@ -11,8 +11,7 @@
 
 
 ### Done/Ready for Changelog after review
-- Scan: own bot is at 0,0.
-- Add example module racks with their weight.
+
 
 ## Ideas
 - Turrets
