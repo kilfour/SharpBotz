@@ -57,8 +57,7 @@ Increasing maximum output adds more weight exponentialy.
         nameof(WeightCurve),
         "Weight Curve",
         "Maximum Output",
-        "Weight",
-        0, 6)]
+        "Weight")]
     public void WeightCurveTest()
     {
         foreach (var (maximumOutput, weight) in WeightCurve)

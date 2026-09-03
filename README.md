@@ -75,7 +75,7 @@ Increasing maximum output adds more weight exponentialy.
 xychart-beta
     title "Weight Curve"
     x-axis "Maximum Output" [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-    y-axis "Weight" 0 --> 6
+    y-axis "Weight"
     bar [4, 5, 6, 7, 8, 10, 11, 13, 15, 16]
 ```
 Requesting more than a reactor's maximum output overloads it.
