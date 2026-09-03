@@ -12,6 +12,13 @@ Call `Scan` on the module info from your BotBrain to request a scan.
 Its power consumption is the requested range multiplied by power per range.  
 Supplying more than the scanner's maximum power overcharges it.
 The scan is still available on the following turn, but every excess unit of power deals 3 damage to the bot.  
+Scan coordinates are relative to the observing bot, which is always at `[0, 0]`.
+Positive X points right across the arena and positive Y points down.
+A range-two scan therefore covers coordinates from `[-2, -2]` through `[2, 2]`.  
+```csharp
+public static ScanResult ReadOwnBot(BotScan scan) =>
+    scan[0, 0];
+```
 A scanner's base weight is 2.
 Supporting a larger maximum range adds weight following the triangular number curve.  
 ```mermaid

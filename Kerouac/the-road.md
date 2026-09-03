@@ -2,7 +2,6 @@
 
 ### Todo
 - random wall/bot placement
-- Scan: own bot should be at 0,0.
 - Melee and ranged: add a direction 
 
 #### Docs
@@ -13,7 +12,7 @@
 
 
 ### Done/Ready for Changelog after review
-
+- Scan: own bot is at 0,0.
 
 ## Ideas
 - Turrets

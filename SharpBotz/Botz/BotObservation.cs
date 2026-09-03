@@ -1,9 +1,10 @@
 namespace SharpBotz.Botz;
 
-public class BotObservation(ScanResult[,] scan)
+public class BotObservation
 {
     public BotObservation() : this(new ScanResult[0, 0]) { }
 
-    public ScanResult[,] Scan { get; } = scan ??
-        throw new ArgumentNullException(nameof(scan));
+    public BotObservation(ScanResult[,] scan) => Scan = new(scan);
+
+    public BotScan Scan { get; }
 }

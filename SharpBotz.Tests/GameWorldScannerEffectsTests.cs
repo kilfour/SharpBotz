@@ -24,16 +24,16 @@ public class GameWorldScannerEffectsTests
         world.Update();
 
         Assert.Equal(2, brain.Scans.Count);
-        Assert.Equal(1, brain.Scans[0].GetLength(0));
+        Assert.Equal(1, brain.Scans[0].Size);
 
         var scan = brain.Scans[1];
-        Assert.Equal(5, scan.GetLength(0));
-        Assert.Equal(5, scan.GetLength(1));
-        Assert.Equal(new ScanResult.OwnBot(Direction.Right, 100), scan[2, 2]);
-        Assert.Equal(new ScanResult.Bot(Direction.Left, 100), scan[3, 2]);
-        Assert.IsType<ScanResult.Wall>(scan[1, 1]);
-        Assert.IsType<ScanResult.Empty>(scan[3, 3]);
-        Assert.IsType<ScanResult.OutOfBounds>(scan[0, 0]);
+        Assert.Equal(2, scan.Range);
+        Assert.Equal(5, scan.Size);
+        Assert.Equal(new ScanResult.OwnBot(Direction.Right, 100), scan[0, 0]);
+        Assert.Equal(new ScanResult.Bot(Direction.Left, 100), scan[1, 0]);
+        Assert.IsType<ScanResult.Wall>(scan[-1, -1]);
+        Assert.IsType<ScanResult.Empty>(scan[1, 1]);
+        Assert.IsType<ScanResult.OutOfBounds>(scan[-2, -2]);
     }
 
     [Fact]
@@ -58,8 +58,8 @@ public class GameWorldScannerEffectsTests
         world.Update();
         world.Update();
 
-        Assert.Equal(5, brain.Scans[1].GetLength(0));
-        Assert.Equal(5, brain.Scans[1].GetLength(1));
+        Assert.Equal(2, brain.Scans[1].Range);
+        Assert.Equal(5, brain.Scans[1].Size);
     }
 
     [Fact]
@@ -74,8 +74,8 @@ public class GameWorldScannerEffectsTests
         world.Update();
         world.Update();
 
-        Assert.Equal(new ScanResult.Bot(Direction.Left, 100), brain.Scans[1][5, 3]);
-        Assert.IsType<ScanResult.Empty>(brain.Scans[1][6, 3]);
+        Assert.Equal(new ScanResult.Bot(Direction.Left, 100), brain.Scans[1][2, 0]);
+        Assert.IsType<ScanResult.Empty>(brain.Scans[1][3, 0]);
     }
 
     [Fact]
@@ -100,11 +100,11 @@ public class GameWorldScannerEffectsTests
         world.Update();
 
         Assert.Equal(97, world.Bots[0].Bot.HitPoints);
-        Assert.Equal(5, brain.Scans[1].GetLength(0));
-        Assert.Equal(5, brain.Scans[1].GetLength(1));
+        Assert.Equal(2, brain.Scans[1].Range);
+        Assert.Equal(5, brain.Scans[1].Size);
         Assert.Equal(
             new ScanResult.OwnBot(Direction.Up, HitPoints: 97),
-            brain.Scans[1][2, 2]);
+            brain.Scans[1][0, 0]);
     }
 
     private static Arena CreateArena(int width) =>
@@ -170,7 +170,7 @@ public class GameWorldScannerEffectsTests
 
     private class ScanningBrain(int range) : BotBrain
     {
-        public List<ScanResult[,]> Scans { get; } = [];
+        public List<BotScan> Scans { get; } = [];
 
         protected override PowerPlan RoutePower(
             ModuleControl modules,
@@ -186,7 +186,7 @@ public class GameWorldScannerEffectsTests
 
     private class MultipleScannerBrain : BotBrain
     {
-        public List<ScanResult[,]> Scans { get; } = [];
+        public List<BotScan> Scans { get; } = [];
 
         protected override PowerPlan RoutePower(
             ModuleControl modules,
@@ -206,7 +206,7 @@ public class GameWorldScannerEffectsTests
 
     private class OneShotScanningBrain(int range) : BotBrain
     {
-        public List<ScanResult[,]> Scans { get; } = [];
+        public List<BotScan> Scans { get; } = [];
 
         protected override PowerPlan RoutePower(
             ModuleControl modules,

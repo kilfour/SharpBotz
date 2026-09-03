@@ -69,12 +69,39 @@ public class F_ScannerTests
         world.Update();
 
         Assert.Equal(97, world.Bots[0].Bot.HitPoints);
-        Assert.Equal(5, brain.Scans[1].GetLength(0));
-        Assert.Equal(5, brain.Scans[1].GetLength(1));
+        Assert.Equal(2, brain.Scans[1].Range);
+        Assert.Equal(5, brain.Scans[1].Size);
         Assert.Equal(
             new ScanResult.OwnBot(Direction.Up, HitPoints: 97),
-            brain.Scans[1][2, 2]);
+            brain.Scans[1][0, 0]);
     }
+
+    [Fact]
+    [DocContent(
+    """
+    Scan coordinates are relative to the observing bot, which is always at `[0, 0]`.
+    Positive X points right across the arena and positive Y points down.
+    A range-two scan therefore covers coordinates from `[-2, -2]` through `[2, 2]`.
+    """)]
+    [DocExample(typeof(F_ScannerTests), nameof(ReadOwnBot))]
+    public void ScanCoordinatesAreRelativeToTheBot()
+    {
+        var world = CreateOverchargedWorld();
+        var brain = Assert.IsType<OneShotScanningBrain>(world.Bots[0].Bot.Brain);
+
+        world.Update();
+        world.Update();
+
+        Assert.Equal(
+            new ScanResult.OwnBot(Direction.Up, HitPoints: 97),
+            ReadOwnBot(brain.Scans[1]));
+        Assert.IsType<ScanResult.Wall>(brain.Scans[1][-2, 0]);
+        Assert.IsType<ScanResult.Wall>(brain.Scans[1][0, -2]);
+    }
+
+    [CodeExample]
+    public static ScanResult ReadOwnBot(BotScan scan) =>
+        scan[0, 0];
 
     private static GameWorld CreateOverchargedWorld() =>
         Scenario.Named("Overcharged scanner")
@@ -159,7 +186,7 @@ public class F_ScannerTests
 
     private class OneShotScanningBrain(int range) : BotBrain
     {
-        public List<ScanResult[,]> Scans { get; } = [];
+        public List<BotScan> Scans { get; } = [];
 
         protected override PowerPlan RoutePower(
             ModuleControl modules,
