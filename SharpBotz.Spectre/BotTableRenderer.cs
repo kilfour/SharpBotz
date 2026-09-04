@@ -32,7 +32,7 @@ public static class BotTableRenderer
             var rack = bot.ModuleRack;
             var (foreground, _) = BotPalette.GetColors(index);
             table.AddRow(
-                $"[{foreground}]● Bot {index + 1}[/]",
+                $"[{foreground}]● {bot.Name}[/]",
                 $"[{foreground}]{bot.HitPoints}[/]",
                 $"[{foreground}]({botState.Position.X}, {botState.Position.Y})[/]",
                 $"[{foreground}]{botState.Facing}[/]",
