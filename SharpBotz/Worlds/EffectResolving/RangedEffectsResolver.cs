@@ -12,6 +12,9 @@ public static class RangedEffectsResolver
 
         foreach (var attacker in botStateEffects)
         {
+            if (!attacker.BotState.Bot.IsAlive)
+                continue;
+
             foreach (var effect in attacker.Effects.RangedEffects.OfType<RangedEffect>())
             {
                 Fire(arena, occupants, attacker, effect);
@@ -42,6 +45,7 @@ public static class RangedEffectsResolver
 
             var receivers = occupants[target.ToCoordinates()]
                 .Where(receiver =>
+                    receiver.BotState.Bot.IsAlive &&
                     !ReferenceEquals(attackerState.Bot, receiver.BotState.Bot))
                 .ToArray();
 

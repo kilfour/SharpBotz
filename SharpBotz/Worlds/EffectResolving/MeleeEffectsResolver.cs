@@ -11,6 +11,9 @@ public static class MeleeEffectsResolver
 
         foreach (var attacker in botStateEffects)
         {
+            if (!attacker.BotState.Bot.IsAlive)
+                continue;
+
             var attackerState = attacker.BotState;
             var target = attackerState.Position.Move(attackerState.Facing);
 
@@ -18,6 +21,7 @@ public static class MeleeEffectsResolver
             {
                 var receivers = occupants[target.ToCoordinates()]
                     .Where(receiver =>
+                        receiver.BotState.Bot.IsAlive &&
                         !ReferenceEquals(attackerState.Bot, receiver.BotState.Bot));
 
                 foreach (var receiver in receivers)

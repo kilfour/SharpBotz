@@ -72,7 +72,23 @@ public class GameWorldRangedEffectsTests
     }
 
     [Fact]
-    public void OpposingLethalShotsLandInTheSameTurn()
+    public void ShotPassesThroughADestroyedBot()
+    {
+        var world = CreateWorld(
+            CreateArena(),
+            CreateState(1, 2, Direction.Right, fire: true),
+            CreateState(2, 2, Direction.Up),
+            CreateState(4, 2, Direction.Up));
+        world.Bots[1].Bot.TakeDamage(Bot.MaximumHitPoints);
+
+        world.Update();
+
+        Assert.Equal(0, world.Bots[1].Bot.HitPoints);
+        Assert.Equal(80, world.Bots[2].Bot.HitPoints);
+    }
+
+    [Fact]
+    public void BotDestroyedBeforeItsRangedAttackDoesNotFire()
     {
         var world = CreateWorld(
             CreateArena(),
@@ -83,7 +99,8 @@ public class GameWorldRangedEffectsTests
 
         world.Update();
 
-        Assert.False(world.Bots[0].Bot.IsAlive);
+        Assert.True(world.Bots[0].Bot.IsAlive);
+        Assert.Equal(20, world.Bots[0].Bot.HitPoints);
         Assert.False(world.Bots[1].Bot.IsAlive);
     }
 
