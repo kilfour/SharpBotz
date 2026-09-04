@@ -67,7 +67,6 @@ It is created by passing in it's maximum output along with a ModuleId (supplied 
 Reactor.Named("reactor")
     .MaximumOutput(10);
 ```
-It's initial current output is set to maximum output.  
 A reactor with a maximum output of zero or negative throws upon construction.  
 A reactor with a maximum output of 1 has a weight of 3.  
 Increasing maximum output adds more weight exponentialy.   

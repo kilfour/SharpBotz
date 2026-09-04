@@ -21,7 +21,6 @@ A reactor is responsible for supplying the energy required to power other module
 It is created by passing in it's maximum output along with a ModuleId (supplied as string).
 """)]
     [DocExample(typeof(A_ReactorTests), nameof(ConstructionExample))]
-    [DocContent("It's initial current output is set to maximum output.")]
     public void Construction()
     {
         var reactor = ConstructionExample();
