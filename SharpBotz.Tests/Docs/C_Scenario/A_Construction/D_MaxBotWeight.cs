@@ -13,9 +13,9 @@ public class D_MaximumBotWeight
     [Fact]
     [DocContent("A Scenario can define the maximum bot weight allowed.")]
     [DocExample(typeof(D_MaximumBotWeight), nameof(GetScenario))]
-    [DocContent("Adding the following bot:")]
+    [DocContent("Using the following bot in that scenario:")]
     [DocExample(typeof(D_MaximumBotWeight), nameof(HeavyBot))]
-    [DocContent("Throws:")]
+    [DocContent("Causes `CreateWorld` to throw:")]
     [DocExample(typeof(D_MaximumBotWeight), nameof(BotTooHeavyException))]
     [DocExample(typeof(D_MaximumBotWeight), nameof(BotTooHeavyExceptionMessage))]
     public void Construction()

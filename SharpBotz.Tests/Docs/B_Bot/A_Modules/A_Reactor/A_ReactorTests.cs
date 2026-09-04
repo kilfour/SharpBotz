@@ -18,7 +18,7 @@ public class A_ReactorTests
     """
 A reactor is responsible for supplying the energy required to power other modules.
 
-It is created by passing in it's maximum output along with a ModuleId (supplied as string).
+It is created by specifying its maximum output and a `ModuleId` (supplied as a string).
 """)]
     [DocExample(typeof(A_ReactorTests), nameof(ConstructionExample))]
     public void Construction()
@@ -47,8 +47,8 @@ It is created by passing in it's maximum output along with a ModuleId (supplied 
     [Fact]
     [DocContent(
 """
-A reactor with a maximum output of 1 has a weight of 3.  
-Increasing maximum output adds more weight exponentialy. 
+A reactor with a maximum output of 1 has a weight of 4.  
+Increasing maximum output adds weight along an approximately quadratic curve. 
 """
     )]
     [DocBarChart(
@@ -115,9 +115,9 @@ Increasing maximum output adds more weight exponentialy.
     [Fact]
     [DocContent(
 """
-Multiple rectors can be installed in a ModuleRack.
+Multiple reactors can be installed in a `ModuleRack`.
 
-The total maximum output of the rack is then the sum of all reactors maximum outputs.
+The rack's total maximum output is the sum of all the reactors' maximum outputs.
 """
     )]
     [DocExample(typeof(A_ReactorTests), nameof(MultipleExample))]

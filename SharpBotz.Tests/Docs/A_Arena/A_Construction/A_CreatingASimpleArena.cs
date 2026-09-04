@@ -9,8 +9,8 @@ public class A_CreatingASimpleArena
     [Fact]
     [DocContent(
 """
-Construct an `Arena` by calling the static `Create` method,
-which takes an `ArenaWidth` and an `ArenaHeight` as arguments: 
+Begin constructing an `Arena` by calling the static `Sized` method,
+which takes an `ArenaWidth` and an `ArenaHeight`. Finish by calling `Build`: 
 """
     )]
     [DocExample(typeof(A_CreatingASimpleArena), nameof(GetArena))]

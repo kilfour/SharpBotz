@@ -7,7 +7,7 @@ namespace SharpBotz.Tests.Docs.B_Bot.A_Modules.C_PoweredModules;
 [DocContent(
 """
 We already saw the modules related to energy generation and storage.  
-All other modules consume power. The are all powered modules.
+All other modules consume power. They are all powered modules.
 
 """
 )]

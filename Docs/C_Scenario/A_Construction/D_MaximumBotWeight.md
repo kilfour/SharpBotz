@@ -7,7 +7,7 @@ Scenario.Named("My Scenario")
     .CompletesWhen(_ => false)
     .MaximumBotWeight(1);
 ```
-Adding the following bot:  
+Using the following bot in that scenario:  
 ```csharp
 Bot.Named("Heavy")
     .Brain(new DummyBrain())
@@ -16,7 +16,7 @@ Bot.Named("Heavy")
             .ThrustPerPower(10)
             .MaximumPower(5)));
 ```
-Throws:  
+Causes `CreateWorld` to throw:  
 ```csharp
 ArgumentException
 ```

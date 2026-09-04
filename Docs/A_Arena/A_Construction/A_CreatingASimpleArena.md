@@ -1,6 +1,6 @@
 # Creating A Simple Arena
-Construct an `Arena` by calling the static `Create` method,
-which takes an `ArenaWidth` and an `ArenaHeight` as arguments:   
+Begin constructing an `Arena` by calling the static `Sized` method,
+which takes an `ArenaWidth` and an `ArenaHeight`. Finish by calling `Build`:   
 ```csharp
 Arena.Sized(
         ArenaWidth.Is(3),

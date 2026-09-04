@@ -19,7 +19,7 @@ public class ModulesTests
         ModuleId.Is("my-module");
 
     [Fact]
-    [DocContent("A `ModuleId` can not be `null`, `string.Empty` or consist only of whitespace.")]
+    [DocContent("A `ModuleId` cannot be `null`, `string.Empty` or consist only of whitespace.")]
     public void InvalidModuleIds()
     {
         var nullEx = Assert.Throws<ArgumentNullException>(() => ModuleId.Is(null!));
