@@ -159,9 +159,9 @@ public class GameWorldRangedEffectsTests
         }
 
         return new(
-            new Bot(
-                new CombatBrain(move, fire),
-                ModuleRack.Create([.. modules])),
+            Bot.Named($"ranged-{x}-{y}")
+                .Brain(new CombatBrain(move, fire))
+                .Rack(ModuleRack.Create([.. modules])),
             new Position(x, y),
             facing);
     }
@@ -195,7 +195,7 @@ public class GameWorldRangedEffectsTests
             intentions.Insert(
                 0,
                 modules.RequireModule<ReactorInfo>().SetOutput(requiredPower));
-            return new([.. intentions]);
+            return PowerPlan.From([.. intentions]);
         }
     }
 }

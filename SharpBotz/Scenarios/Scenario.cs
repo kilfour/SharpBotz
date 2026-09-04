@@ -52,6 +52,13 @@ public class Scenario
             => new(scenario, botFactory, new(x, y));
     }
 
+    private int maximumBotWeight = 100;
+    public Scenario MaximumBotWeight(int maximumBotWeight)
+    {
+        this.maximumBotWeight = maximumBotWeight;
+        return this;
+    }
+
     private readonly List<BotPlacement> botPlacements = [];
 
     public class SpawnPosition(Scenario scenario, Func<Bot> botFactory, Position position)
@@ -68,12 +75,25 @@ public class Scenario
     public GameWorld CreateWorld(int? seed = null) =>
         new(
             Arena,
-            [.. botPlacements.Select(placement =>
-                    new BotState(
-                        placement.BotFactory(),
-                        placement.Position,
-                        placement.Facing))],
+            [.. botPlacements.Select(CreateBotState)],
             MaximumTurns,
             Complete,
             seed);
+
+    private BotState CreateBotState(BotPlacement placement)
+    {
+        var bot = placement.BotFactory();
+        if (bot.ModuleRack.TotalWeight > maximumBotWeight)
+        {
+            throw new ArgumentException(
+                $"A bot cannot weigh more than {maximumBotWeight}. " +
+                $"{bot.Name}'s module rack weighs {bot.ModuleRack.TotalWeight}.",
+                nameof(placement));
+        }
+        return new BotState(
+            bot,
+            placement.Position,
+            placement.Facing);
+    }
+
 }

@@ -104,9 +104,9 @@ Increasing maximum output adds more weight exponentialy.
                 .Build())
             .MaximumTurns(1)
             .CompletesWhen(_ => false)
-            .Spawn(() => new Bot(
-                        new OverloadedReactorBrain(),
-                        ModuleRack.Create(
+            .Spawn(() => Bot.Named("overloaded-reactor")
+                    .Brain(new OverloadedReactorBrain())
+                    .Rack(ModuleRack.Create(
                             Reactor.Named("reactor").MaximumOutput(1),
                             Battery.Named("battery").Capacity(10))))
                 .At(1, 1)
@@ -139,6 +139,6 @@ The total maximum output of the rack is then the sum of all reactors maximum out
         protected override PowerPlan RoutePower(
             ModuleControl modules,
             BotObservation observation) =>
-            new(modules.RequireModule<ReactorInfo>().SetOutput(2));
+            PowerPlan.From(modules.RequireModule<ReactorInfo>().SetOutput(2));
     }
 }

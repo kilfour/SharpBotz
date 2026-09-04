@@ -17,6 +17,7 @@
   - [Scenario](C_Scenario/ScenarioTests.md)
     - [Arena Definition](C_Scenario/A_Construction/A_ArenaDefinition.md)
     - [Adding Bots](C_Scenario/A_Construction/C_AddingBots.md)
+    - [Maximum Bot Weight](C_Scenario/A_Construction/D_MaximumBotWeight.md)
   - [Game World](D_Gameworld/GameWorldTests.md)
     - [Creating A Game World](D_Gameworld/A_Construction/A_CreatingAGameWorld.md)
     - [Advancing Turns](D_Gameworld/B_Turns/A_AdvancingTurns.md)

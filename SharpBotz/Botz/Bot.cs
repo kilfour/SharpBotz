@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using QuickFuzzr.UnderTheHood;
 using SharpBotz.Botz.BotModules;
 
@@ -7,32 +8,39 @@ public class Bot
 {
     public const int MaximumHitPoints = 100;
 
-    // move this to Scenario
-    public const int MaximumWeight = 100;
-
     private readonly BotBrain brain;
 
-    public Bot(BotBrain brain, ModuleRack moduleRack)
+    protected Bot(string name, BotBrain brain, ModuleRack moduleRack)
     {
+
+        ArgumentException.ThrowIfNullOrWhiteSpace(name);
         ArgumentNullException.ThrowIfNull(brain);
         ArgumentNullException.ThrowIfNull(moduleRack);
 
-        // move this to Scenario
-        if (moduleRack.TotalWeight > MaximumWeight)
-        {
-            throw new ArgumentException(
-                $"A bot cannot weigh more than {MaximumWeight}; " +
-                $"this module rack weighs {moduleRack.TotalWeight}.",
-                nameof(moduleRack));
-        }
-
-        moduleRack.Attach();
+        Name = name;
         this.brain = brain;
         ModuleRack = moduleRack;
+        moduleRack.Attach();
     }
 
-    public BotBrain Brain => brain;
+    public static BotNamed Named(string name) =>
+        new(name);
 
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public class BotNamed(string name)
+    {
+        public BotBrained Brain(BotBrain brain) =>
+            new(name, brain);
+
+        public class BotBrained(string name, BotBrain brain)
+        {
+            public Bot Rack(ModuleRack rack) =>
+                new(name, brain, rack);
+        }
+    }
+
+    public string Name { get; }
+    public BotBrain Brain => brain;
     public ModuleRack ModuleRack { get; }
 
     public ModuleEffects GetEffects(BotObservation observation, State state) =>

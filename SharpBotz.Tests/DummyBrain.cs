@@ -9,4 +9,4 @@ public class DummyBrain : BotBrain
         PowerPlan.Empty;
 }
 
-public class DummyBot() : Bot(new DummyBrain(), ModuleRack.Create());
+public class DummyBot() : Bot(nameof(DummyBot), new DummyBrain(), ModuleRack.Create());

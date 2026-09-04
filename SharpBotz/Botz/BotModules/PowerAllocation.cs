@@ -4,7 +4,7 @@ public record PowerAllocation(ModuleId ModuleId, int Power) : PowerModuleIntent(
 
 public class PowerPlan
 {
-    public PowerPlan(params PowerModuleIntent[] intentions)
+    private PowerPlan(params PowerModuleIntent[] intentions)
     {
         ArgumentNullException.ThrowIfNull(intentions);
         if (intentions.Select(intention => intention.ModuleId).Distinct().Count() != intentions.Length)
@@ -17,6 +17,9 @@ public class PowerPlan
         Generations = Array.AsReadOnly([.. intentions.Where(a => a is PowerGeneration).Cast<PowerGeneration>()]);
         Allocations = Array.AsReadOnly([.. intentions.Where(a => a is PowerAllocation).Cast<PowerAllocation>()]);
     }
+
+    public static PowerPlan From(params PowerModuleIntent[] intentions) =>
+        new(intentions);
 
     public IReadOnlyList<PowerGeneration> Generations { get; }
 

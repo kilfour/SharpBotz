@@ -20,9 +20,9 @@ public class GameWorldRotatorEffectsTests
                 .Build(),
             [
                 new BotState(
-                    new Bot(
-                        new TurningBrain(),
-                        ModuleRack.Create(
+                    Bot.Named("turning")
+                        .Brain(new TurningBrain())
+                        .Rack(ModuleRack.Create(
                             Reactor.Named("reactor").MaximumOutput(2),
                             Battery.Named("battery").Capacity(10),
                             Rotator.Named("rotator")
@@ -50,7 +50,7 @@ public class GameWorldRotatorEffectsTests
             var reactor = modules.RequireModule<ReactorInfo>();
             var rotator = modules.RequireModule<RightRotatorInfo>();
 
-            return new(
+            return PowerPlan.From(
                 reactor.SetOutput(2),
                 new PowerAllocation(rotator.Id, 2));
         }

@@ -84,9 +84,9 @@ public class GameWorldDriveEffectsTests
     {
         var world = CreateWorld(
             new BotState(
-                new Bot(
-                    new MovingBrain(speed: 1),
-                    ModuleRack.Create(
+                Bot.Named("overcharged-drive")
+                    .Brain(new MovingBrain(speed: 1))
+                    .Rack(ModuleRack.Create(
                         Reactor.Named("reactor").MaximumOutput(2),
                         Battery.Named("battery").Capacity(10),
                         Drive.Named("drive")
@@ -118,9 +118,9 @@ public class GameWorldDriveEffectsTests
         Direction facing,
         int speed = 1) =>
         new(
-            new Bot(
-                new MovingBrain(speed),
-                ModuleRack.Create(
+            Bot.Named($"moving-{x}-{y}")
+                .Brain(new MovingBrain(speed))
+                .Rack(ModuleRack.Create(
                     Reactor.Named("reactor").MaximumOutput(2),
                     Battery.Named("battery").Capacity(10),
                     Drive.Named("drive").ThrustPerPower(100).MaximumPower(2))),
@@ -129,9 +129,9 @@ public class GameWorldDriveEffectsTests
 
     private static BotState CreateIdleState(int x, int y, Direction facing) =>
         new(
-            new Bot(
-                new IdleBrain(),
-                ModuleRack.Create(
+            Bot.Named($"idle-{x}-{y}")
+                .Brain(new IdleBrain())
+                .Rack(ModuleRack.Create(
                     Battery.Named("battery").Capacity(10))),
             new Position(x, y),
             facing);
@@ -143,7 +143,7 @@ public class GameWorldDriveEffectsTests
             BotObservation observation)
         {
             var movement = modules.RequireModule<DrivingInfo>().Move(speed);
-            return new(
+            return PowerPlan.From(
                 modules.RequireModule<ReactorInfo>().SetOutput(movement.Power),
                 movement);
         }

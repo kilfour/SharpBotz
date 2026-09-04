@@ -12,7 +12,7 @@ public class ModuleRackPowerResolutionTests
     {
         var reactor = new ReactorInfo(ModuleId.Is("reactor"), MaximumOutput: 1);
 
-        var exception = Assert.Throws<ArgumentException>(() => new PowerPlan(
+        var exception = Assert.Throws<ArgumentException>(() => PowerPlan.From(
             reactor.SetOutput(1),
             reactor.SetOutput(1)));
 
@@ -30,7 +30,7 @@ public class ModuleRackPowerResolutionTests
             DamagePerPower: 10,
             MaximumPower: 1);
 
-        var exception = Assert.Throws<ArgumentException>(() => new PowerPlan(
+        var exception = Assert.Throws<ArgumentException>(() => PowerPlan.From(
             melee.Hit(10),
             melee.Hit(10)));
 
@@ -53,7 +53,7 @@ public class ModuleRackPowerResolutionTests
         var modules = rack.GetModuleControl();
         var reactor = modules.RequireModule<ReactorInfo>();
         var meleeInfo = modules.RequireModule<MeleeInfo>();
-        var plan = new PowerPlan(
+        var plan = PowerPlan.From(
             reactor.SetOutput(2),
             meleeInfo.Hit(20));
 
@@ -71,7 +71,7 @@ public class ModuleRackPowerResolutionTests
     public void TwoRemainingPowerWithoutBatteriesCreatesAnEffectForTwoOfThreeReactors()
     {
         var (rack, reactorInfos, meleeInfo) = CreateRackWithoutBatteries();
-        var plan = new PowerPlan(
+        var plan = PowerPlan.From(
             reactorInfos[0].SetOutput(1),
             reactorInfos[1].SetOutput(1),
             reactorInfos[2].SetOutput(1),
@@ -91,7 +91,7 @@ public class ModuleRackPowerResolutionTests
     public void FourRemainingPowerWithoutBatteriesCreatesAnEffectForEveryReactor()
     {
         var (rack, reactorInfos, meleeInfo) = CreateRackWithoutBatteries();
-        var plan = new PowerPlan(
+        var plan = PowerPlan.From(
             reactorInfos[0].SetOutput(2),
             reactorInfos[1].SetOutput(2),
             reactorInfos[2].SetOutput(2),
@@ -119,7 +119,7 @@ public class ModuleRackPowerResolutionTests
         var modules = rack.GetModuleControl();
         var reactor = modules.RequireModule<ReactorInfo>();
 
-        rack.Resolve(new PowerPlan(reactor.SetOutput(2)));
+        rack.Resolve(PowerPlan.From(reactor.SetOutput(2)));
 
         Assert.Equal(
             [1, 1, 0],

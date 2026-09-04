@@ -64,12 +64,12 @@ public class GameWorld
     }
 
     private IEnumerable<BotStateEffect> GetBotStateEffects() =>
-    Bots.Select((botState, botIndex) =>
-        new BotStateEffect(
-            botState,
-            botState.Bot.IsAlive
-                ? botState.Bot.GetEffects(observations[botIndex], fuzzrState)
-                : ModuleEffects.From([])));
+        Bots.Select((botState, botIndex) =>
+            new BotStateEffect(
+                botState,
+                botState.Bot.IsAlive
+                    ? botState.Bot.GetEffects(observations[botIndex], fuzzrState)
+                    : ModuleEffects.From([])));
 
     private void IncrementTurn()
     {

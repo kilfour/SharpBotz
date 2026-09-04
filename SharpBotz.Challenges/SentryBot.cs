@@ -6,6 +6,7 @@ using SharpBotz.Botz.BotModules.Reactors;
 namespace SharpBotz.Challenges;
 
 public class SentryBot(int range, int damage) : Bot(
+    nameof(SentryBot),
     new SentryBrain(damage),
     ModuleRack.Create(
         Reactor.Named("reactor").MaximumOutput(1),
@@ -21,7 +22,7 @@ public class SentryBot(int range, int damage) : Bot(
             BotObservation observation)
         {
             var shot = modules.RequireModule<RangedInfo>().Fire(damage);
-            return new(
+            return PowerPlan.From(
                 modules.RequireModule<ReactorInfo>().SetOutput(shot.Power),
                 shot);
         }

@@ -97,9 +97,9 @@ public class C_RotatorTests
                 .Build())
             .MaximumTurns(1)
             .CompletesWhen(_ => false)
-            .Spawn(() => new Bot(
-                        new TurnTwiceBrain(),
-                        ModuleRack.Create(
+            .Spawn(() => Bot.Named("turning")
+                    .Brain(new TurnTwiceBrain())
+                    .Rack(ModuleRack.Create(
                             Reactor.Named("reactor").MaximumOutput(2),
                             Battery.Named("battery").Capacity(10),
                             Rotator.Named("rotator")
@@ -134,9 +134,9 @@ public class C_RotatorTests
                 .Build())
             .MaximumTurns(1)
             .CompletesWhen(_ => false)
-            .Spawn(() => new Bot(
-                        new OverchargedTurnBrain(),
-                        ModuleRack.Create(
+            .Spawn(() => Bot.Named("overcharged-rotator")
+                    .Brain(new OverchargedTurnBrain())
+                    .Rack(ModuleRack.Create(
                             Reactor.Named("reactor").MaximumOutput(2),
                             Battery.Named("battery").Capacity(10),
                             Rotator.Named("rotator")
@@ -219,7 +219,7 @@ public class C_RotatorTests
             var reactor = modules.RequireModule<ReactorInfo>();
             var rotator = modules.RequireModule<RightRotatorInfo>();
 
-            return new(
+            return PowerPlan.From(
                 reactor.SetOutput(2),
                 new PowerAllocation(rotator.Id, 2));
         }
@@ -234,7 +234,7 @@ public class C_RotatorTests
             var reactor = modules.RequireModule<ReactorInfo>();
             var rotator = modules.RequireModule<RightRotatorInfo>();
 
-            return new(
+            return PowerPlan.From(
                 reactor.SetOutput(2),
                 new PowerAllocation(rotator.Id, 2));
         }

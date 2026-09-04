@@ -82,9 +82,9 @@ public class B_DriveTests
                 .Build())
             .MaximumTurns(1)
             .CompletesWhen(_ => false)
-            .Spawn(() => new Bot(
-                        new MoveRightBrain(),
-                        ModuleRack.Create(
+            .Spawn(() => Bot.Named("moving")
+                    .Brain(new MoveRightBrain())
+                    .Rack(ModuleRack.Create(
                             Reactor.Named("reactor").MaximumOutput(1),
                             Battery.Named("battery").Capacity(10),
                             Drive.Named("drive")
@@ -118,9 +118,9 @@ public class B_DriveTests
                 .Build())
             .MaximumTurns(1)
             .CompletesWhen(_ => false)
-            .Spawn(() => new Bot(
-                        new MoveRightBrain(),
-                        ModuleRack.Create(
+            .Spawn(() => Bot.Named("overcharged-drive")
+                    .Brain(new MoveRightBrain())
+                    .Rack(ModuleRack.Create(
                             Reactor.Named("reactor").MaximumOutput(2),
                             Battery.Named("battery").Capacity(10),
                             Drive.Named("drive")
@@ -202,7 +202,7 @@ public class B_DriveTests
             var drive = modules.RequireModule<DrivingInfo>();
             var movement = drive.Move(1);
 
-            return new(
+            return PowerPlan.From(
                 reactor.SetOutput(movement.Power),
                 movement);
         }

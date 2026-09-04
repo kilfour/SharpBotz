@@ -3,7 +3,7 @@ using SharpBotz.Botz.BotModules;
 
 namespace SharpBotz.Challenges.B_DifferentRoutes;
 
-public class RouteBot() : Bot(new RouteBrain(), ModuleRack.Create())
+public class RouteBot() : Bot(nameof(RouteBot), new RouteBrain(), ModuleRack.Create())
 {
     public class RouteBrain : BotBrain
     {

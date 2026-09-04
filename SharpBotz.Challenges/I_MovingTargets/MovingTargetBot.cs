@@ -3,7 +3,7 @@ using SharpBotz.Botz.BotModules;
 
 namespace SharpBotz.Challenges.I_MovingTargets;
 
-public class MovingTargetBot() : Bot(new MovingTargetBrain(), ModuleRack.Create())
+public class MovingTargetBot() : Bot(nameof(MovingTargetBot), new MovingTargetBrain(), ModuleRack.Create())
 {
     public class MovingTargetBrain : BotBrain
     {

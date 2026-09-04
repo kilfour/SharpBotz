@@ -3,7 +3,7 @@ using SharpBotz.Botz.BotModules;
 
 namespace SharpBotz.Challenges.H_Crossfire;
 
-public class CrossfireBot() : Bot(new CrossfireBrain(), ModuleRack.Create())
+public class CrossfireBot() : Bot(nameof(CrossfireBot), new CrossfireBrain(), ModuleRack.Create())
 {
     public class CrossfireBrain : BotBrain
     {

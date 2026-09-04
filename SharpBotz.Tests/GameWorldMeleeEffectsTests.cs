@@ -100,9 +100,9 @@ public class GameWorldMeleeEffectsTests
         }
 
         return new(
-            new Bot(
-                new CombatBrain(move, attack),
-                ModuleRack.Create([.. modules])),
+            Bot.Named($"melee-{x}-{y}")
+                .Brain(new CombatBrain(move, attack))
+                .Rack(ModuleRack.Create([.. modules])),
             new Position(x, y),
             facing);
     }
@@ -136,7 +136,7 @@ public class GameWorldMeleeEffectsTests
             intentions.Insert(
                 0,
                 modules.RequireModule<ReactorInfo>().SetOutput(requiredPower));
-            return new([.. intentions]);
+            return PowerPlan.From([.. intentions]);
         }
     }
 }

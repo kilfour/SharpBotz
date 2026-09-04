@@ -81,9 +81,9 @@ public class E_RangedTests
                 .Build())
             .MaximumTurns(1)
             .CompletesWhen(_ => false)
-            .Spawn(() => new Bot(
-                        new OverchargedRangedBrain(),
-                        ModuleRack.Create(
+            .Spawn(() => Bot.Named("attacker")
+                    .Brain(new OverchargedRangedBrain())
+                    .Rack(ModuleRack.Create(
                             Reactor.Named("reactor").MaximumOutput(2),
                             Battery.Named("battery").Capacity(10),
                             Ranged.Named("ranged")
@@ -92,10 +92,10 @@ public class E_RangedTests
                                 .MaximumPower(1))))
                 .At(1, 1)
                 .Facing(Direction.Right)
-            .Spawn(() => new Bot(
-                        new IdleBrain(),
-                        ModuleRack.Create(
-                            Battery.Named("battery").Capacity(10))))
+            .Spawn(() => Bot.Named("target")
+                    .Brain(new IdleBrain())
+                    .Rack(ModuleRack.Create(
+                        Battery.Named("battery").Capacity(10))))
                 .At(3, 1)
                 .Facing(Direction.Left)
             .CreateWorld();
@@ -197,7 +197,7 @@ public class E_RangedTests
             var reactor = modules.RequireModule<ReactorInfo>();
             var shot = modules.RequireModule<RangedInfo>().Fire(damage: 20);
 
-            return new(
+            return PowerPlan.From(
                 reactor.SetOutput(shot.Power),
                 shot);
         }

@@ -19,10 +19,10 @@ var scenario = Scenario.Named("First contact")
             .Build())
     .MaximumTurns(20)
     .CompletesWhen(a => a.Bots.Count(a => a.Bot.IsAlive) < 2)
-    .Spawn(CreateDuelist)
+    .Spawn(() => CreateDuelist("Duelist One"))
         .At(2, 3)
         .Facing(Direction.Right)
-    .Spawn(CreateDuelist)
+    .Spawn(() => CreateDuelist("Duelist Two"))
         .At(9, 3)
         .Facing(Direction.Left);
 
@@ -30,10 +30,10 @@ var world = scenario.CreateWorld();
 var display = new SpectreGameDisplay();
 await display.RunAsync(world, scenario.Name);
 
-static Bot CreateDuelist() =>
-    new(
-        new DuelistBrain(),
-        ModuleRack.Create(
+static Bot CreateDuelist(string name) =>
+    Bot.Named(name)
+        .Brain(new DuelistBrain())
+        .Rack(ModuleRack.Create(
             Reactor.Named("reactor").MaximumOutput(3),
             Battery.Named("battery").Capacity(10),
             Drive.Named("drive")
@@ -57,7 +57,7 @@ class DuelistBrain : BotBrain
         var scan = modules.RequireModule<ScannerInfo>().Scan(1);
         var requiredPower = movement.Power + attack.Power + scan.Power;
 
-        return new(
+        return PowerPlan.From(
             modules.RequireModule<ReactorInfo>().SetOutput(requiredPower),
             movement,
             attack,

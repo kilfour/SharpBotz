@@ -40,9 +40,9 @@ public class GameWorldScannerEffectsTests
     public void MultipleScannersUseTheGreatestRange()
     {
         var brain = new MultipleScannerBrain();
-        var bot = new Bot(
-            brain,
-            ModuleRack.Create(
+        var bot = Bot.Named("multi-scanner")
+            .Brain(brain)
+            .Rack(ModuleRack.Create(
                 Reactor.Named("reactor").MaximumOutput(3),
                 Battery.Named("battery").Capacity(10),
                 Scanner.Named("short-scanner")
@@ -85,9 +85,9 @@ public class GameWorldScannerEffectsTests
         var world = CreateWorld(
             CreateArena(width: 5),
             new BotState(
-                new Bot(
-                    brain,
-                    ModuleRack.Create(
+                Bot.Named("overcharged-scanner")
+                    .Brain(brain)
+                    .Rack(ModuleRack.Create(
                         Reactor.Named("reactor").MaximumOutput(2),
                         Battery.Named("battery").Capacity(10),
                         Scanner.Named("scanner")
@@ -130,9 +130,9 @@ public class GameWorldScannerEffectsTests
         Direction facing,
         int maximumPower) =>
         new(
-            new Bot(
-                brain,
-                ModuleRack.Create(
+            Bot.Named($"scanner-{x}-{y}")
+                .Brain(brain)
+                .Rack(ModuleRack.Create(
                     Reactor.Named("reactor").MaximumOutput(maximumPower),
                     Battery.Named("battery").Capacity(10),
                     Scanner.Named("scanner")
@@ -146,9 +146,9 @@ public class GameWorldScannerEffectsTests
         int y,
         Direction facing) =>
         new(
-            new Bot(
-                new IdleBrain(),
-                ModuleRack.Create(Battery.Named("battery").Capacity(10))),
+            Bot.Named($"idle-{x}-{y}")
+                .Brain(new IdleBrain())
+                .Rack(ModuleRack.Create(Battery.Named("battery").Capacity(10))),
             new Position(x, y),
             facing);
 
@@ -157,9 +157,9 @@ public class GameWorldScannerEffectsTests
         int y,
         Direction facing) =>
         new(
-            new Bot(
-                new MovingBrain(),
-                ModuleRack.Create(
+            Bot.Named($"moving-{x}-{y}")
+                .Brain(new MovingBrain())
+                .Rack(ModuleRack.Create(
                     Reactor.Named("reactor").MaximumOutput(1),
                     Battery.Named("battery").Capacity(10),
                     Drive.Named("drive")
@@ -178,7 +178,7 @@ public class GameWorldScannerEffectsTests
         {
             Scans.Add(observation.Scan);
             var scan = modules.RequireModule<ScannerInfo>().Scan(range);
-            return new(
+            return PowerPlan.From(
                 modules.RequireModule<ReactorInfo>().SetOutput(scan.Power),
                 scan);
         }
@@ -196,7 +196,7 @@ public class GameWorldScannerEffectsTests
             var scans = modules.FindModules<ScannerInfo>()
                 .Select(scanner => scanner.Scan(scanner.MaximumRange))
                 .ToArray();
-            return new([
+            return PowerPlan.From([
                 modules.RequireModule<ReactorInfo>()
                     .SetOutput(scans.Sum(scan => scan.Power)),
                 .. scans,
@@ -219,7 +219,7 @@ public class GameWorldScannerEffectsTests
             }
 
             var scan = modules.RequireModule<ScannerInfo>().Scan(range);
-            return new(
+            return PowerPlan.From(
                 modules.RequireModule<ReactorInfo>().SetOutput(scan.Power),
                 scan);
         }
@@ -232,7 +232,7 @@ public class GameWorldScannerEffectsTests
             BotObservation observation)
         {
             var movement = modules.RequireModule<DrivingInfo>().Move(1);
-            return new(
+            return PowerPlan.From(
                 modules.RequireModule<ReactorInfo>().SetOutput(movement.Power),
                 movement);
         }

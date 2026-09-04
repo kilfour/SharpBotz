@@ -334,7 +334,7 @@ public class MoveForwardBrain : BotBrain
         var drive = modules.RequireModule<DrivingInfo>();
         var movement = drive.Move(speed: 1);
 
-        return new PowerPlan(
+        return PowerPlan.From(
             reactor.SetOutput(movement.Power),
             movement);
     }
@@ -345,9 +345,9 @@ The game world calls the brain once per turn and resolves the returned plan.
 A brain is installed in a bot together with the module rack it controls:  
 ```csharp
 public static Bot CreateBot() =>
-    new(
-        new MoveForwardBrain(),
-        ModuleRack.Create(
+    Bot.Named("move-forward")
+        .Brain(new MoveForwardBrain())
+        .Rack(ModuleRack.Create(
             Reactor.Named("reactor").MaximumOutput(1),
             Drive.Named("drive")
                 .ThrustPerPower(100)
@@ -417,6 +417,31 @@ This creates:
 Wall Wall Wall Wall Wall
 Wall  ↑↑        ↑↑  Wall
 Wall Wall Wall Wall Wall
+```
+### Maximum Bot Weight
+A Scenario can define the maximum bot weight allowed.  
+```csharp
+Scenario.Named("My Scenario")
+    .Arena(arena)
+    .MaximumTurns(20)
+    .CompletesWhen(_ => false)
+    .MaximumBotWeight(1);
+```
+Adding the following bot:  
+```csharp
+Bot.Named("Heavy")
+    .Brain(new DummyBrain())
+    .Rack(ModuleRack.Create(
+        Drive.Named("drive")
+            .ThrustPerPower(10)
+            .MaximumPower(5)));
+```
+Throws:  
+```csharp
+ArgumentException
+```
+```csharp
+$"A bot cannot weigh more than 1. Heavy's module rack weighs 28. (Parameter 'placement')";
 ```
 ## Game World
 A game world contains the mutable state of a running game.  

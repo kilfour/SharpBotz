@@ -7,6 +7,7 @@ using SharpBotz.Botz.BotModules.Rotators;
 namespace SharpBotz.Challenges;
 
 public class PatrolBot() : Bot(
+    nameof(PatrolBot),
     new PatrolBrain(),
     ModuleRack.Create(
         Reactor.Named("reactor").MaximumOutput(4),
@@ -30,14 +31,14 @@ public class PatrolBot() : Bot(
             var movement = modules.RequireModule<DrivingInfo>().Move(1);
             if (turn % 4 != 0)
             {
-                return new(
+                return PowerPlan.From(
                     modules.RequireModule<ReactorInfo>().SetOutput(movement.Power),
                     movement);
             }
 
             var rotator = modules.RequireModule<RightRotatorInfo>();
             var rotation = new PowerAllocation(rotator.Id, Power: 2);
-            return new(
+            return PowerPlan.From(
                 modules.RequireModule<ReactorInfo>()
                     .SetOutput(movement.Power + rotation.Power),
                 movement,

@@ -9,7 +9,6 @@ public class ModuleRack
     private readonly BotModule[] modules;
     private readonly IReadOnlyDictionary<ModuleId, BotModule> modulesById;
     private readonly Reactor[] reactors;
-    // private readonly PoweredModule[] poweredModules;
     private readonly Battery[] batteries;
     private bool isAttached;
 
@@ -23,7 +22,6 @@ public class ModuleRack
         }
         modulesById = this.modules.ToDictionary(module => module.Id);
         reactors = [.. this.modules.OfType<Reactor>()];
-        // poweredModules = [.. this.modules.OfType<PoweredModule>()];
         batteries = [.. this.modules.OfType<Battery>()];
     }
 
@@ -46,10 +44,7 @@ public class ModuleRack
 
     public int TotalWeight { get; }
     public int BatteryLevel => batteries.Sum(battery => battery.Charge);
-
-    // only used in tests for now
     public int BatteryCapacity => batteries.Sum(battery => battery.Capacity);
-    // only used in tests for now
     public int MaximumReactorOutput => reactors.Sum(reactor => reactor.MaximumOutput);
 
     public ModuleControl GetModuleControl() =>

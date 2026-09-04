@@ -111,9 +111,9 @@ public class F_ScannerTests
                 .Build())
             .MaximumTurns(2)
             .CompletesWhen(_ => false)
-            .Spawn(() => new Bot(
-                        new OneShotScanningBrain(range: 2),
-                        ModuleRack.Create(
+            .Spawn(() => Bot.Named("scanner")
+                    .Brain(new OneShotScanningBrain(range: 2))
+                    .Rack(ModuleRack.Create(
                             Reactor.Named("reactor").MaximumOutput(2),
                             Battery.Named("battery").Capacity(10),
                             Scanner.Named("scanner")
@@ -199,7 +199,7 @@ public class F_ScannerTests
             }
 
             var scan = modules.RequireModule<ScannerInfo>().Scan(range);
-            return new(
+            return PowerPlan.From(
                 modules.RequireModule<ReactorInfo>().SetOutput(scan.Power),
                 scan);
         }

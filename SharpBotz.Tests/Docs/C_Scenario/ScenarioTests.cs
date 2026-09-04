@@ -20,7 +20,7 @@ public class ScenarioTests
                 .Build())
             .MaximumTurns(20)
             .CompletesWhen(_ => false)
-            .Spawn(() => new Bot(new DummyBrain(), ModuleRack.Create()))
+            .Spawn(() => Bot.Named("dummy").Brain(new DummyBrain()).Rack(ModuleRack.Create()))
                 .At(1, 1)
                 .Facing(Direction.Up);
 

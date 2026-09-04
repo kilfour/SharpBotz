@@ -3,7 +3,7 @@ using SharpBotz.Botz.BotModules;
 
 namespace SharpBotz.Challenges;
 
-public class DummyBot() : Bot(new DummyBrain(), ModuleRack.Create())
+public class DummyBot() : Bot(nameof(DummyBot), new DummyBrain(), ModuleRack.Create())
 {
     public class DummyBrain : BotBrain
     {

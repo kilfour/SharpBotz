@@ -18,7 +18,7 @@ public class MoveForwardBrain : BotBrain
         var drive = modules.RequireModule<DrivingInfo>();
         var movement = drive.Move(speed: 1);
 
-        return new PowerPlan(
+        return PowerPlan.From(
             reactor.SetOutput(movement.Power),
             movement);
     }
@@ -29,9 +29,9 @@ The game world calls the brain once per turn and resolves the returned plan.
 A brain is installed in a bot together with the module rack it controls:  
 ```csharp
 public static Bot CreateBot() =>
-    new(
-        new MoveForwardBrain(),
-        ModuleRack.Create(
+    Bot.Named("move-forward")
+        .Brain(new MoveForwardBrain())
+        .Rack(ModuleRack.Create(
             Reactor.Named("reactor").MaximumOutput(1),
             Drive.Named("drive")
                 .ThrustPerPower(100)

@@ -77,9 +77,9 @@ public class D_MeleeTests
                 .Build())
             .MaximumTurns(1)
             .CompletesWhen(_ => false)
-            .Spawn(() => new Bot(
-                        new OverchargedMeleeBrain(),
-                        ModuleRack.Create(
+            .Spawn(() => Bot.Named("attacker")
+                    .Brain(new OverchargedMeleeBrain())
+                    .Rack(ModuleRack.Create(
                             Reactor.Named("reactor").MaximumOutput(2),
                             Battery.Named("battery").Capacity(10),
                             Melee.Named("melee")
@@ -87,10 +87,10 @@ public class D_MeleeTests
                                 .MaximumPower(1))))
                 .At(1, 1)
                 .Facing(Direction.Right)
-            .Spawn(() => new Bot(
-                        new IdleBrain(),
-                        ModuleRack.Create(
-                            Battery.Named("battery").Capacity(10))))
+            .Spawn(() => Bot.Named("target")
+                    .Brain(new IdleBrain())
+                    .Rack(ModuleRack.Create(
+                        Battery.Named("battery").Capacity(10))))
                 .At(2, 1)
                 .Facing(Direction.Left)
             .CreateWorld();
@@ -166,7 +166,7 @@ public class D_MeleeTests
             var reactor = modules.RequireModule<ReactorInfo>();
             var attack = modules.RequireModule<MeleeInfo>().Hit(damage: 20);
 
-            return new(
+            return PowerPlan.From(
                 reactor.SetOutput(attack.Power),
                 attack);
         }

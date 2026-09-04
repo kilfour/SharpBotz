@@ -56,9 +56,9 @@ public class BotBrainTests
 
     [CodeExample]
     public static Bot CreateBot() =>
-        new(
-            new MoveForwardBrain(),
-            ModuleRack.Create(
+        Bot.Named("move-forward")
+            .Brain(new MoveForwardBrain())
+            .Rack(ModuleRack.Create(
                 Reactor.Named("reactor").MaximumOutput(1),
                 Drive.Named("drive")
                     .ThrustPerPower(100)
@@ -88,7 +88,7 @@ public class BotBrainTests
             var drive = modules.RequireModule<DrivingInfo>();
             var movement = drive.Move(speed: 1);
 
-            return new PowerPlan(
+            return PowerPlan.From(
                 reactor.SetOutput(movement.Power),
                 movement);
         }

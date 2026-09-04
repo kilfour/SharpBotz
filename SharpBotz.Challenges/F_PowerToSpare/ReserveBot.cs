@@ -3,7 +3,7 @@ using SharpBotz.Botz.BotModules;
 
 namespace SharpBotz.Challenges.F_PowerToSpare;
 
-public class ReserveBot() : Bot(new ReserveBrain(), ModuleRack.Create())
+public class ReserveBot() : Bot(nameof(ReserveBot), new ReserveBrain(), ModuleRack.Create())
 {
     public class ReserveBrain : BotBrain
     {

@@ -3,7 +3,7 @@ using SharpBotz.Botz.BotModules;
 
 namespace SharpBotz.Challenges.C_LongShot;
 
-public class LongShotBot() : Bot(new LongShotBrain(), ModuleRack.Create())
+public class LongShotBot() : Bot(nameof(LongShotBot), new LongShotBrain(), ModuleRack.Create())
 {
     public class LongShotBrain : BotBrain
     {

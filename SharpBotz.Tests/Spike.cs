@@ -20,7 +20,7 @@ public class Spike
                 Battery.Named("battery").Capacity(50)
             );
         var control = rack.GetModuleControl();
-        var plan = new PowerPlan(control.RequireModule<ReactorInfo>().SetOutput(10));
+        var plan = PowerPlan.From(control.RequireModule<ReactorInfo>().SetOutput(10));
         var effects = rack.Resolve(plan);
         Assert.Empty(effects);
         Assert.Equal(10, rack.BatteryLevel);
@@ -35,7 +35,7 @@ public class Spike
                 Battery.Named("battery").Capacity(5)
             );
         var control = rack.GetModuleControl();
-        var plan = new PowerPlan(control.RequireModule<ReactorInfo>().SetOutput(10));
+        var plan = PowerPlan.From(control.RequireModule<ReactorInfo>().SetOutput(10));
         var effects = rack.Resolve(plan);
         var effect = Assert.Single(effects);
         Assert.IsType<BatteryOverChargedEffect>(effect);
@@ -54,7 +54,7 @@ public class Spike
             .Arena(Arena.Sized(ArenaWidth.Is(3), ArenaHeight.Is(3)).Build())
             .MaximumTurns(1)
             .CompletesWhen(_ => false)
-            .Spawn(() => new Bot(new OverLoadBrain(), rack)).At(1, 1).Facing(Direction.Up)
+            .Spawn(() => Bot.Named("overloaded").Brain(new OverLoadBrain()).Rack(rack)).At(1, 1).Facing(Direction.Up)
             .CreateWorld();
         world.Update();
         var bot = Assert.Single(world.Bots).Bot;
@@ -65,7 +65,7 @@ public class Spike
     public class OverLoadBrain : BotBrain
     {
         protected override PowerPlan RoutePower(ModuleControl modules, BotObservation observation) =>
-            new(modules.RequireModule<ReactorInfo>().SetOutput(15));
+            PowerPlan.From(modules.RequireModule<ReactorInfo>().SetOutput(15));
     }
 
     [Fact]
@@ -79,7 +79,7 @@ public class Spike
             );
         Assert.Equal(54, rack.TotalWeight);
         var control = rack.GetModuleControl();
-        var plan = new PowerPlan(
+        var plan = PowerPlan.From(
             control.RequireModule<ReactorInfo>().SetOutput(4),
             control.RequireModule<DrivingInfo>().Move(1));
         var effects = rack.Resolve(plan);
@@ -99,7 +99,7 @@ public class Spike
                 Drive.Named("drive").ThrustPerPower(5).MaximumPower(10)
             );
         var control = rack.GetModuleControl();
-        var plan = new PowerPlan(
+        var plan = PowerPlan.From(
             control.RequireModule<ReactorInfo>().SetOutput(1),
             control.RequireModule<DrivingInfo>().Move(1));
         var effects = rack.Resolve(plan);

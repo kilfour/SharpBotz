@@ -3,7 +3,7 @@ using SharpBotz.Botz.BotModules;
 
 namespace SharpBotz.Challenges.J_TrialByFire;
 
-public class TrialBot() : Bot(new TrialBrain(), ModuleRack.Create())
+public class TrialBot() : Bot(nameof(TrialBot), new TrialBrain(), ModuleRack.Create())
 {
     public class TrialBrain : BotBrain
     {
