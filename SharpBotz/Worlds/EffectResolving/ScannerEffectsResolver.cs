@@ -96,10 +96,10 @@ public static class ScannerEffectsResolver
     {
         var (arenaOffsetX, arenaOffsetY) = observer.Facing switch
         {
-            Direction.Up => (relativeX, relativeY),
-            Direction.Right => (-relativeY, relativeX),
-            Direction.Down => (-relativeX, -relativeY),
-            Direction.Left => (relativeY, -relativeX),
+            Direction.Up => (relativeX, -relativeY),
+            Direction.Right => (relativeY, relativeX),
+            Direction.Down => (-relativeX, relativeY),
+            Direction.Left => (-relativeY, -relativeX),
             _ => throw new ArgumentOutOfRangeException(
                 nameof(observer.Facing),
                 observer.Facing,

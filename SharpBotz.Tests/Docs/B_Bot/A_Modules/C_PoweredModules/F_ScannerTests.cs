@@ -79,8 +79,8 @@ public class F_ScannerTests
     [Fact]
     [DocContent(
     """
-    Scan coordinates are relative to the observing bot, which is always at `[0, 0]` and faces toward the top of the scan.
-    Negative Y points ahead, positive X points to the bot's right, positive Y points behind, and negative X points to its left.
+    Scan coordinates are relative to the observing bot, which is always at `[0, 0]`.
+    Positive Y points ahead, positive X points to the bot's right, negative Y points behind, and negative X points to its left.
     A range-two scan therefore covers coordinates from `[-2, -2]` through `[2, 2]`.
     """)]
     [DocExample(typeof(F_ScannerTests), nameof(ReadOwnBot))]
@@ -106,7 +106,7 @@ public class F_ScannerTests
     [Fact]
     [DocContent(
     """
-    A scan rotates with the observing bot. `[0, -1]` is therefore always directly ahead, regardless of the bot's arena direction.
+    A scan rotates with the observing bot. `[0, 1]` is therefore always directly ahead, regardless of the bot's arena direction.
     The `Facing` value in a bot scan result remains an absolute arena direction.
 
     In this example the observer faces left. A target one arena tile above it is on the observer's right and therefore appears at `[1, 0]`:
