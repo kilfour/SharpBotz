@@ -79,8 +79,8 @@ public class F_ScannerTests
     [Fact]
     [DocContent(
     """
-    Scan coordinates are relative to the observing bot, which is always at `[0, 0]`.
-    Positive X points right across the arena and positive Y points down.
+    Scan coordinates are relative to the observing bot, which is always at `[0, 0]` and faces toward the top of the scan.
+    Negative Y points ahead, positive X points to the bot's right, positive Y points behind, and negative X points to its left.
     A range-two scan therefore covers coordinates from `[-2, -2]` through `[2, 2]`.
     """)]
     [DocExample(typeof(F_ScannerTests), nameof(ReadOwnBot))]
@@ -103,6 +103,36 @@ public class F_ScannerTests
     public static ScanResult ReadOwnBot(BotScan scan) =>
         scan[0, 0];
 
+    [Fact]
+    [DocContent(
+    """
+    A scan rotates with the observing bot. `[0, -1]` is therefore always directly ahead, regardless of the bot's arena direction.
+    The `Facing` value in a bot scan result remains an absolute arena direction.
+
+    In this example the observer faces left. A target one arena tile above it is on the observer's right and therefore appears at `[1, 0]`:
+    """)]
+    [DocExample(typeof(F_ScannerTests), nameof(ReadTileToTheBotsRight))]
+    public void ScanOrientationTurnsWithTheBot()
+    {
+        var world = CreateOrientedScanWorld();
+        var brain = Assert.IsType<OneShotScanningBrain>(world.Bots[0].Bot.Brain);
+
+        world.Update();
+        world.Update();
+
+        var scan = brain.Scans[1];
+        Assert.Equal(
+            new ScanResult.OwnBot(Direction.Left, HitPoints: 100),
+            scan[0, 0]);
+        Assert.Equal(
+            new ScanResult.Bot(Direction.Up, HitPoints: 100),
+            ReadTileToTheBotsRight(scan));
+    }
+
+    [CodeExample]
+    public static ScanResult ReadTileToTheBotsRight(BotScan scan) =>
+        scan[1, 0];
+
     private static GameWorld CreateOverchargedWorld() =>
         Scenario.Named("Overcharged scanner")
             .Arena(Arena.Sized(
@@ -122,6 +152,51 @@ public class F_ScannerTests
                 .At(2, 2)
                 .Facing(Direction.Up)
             .CreateWorld();
+
+    private static GameWorld CreateOrientedScanWorld() =>
+        new(
+            Arena.Sized(
+                    ArenaWidth.Is(5),
+                    ArenaHeight.Is(5))
+                .Build(),
+            [
+                CreateScannerState(
+                    new OneShotScanningBrain(range: 1),
+                    x: 2,
+                    y: 2,
+                    facing: Direction.Left),
+                CreateIdleState(x: 2, y: 1, facing: Direction.Up),
+            ],
+            maximumTurns: 2,
+            complete: _ => false,
+            seed: 1234);
+
+    private static BotState CreateScannerState(
+        BotBrain brain,
+        int x,
+        int y,
+        Direction facing) =>
+        new(
+            Bot.Named("scanner")
+                .Brain(brain)
+                .Rack(ModuleRack.Create(
+                    Reactor.Named("reactor").MaximumOutput(1),
+                    Scanner.Named("scanner")
+                        .PowerPerRange(1)
+                        .MaximumPower(1))),
+            new Position(x, y),
+            facing);
+
+    private static BotState CreateIdleState(
+        int x,
+        int y,
+        Direction facing) =>
+        new(
+            Bot.Named("target")
+                .Brain(new IdleBrain())
+                .Rack(ModuleRack.Create()),
+            new Position(x, y),
+            facing);
 
     [Fact]
     [DocContent(
@@ -203,5 +278,13 @@ public class F_ScannerTests
                 modules.RequireModule<ReactorInfo>().SetOutput(scan.Power),
                 scan);
         }
+    }
+
+    private class IdleBrain : BotBrain
+    {
+        protected override PowerPlan RoutePower(
+            ModuleControl modules,
+            BotObservation observation) =>
+            PowerPlan.Empty;
     }
 }

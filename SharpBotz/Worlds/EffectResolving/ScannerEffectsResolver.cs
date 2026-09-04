@@ -72,8 +72,12 @@ public static class ScannerEffectsResolver
                     continue;
                 }
 
-                var arenaX = observer.Position.X - range + scanX;
-                var arenaY = observer.Position.Y - range + scanY;
+                var relativeX = scanX - range;
+                var relativeY = scanY - range;
+                var (arenaX, arenaY) = ToArenaCoordinates(
+                    observer,
+                    relativeX,
+                    relativeY);
                 scan[scanX, scanY] = CreateScanResult(
                     arena,
                     arenaX,
@@ -83,6 +87,28 @@ public static class ScannerEffectsResolver
         }
 
         return new(scan);
+    }
+
+    private static (int X, int Y) ToArenaCoordinates(
+        BotState observer,
+        int relativeX,
+        int relativeY)
+    {
+        var (arenaOffsetX, arenaOffsetY) = observer.Facing switch
+        {
+            Direction.Up => (relativeX, relativeY),
+            Direction.Right => (-relativeY, relativeX),
+            Direction.Down => (-relativeX, -relativeY),
+            Direction.Left => (relativeY, -relativeX),
+            _ => throw new ArgumentOutOfRangeException(
+                nameof(observer.Facing),
+                observer.Facing,
+                "Unknown bot direction."),
+        };
+
+        return (
+            checked(observer.Position.X + arenaOffsetX),
+            checked(observer.Position.Y + arenaOffsetY));
     }
 
     private static ScanResult CreateScanResult(

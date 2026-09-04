@@ -30,10 +30,41 @@ public class GameWorldScannerEffectsTests
         Assert.Equal(2, scan.Range);
         Assert.Equal(5, scan.Size);
         Assert.Equal(new ScanResult.OwnBot(Direction.Right, 100), scan[0, 0]);
-        Assert.Equal(new ScanResult.Bot(Direction.Left, 100), scan[1, 0]);
+        Assert.Equal(new ScanResult.Bot(Direction.Left, 100), scan[0, -1]);
         Assert.IsType<ScanResult.Wall>(scan[-1, -1]);
-        Assert.IsType<ScanResult.Empty>(scan[1, 1]);
+        Assert.IsType<ScanResult.Empty>(scan[1, 0]);
         Assert.IsType<ScanResult.OutOfBounds>(scan[-2, -2]);
+    }
+
+    [Theory]
+    [InlineData(Direction.Up)]
+    [InlineData(Direction.Right)]
+    [InlineData(Direction.Down)]
+    [InlineData(Direction.Left)]
+    public void DirectlyAheadIsAlwaysAtTheTopOfTheScan(Direction facing)
+    {
+        var brain = new ScanningBrain(range: 1);
+        var observerPosition = new Position(2, 2);
+        var targetPosition = observerPosition.Move(facing);
+        var world = CreateWorld(
+            CreateArena(width: 5),
+            CreateScannerState(
+                brain,
+                observerPosition.X,
+                observerPosition.Y,
+                facing,
+                maximumPower: 1),
+            CreateIdleState(
+                targetPosition.X,
+                targetPosition.Y,
+                Direction.Up));
+
+        world.Update();
+        world.Update();
+
+        Assert.Equal(
+            new ScanResult.Bot(Direction.Up, HitPoints: 100),
+            brain.Scans[1][0, -1]);
     }
 
     [Fact]
@@ -74,8 +105,8 @@ public class GameWorldScannerEffectsTests
         world.Update();
         world.Update();
 
-        Assert.Equal(new ScanResult.Bot(Direction.Left, 100), brain.Scans[1][2, 0]);
-        Assert.IsType<ScanResult.Empty>(brain.Scans[1][3, 0]);
+        Assert.Equal(new ScanResult.Bot(Direction.Left, 100), brain.Scans[1][0, -2]);
+        Assert.IsType<ScanResult.Empty>(brain.Scans[1][0, -3]);
     }
 
     [Fact]
