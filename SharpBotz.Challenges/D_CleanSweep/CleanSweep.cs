@@ -27,8 +27,7 @@ public class CleanSweep : Challenge
         var scenario = Scenario.Named(name)
             .Arena(Arena.Sized(
                     ArenaWidth.Is(11),
-                    ArenaHeight.Is(11))
-                .Build())
+                    ArenaHeight.Is(11)))
             .MaximumTurns(45)
             .CompletesWhen(OnlyFirstBotLives)
             .Spawn(() => new SweepBot())

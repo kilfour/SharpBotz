@@ -26,7 +26,7 @@ public class C_RotatorTests
     {
         var rotator = ConstructionExample();
         Assert.Equal("rotator", rotator.Id.ToString());
-        Assert.Equal(18, rotator.Weight);
+        Assert.Equal(19, rotator.Weight);
     }
 
     [CodeSnippet]
@@ -93,8 +93,7 @@ public class C_RotatorTests
         Scenario.Named("Turning twice")
             .Arena(Arena.Sized(
                     ArenaWidth.Is(3),
-                    ArenaHeight.Is(3))
-                .Build())
+                    ArenaHeight.Is(3)))
             .MaximumTurns(1)
             .CompletesWhen(_ => false)
             .Spawn(() => Bot.Named("turning")
@@ -130,8 +129,7 @@ public class C_RotatorTests
         Scenario.Named("Overcharged rotator")
             .Arena(Arena.Sized(
                     ArenaWidth.Is(3),
-                    ArenaHeight.Is(3))
-                .Build())
+                    ArenaHeight.Is(3)))
             .MaximumTurns(1)
             .CompletesWhen(_ => false)
             .Spawn(() => Bot.Named("overcharged-rotator")
@@ -187,21 +185,21 @@ public class C_RotatorTests
 
     private static readonly (int MaximumPower, int Weight)[] MaximumPowerWeightCurve =
         [
-            (1, 4),
-            (2, 6),
-            (3, 9),
-            (4, 13),
-            (5, 18)
+            (1, 5),
+            (2, 7),
+            (3, 10),
+            (4, 14),
+            (5, 19)
         ];
 
     private static readonly (int TorquePerPower, int Weight)[] TorquePerPowerWeightCurve =
         [
-            (10, 4),
-            (11, 5),
-            (12, 5),
-            (13, 6),
-            (14, 6),
-            (15, 7)
+            (10, 5),
+            (15, 5),
+            (20, 6),
+            (25, 6),
+            (50, 9),
+            (100, 14)
         ];
 
     private static Rotator CreateRotator(int torquePerPower, int maximumPower) =>
@@ -221,7 +219,7 @@ public class C_RotatorTests
 
             return PowerPlan.From(
                 reactor.SetOutput(2),
-                new PowerAllocation(rotator.Id, 2));
+                rotator.Turn(2));
         }
     }
 

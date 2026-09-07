@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="QuickFuzzr" Version="0.2.2" />
+    <PackageReference Include="QuickPulse.Show" Version="0.1.17" />
   </ItemGroup>
 
 </Project>

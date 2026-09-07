@@ -137,8 +137,7 @@ public class F_ScannerTests
         Scenario.Named("Overcharged scanner")
             .Arena(Arena.Sized(
                     ArenaWidth.Is(5),
-                    ArenaHeight.Is(5))
-                .Build())
+                    ArenaHeight.Is(5)))
             .MaximumTurns(2)
             .CompletesWhen(_ => false)
             .Spawn(() => Bot.Named("scanner")

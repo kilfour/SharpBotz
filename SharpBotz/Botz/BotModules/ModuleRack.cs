@@ -50,6 +50,8 @@ public class ModuleRack
     public ModuleControl GetModuleControl() =>
         new([.. modules.Select(module => module.GetInfo(TotalWeight))]);
 
+    public Dictionary<string, int> GetModuleWeights() =>
+        modules.ToDictionary(module => module.Id.ToString(), module => module.Weight);
 
     public ModuleEffect[] Resolve(PowerPlan plan)
     {

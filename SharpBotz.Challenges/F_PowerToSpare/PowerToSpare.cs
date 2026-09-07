@@ -19,8 +19,7 @@ public class PowerToSpare : Challenge
         Scenario.Named(name)
             .Arena(Arena.Sized(
                     ArenaWidth.Is(targetX + 2),
-                    ArenaHeight.Is(3))
-                .Build())
+                    ArenaHeight.Is(3)))
             .MaximumTurns(30)
             .CompletesWhen(world =>
                 OnlyFirstBotLivesWithStoredPower(world, minimumStoredPower))

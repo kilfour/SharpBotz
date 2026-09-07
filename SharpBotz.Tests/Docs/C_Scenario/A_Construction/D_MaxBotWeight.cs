@@ -22,9 +22,8 @@ public class D_MaximumBotWeight
     {
         var arena =
             Arena.Sized(
-                    ArenaWidth.Is(3),
-                    ArenaHeight.Is(3))
-                .Build();
+                ArenaWidth.Is(3),
+                ArenaHeight.Is(3));
         var scenario =
             GetScenario(arena)
                 .Spawn(HeavyBot)
@@ -36,7 +35,7 @@ public class D_MaximumBotWeight
     }
 
     [CodeSnippet]
-    private static Scenario GetScenario(Arena arena) =>
+    private static Scenario GetScenario(Arena.ArenaBuilder arena) =>
         Scenario.Named("My Scenario")
             .Arena(arena)
             .MaximumTurns(20)

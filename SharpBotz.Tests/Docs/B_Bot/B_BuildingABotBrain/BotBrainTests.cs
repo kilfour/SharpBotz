@@ -68,8 +68,7 @@ public class BotBrainTests
         Scenario.Named("Move forward")
             .Arena(Arena.Sized(
                     ArenaWidth.Is(5),
-                    ArenaHeight.Is(3))
-                .Build())
+                    ArenaHeight.Is(3)))
             .MaximumTurns(1)
             .CompletesWhen(_ => false)
             .Spawn(CreateBot)

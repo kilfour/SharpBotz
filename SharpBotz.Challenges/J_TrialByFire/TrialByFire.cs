@@ -10,8 +10,7 @@ public class TrialByFire : Challenge
         Scenario.Named("Trial By Fire - Open Arena")
             .Arena(Arena.Sized(
                     ArenaWidth.Is(13),
-                    ArenaHeight.Is(13))
-                .Build())
+                    ArenaHeight.Is(13)))
             .MaximumTurns(50)
             .CompletesWhen(OnlyFirstBotLives)
             .Spawn(() => new TrialBot())
@@ -41,7 +40,7 @@ public class TrialByFire : Challenge
             AddSplitWall(arena, x: 9);
 
             return Scenario.Named("Trial By Fire - Broken Ground")
-                .Arena(arena.Build())
+                .Arena(arena)
                 .MaximumTurns(60)
                 .CompletesWhen(OnlyFirstBotLives)
                 .Spawn(() => new TrialBot())
@@ -73,8 +72,7 @@ public class TrialByFire : Challenge
                 .AddWallAt(8, 5)
                 .AddWallAt(8, 6)
                 .AddWallAt(8, 8)
-                .AddWallAt(8, 9)
-                .Build();
+                .AddWallAt(8, 9);
 
             return Scenario.Named("Trial By Fire - Final Arena")
                 .Arena(arena)

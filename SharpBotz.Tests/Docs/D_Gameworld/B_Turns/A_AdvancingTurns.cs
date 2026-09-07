@@ -32,8 +32,7 @@ public class A_AdvancingTurns
         Scenario.Named("Advancing turns")
             .Arena(Arena.Sized(
                     ArenaWidth.Is(3),
-                    ArenaHeight.Is(3))
-                .Build())
+                    ArenaHeight.Is(3)))
             .MaximumTurns(10)
             .CompletesWhen(_ => false)
             .CreateWorld();

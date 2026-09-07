@@ -11,8 +11,7 @@ public class DeadAhead : Challenge
             .Arena(
                 Arena.Sized(
                     ArenaWidth.Is(15),
-                    ArenaHeight.Is(3))
-                .Build())
+                    ArenaHeight.Is(3)))
             .MaximumTurns(20)
             .CompletesWhen(OnlyFirstBotLives)
             .Spawn(() => new AheadBot()).At(1, 1).Facing(Direction.Right)

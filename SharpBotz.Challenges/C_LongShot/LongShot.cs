@@ -21,8 +21,7 @@ public class LongShot : Challenge
         Scenario.Named(name)
             .Arena(Arena.Sized(
                     ArenaWidth.Is(9),
-                    ArenaHeight.Is(9))
-                .Build())
+                    ArenaHeight.Is(9)))
             .MaximumTurns(12)
             .CompletesWhen(world => OnlyFirstBotLivesAt(world, Start))
             .Spawn(() => new LongShotBot())

@@ -99,8 +99,7 @@ Increasing maximum output adds weight along an approximately quadratic curve.
         Scenario.Named("Overloaded reactor")
             .Arena(Arena.Sized(
                     ArenaWidth.Is(3),
-                    ArenaHeight.Is(3))
-                .Build())
+                    ArenaHeight.Is(3)))
             .MaximumTurns(1)
             .CompletesWhen(_ => false)
             .Spawn(() => Bot.Named("overloaded-reactor")

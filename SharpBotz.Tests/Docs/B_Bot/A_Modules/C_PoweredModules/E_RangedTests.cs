@@ -77,8 +77,7 @@ public class E_RangedTests
         Scenario.Named("Overcharged ranged weapon")
             .Arena(Arena.Sized(
                     ArenaWidth.Is(5),
-                    ArenaHeight.Is(3))
-                .Build())
+                    ArenaHeight.Is(3)))
             .MaximumTurns(1)
             .CompletesWhen(_ => false)
             .Spawn(() => Bot.Named("attacker")

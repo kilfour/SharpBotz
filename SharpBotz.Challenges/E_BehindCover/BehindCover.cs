@@ -33,7 +33,7 @@ public class BehindCover : Challenge
         }
 
         return Scenario.Named(name)
-            .Arena(arena.Build())
+            .Arena(arena)
             .MaximumTurns(40)
             .CompletesWhen(OnlyFirstBotLives)
             .Spawn(() => new CoverBot())

@@ -30,6 +30,9 @@ public class Arena
         }
         return snapshot;
     }
+
+
+
     private Arena(ArenaTileType[,] grid)
     {
         this.grid = (ArenaTileType[,])grid.Clone();
@@ -79,6 +82,14 @@ public class Arena
             grid[x, y] = ArenaTileType.Wall;
             return this;
         }
+
+        public Position[] GetAvailablePositions() =>
+        [..
+            from x in Enumerable.Range(1, Math.Max(0, width - 2))
+            from y in Enumerable.Range(1, Math.Max(0, height - 2))
+            let position = new Position(x, y)
+            where grid[x, y] == ArenaTileType.Empty
+            select position];
 
         public Arena Build() => new(grid);
     }

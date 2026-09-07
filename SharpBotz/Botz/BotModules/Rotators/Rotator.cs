@@ -44,8 +44,8 @@ public class Rotator : PoweredModule
     protected override ModuleInfo CreateInfo(int totalWeight)
     {
         return rotation == Rotation.Left
-            ? new LeftRotatorInfo(Id)
-            : new RightRotatorInfo(Id);
+            ? new LeftRotatorInfo(Id, torquePerPower, maximumPower, totalWeight)
+            : new RightRotatorInfo(Id, torquePerPower, maximumPower, totalWeight);
     }
 
     public override IEnumerable<ModuleEffect> CreateEffects(int power, int totalBotWeight)
@@ -63,8 +63,6 @@ public class Rotator : PoweredModule
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(torquePerPower);
 
         var speedWeight = maximumPower * (maximumPower + 1) / 2;
-        var efficiencyWeight = Math.Max(0, torquePerPower - 10);
-        efficiencyWeight = (efficiencyWeight / 2) + (efficiencyWeight % 2);
-        return 3 + speedWeight + efficiencyWeight;
+        return 3 + speedWeight + (torquePerPower / 10);
     }
 }

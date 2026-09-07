@@ -51,7 +51,7 @@ public class Spike
                 Battery.Named("battery").Capacity(5)
             );
         var world = Scenario.Named("overload")
-            .Arena(Arena.Sized(ArenaWidth.Is(3), ArenaHeight.Is(3)).Build())
+            .Arena(Arena.Sized(ArenaWidth.Is(3), ArenaHeight.Is(3)))
             .MaximumTurns(1)
             .CompletesWhen(_ => false)
             .Spawn(() => Bot.Named("overloaded").Brain(new OverLoadBrain()).Rack(rack)).At(1, 1).Facing(Direction.Up)

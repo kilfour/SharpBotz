@@ -16,8 +16,7 @@ public class ScenarioTests
         var scenario = Scenario.Named("Botz")
             .Arena(Arena.Sized(
                     ArenaWidth.Is(3),
-                    ArenaHeight.Is(3))
-                .Build())
+                    ArenaHeight.Is(3)))
             .MaximumTurns(20)
             .CompletesWhen(_ => false)
             .Spawn(() => Bot.Named("dummy").Brain(new DummyBrain()).Rack(ModuleRack.Create()))
@@ -27,7 +26,7 @@ public class ScenarioTests
         var first = scenario.CreateWorld();
         var second = scenario.CreateWorld();
 
-        Assert.Same(first.Arena, second.Arena);
+        Assert.NotSame(first.Arena, second.Arena);
         Assert.NotSame(first.Bots[0].Bot, second.Bots[0].Bot);
     }
 }

@@ -10,8 +10,7 @@ public class UnderFire : Challenge
         Scenario.Named("Under Fire - From The East")
             .Arena(Arena.Sized(
                     ArenaWidth.Is(11),
-                    ArenaHeight.Is(5))
-                .Build())
+                    ArenaHeight.Is(5)))
             .MaximumTurns(20)
             .CompletesWhen(OnlyFirstBotLives)
             .Spawn(() => new UnderFireBot())
@@ -25,8 +24,7 @@ public class UnderFire : Challenge
         Scenario.Named("Under Fire - From The North")
             .Arena(Arena.Sized(
                     ArenaWidth.Is(7),
-                    ArenaHeight.Is(11))
-                .Build())
+                    ArenaHeight.Is(11)))
             .MaximumTurns(20)
             .CompletesWhen(OnlyFirstBotLives)
             .Spawn(() => new UnderFireBot())

@@ -13,16 +13,15 @@ public class A_ArenaDefinition
     {
         var arena =
             Arena.Sized(
-                    ArenaWidth.Is(3),
-                    ArenaHeight.Is(3))
-                .Build();
+                ArenaWidth.Is(3),
+                ArenaHeight.Is(3));
         var scenario = GetScenario(arena);
         Assert.Equal("My Scenario", scenario.Name);
-        Assert.Same(arena, scenario.Arena);
+        Assert.Same(arena, scenario.ArenaBuilder);
     }
 
     [CodeSnippet]
-    private static Scenario GetScenario(Arena arena) =>
+    private static Scenario GetScenario(Arena.ArenaBuilder arena) =>
         Scenario.Named("My Scenario")
             .Arena(arena)
             .MaximumTurns(20)

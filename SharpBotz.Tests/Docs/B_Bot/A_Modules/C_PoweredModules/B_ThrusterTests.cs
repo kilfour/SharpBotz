@@ -78,8 +78,7 @@ public class B_ThrusterTests
         Scenario.Named("Moving one tile")
             .Arena(Arena.Sized(
                     ArenaWidth.Is(5),
-                    ArenaHeight.Is(3))
-                .Build())
+                    ArenaHeight.Is(3)))
             .MaximumTurns(1)
             .CompletesWhen(_ => false)
             .Spawn(() => Bot.Named("moving")
@@ -114,8 +113,7 @@ public class B_ThrusterTests
         Scenario.Named("Overcharged thruster")
             .Arena(Arena.Sized(
                     ArenaWidth.Is(5),
-                    ArenaHeight.Is(3))
-                .Build())
+                    ArenaHeight.Is(3)))
             .MaximumTurns(1)
             .CompletesWhen(_ => false)
             .Spawn(() => Bot.Named("overcharged-thruster")

@@ -15,8 +15,7 @@ public class Crossfire : Challenge
         var scenario = Scenario.Named(name)
             .Arena(Arena.Sized(
                     ArenaWidth.Is(11),
-                    ArenaHeight.Is(11))
-                .Build())
+                    ArenaHeight.Is(11)))
             .MaximumTurns(16)
             .CompletesWhen(OnlyFirstBotLives)
             .Spawn(() => new CrossfireBot())

@@ -73,8 +73,7 @@ public class D_MeleeTests
         Scenario.Named("Overcharged melee weapon")
             .Arena(Arena.Sized(
                     ArenaWidth.Is(4),
-                    ArenaHeight.Is(3))
-                .Build())
+                    ArenaHeight.Is(3)))
             .MaximumTurns(1)
             .CompletesWhen(_ => false)
             .Spawn(() => Bot.Named("attacker")

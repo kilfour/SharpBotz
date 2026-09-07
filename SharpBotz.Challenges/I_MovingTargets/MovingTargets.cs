@@ -33,9 +33,8 @@ public class MovingTargets : Challenge
                 .At(7, 7)
                 .Facing(Direction.Left);
 
-    private static Arena CreateArena() =>
+    private static Arena.ArenaBuilder CreateArena() =>
         Arena.Sized(
-                ArenaWidth.Is(11),
-                ArenaHeight.Is(11))
-            .Build();
+            ArenaWidth.Is(11),
+            ArenaHeight.Is(11));
 }
