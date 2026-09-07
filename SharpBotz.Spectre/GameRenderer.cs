@@ -1,3 +1,4 @@
+using SharpBotz.Botz;
 using SharpBotz.Worlds;
 using Spectre.Console;
 using Spectre.Console.Rendering;
@@ -10,14 +11,24 @@ public static class GameRenderer
         GameWorld world,
         string title,
         string speed,
-        bool isPaused)
+        bool isPaused) =>
+        Render(world, title, speed, isPaused, [], eventBotFilter: null);
+
+    public static IRenderable Render(
+        GameWorld world,
+        string title,
+        string speed,
+        bool isPaused,
+        IReadOnlyList<(int Turn, WorldEvent Event)> eventLog,
+        Bot? eventBotFilter)
     {
         var state = world.IsComplete
             ? "[bold green]Finished[/]"
             : isPaused
                 ? "[bold yellow]Paused[/]"
                 : "[bold green]Running[/]";
-        var controls = "[grey]| ←/→ speed | Space pause | Enter step[/]";
+        var controls =
+            "[grey]| ←/→ speed | Space pause | Enter step | Tab events[/]";
 
         return new Rows(
             new Panel(ArenaRenderer.Render(world.Arena, world.Bots))
@@ -32,6 +43,7 @@ public static class GameRenderer
                 speed,
                 controls,
                 world.Turn,
-                world.MaximumTurns));
+                world.MaximumTurns),
+            WorldEventRenderer.Render(eventLog, world.Bots, eventBotFilter));
     }
 }

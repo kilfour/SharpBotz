@@ -1,3 +1,4 @@
+using SharpBotz.Botz;
 using SharpBotz.Worlds;
 using Spectre.Console;
 using System.Diagnostics;
@@ -31,14 +32,14 @@ public class SpectreGameDisplay
         var nextUpdate = clock.Elapsed + CurrentSpeed.Interval;
         while (true)
         {
-            var controls = ReadControls(state);
+            var controls = ReadControls(state, world.Bots);
             if (controls.ResetUpdateTimer)
             {
                 nextUpdate = clock.Elapsed + CurrentSpeed.Interval;
             }
             if (controls.ShouldRender)
             {
-                Refresh(context, world, title, state.IsPaused);
+                Refresh(context, world, title, state);
             }
             if (controls.AdvanceOneTurn ||
                 !state.IsPaused && clock.Elapsed >= nextUpdate)
@@ -64,7 +65,7 @@ public class SpectreGameDisplay
             .StartAsync(async context =>
             {
                 var state = new DisplayState();
-                Refresh(context, world, title, state.IsPaused);
+                Refresh(context, world, title, state);
                 while (!world.IsComplete)
                 {
                     await WaitForNextTurnAsync(
@@ -74,8 +75,9 @@ public class SpectreGameDisplay
                         state,
                         cancellationToken);
                     cancellationToken.ThrowIfCancellationRequested();
-                    world.Update();
-                    Refresh(context, world, title, state.IsPaused);
+                    var worldEvents = world.Update();
+                    state.AddEvents(world.Turn, worldEvents);
+                    Refresh(context, world, title, state);
                 }
             });
         return world.Turn;
@@ -85,17 +87,21 @@ public class SpectreGameDisplay
         LiveDisplayContext context,
         GameWorld world,
         string title,
-        bool isPaused)
+        DisplayState state)
     {
         context.UpdateTarget(GameRenderer.Render(
             world,
             title,
             CurrentSpeed.Label,
-            isPaused));
+            state.IsPaused,
+            state.EventLog,
+            state.EventBotFilter));
         context.Refresh();
     }
 
-    private ControlUpdate ReadControls(DisplayState state)
+    private ControlUpdate ReadControls(
+        DisplayState state,
+        IReadOnlyList<BotState> bots)
     {
         var update = new ControlUpdate();
         var input = AnsiConsole.Console.Input;
@@ -134,10 +140,38 @@ public class SpectreGameDisplay
                 case ConsoleKey.Enter when state.IsPaused:
                     update = update with { AdvanceOneTurn = true };
                     break;
+                case ConsoleKey.Tab:
+                    state.EventBotFilter = CycleEventBotFilter(
+                        bots,
+                        state.EventBotFilter,
+                        backwards: pressedKey.Modifiers.HasFlag(ConsoleModifiers.Shift));
+                    update = update with { ShouldRender = true };
+                    break;
             }
         }
 
         return update;
+    }
+
+    private static Bot? CycleEventBotFilter(
+        IReadOnlyList<BotState> bots,
+        Bot? current,
+        bool backwards)
+    {
+        var currentIndex = 0;
+        for (var index = 0; index < bots.Count; index++)
+        {
+            if (ReferenceEquals(bots[index].Bot, current))
+            {
+                currentIndex = index + 1;
+                break;
+            }
+        }
+
+        var optionCount = bots.Count + 1;
+        var nextIndex =
+            (currentIndex + (backwards ? -1 : 1) + optionCount) % optionCount;
+        return nextIndex == 0 ? null : bots[nextIndex - 1].Bot;
     }
 
     private SimulationSpeed CurrentSpeed => speeds[speedIndex];
@@ -147,6 +181,13 @@ public class SpectreGameDisplay
     private sealed class DisplayState
     {
         public bool IsPaused { get; set; }
+
+        public List<(int Turn, WorldEvent Event)> EventLog { get; } = [];
+
+        public Bot? EventBotFilter { get; set; }
+
+        public void AddEvents(int turn, IEnumerable<WorldEvent> worldEvents) =>
+            EventLog.AddRange(worldEvents.Select(worldEvent => (turn, worldEvent)));
     }
 
     private readonly record struct ControlUpdate(
