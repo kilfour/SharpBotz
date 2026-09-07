@@ -4,6 +4,8 @@ public abstract record ScanResult
 {
     private ScanResult() { }
 
+    public record Unknown : ScanResult;
+
     public record OutOfBounds : ScanResult;
 
     public record Empty : ScanResult;

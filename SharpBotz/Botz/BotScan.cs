@@ -34,9 +34,9 @@ public sealed class BotScan
         get
         {
             if (Size == 0 || x < -Range || x > Range)
-                throw new ArgumentOutOfRangeException(nameof(x));
+                return new ScanResult.Unknown();
             if (y < -Range || y > Range)
-                throw new ArgumentOutOfRangeException(nameof(y));
+                return new ScanResult.Unknown();
 
             return results[x + Range, y + Range];
         }

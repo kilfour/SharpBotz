@@ -15,7 +15,7 @@ namespace SharpBotz.Challenges.Tests;
 
 public class ChallengeTests
 {
-    [Fact(Skip = "Not Implemented")]
+    [Fact]
     public void DeadAhead_Challenge() =>
         Assert.True(RunScenario(DeadAhead.Challenge).GoalReached);
 
