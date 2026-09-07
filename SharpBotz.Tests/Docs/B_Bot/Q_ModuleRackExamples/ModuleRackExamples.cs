@@ -13,6 +13,7 @@ namespace SharpBotz.Tests.Docs.B_Bot.Q_ModuleRackExamples;
 public class ModuleRackExamples
 {
     [Fact]
+    [DocHeader("Chassis Only")]
     [DocContent(
     """
     Every module rack includes a chassis weighing 10, even when no modules are installed:
@@ -29,6 +30,7 @@ public class ModuleRackExamples
         ModuleRack.Create();
 
     [Fact]
+    [DocHeader("Driving")]
     [DocContent(
     """
     A small mobile rack combines a one-power reactor with a drive.
@@ -50,6 +52,7 @@ public class ModuleRackExamples
                 .MaximumPower(1));
 
     [Fact]
+    [DocHeader("Brawler")]
     [DocContent(
     """
     A close-combat rack can move, scan its surroundings, and strike an adjacent bot.
