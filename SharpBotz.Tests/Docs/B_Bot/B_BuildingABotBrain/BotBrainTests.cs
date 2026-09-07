@@ -2,8 +2,8 @@ using QuickPulse.Explains;
 using SharpBotz.Arenas;
 using SharpBotz.Botz;
 using SharpBotz.Botz.BotModules;
-using SharpBotz.Botz.BotModules.Drives;
 using SharpBotz.Botz.BotModules.Reactors;
+using SharpBotz.Botz.BotModules.Thrusters;
 using SharpBotz.Scenarios;
 using SharpBotz.Worlds;
 
@@ -23,7 +23,7 @@ public class BotBrainTests
     Calling a module action creates a power intention; it does not immediately perform that action.
     Return those intentions together in a `PowerPlan`.
 
-    This brain asks its drive to move one tile, then asks its reactor to generate exactly the power that movement requires:
+    This brain asks its thruster to move one tile, then asks its reactor to generate exactly the power that movement requires:
     """)]
     [DocExample(typeof(MoveForwardBrain))]
     [DocContent(
@@ -60,7 +60,7 @@ public class BotBrainTests
             .Brain(new MoveForwardBrain())
             .Rack(ModuleRack.Create(
                 Reactor.Named("reactor").MaximumOutput(1),
-                Drive.Named("drive")
+                Thruster.Named("thruster")
                     .ThrustPerPower(100)
                     .MaximumPower(1)));
 
@@ -85,8 +85,8 @@ public class BotBrainTests
             BotObservation observation)
         {
             var reactor = modules.RequireModule<ReactorInfo>();
-            var drive = modules.RequireModule<DrivingInfo>();
-            var movement = drive.Move(speed: 1);
+            var thruster = modules.RequireModule<ThrusterInfo>();
+            var movement = thruster.Move(speed: 1);
 
             return PowerPlan.From(
                 reactor.SetOutput(movement.Power),

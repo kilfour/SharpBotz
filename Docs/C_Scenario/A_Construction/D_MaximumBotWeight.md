@@ -12,7 +12,7 @@ Using the following bot in that scenario:
 Bot.Named("Heavy")
     .Brain(new DummyBrain())
     .Rack(ModuleRack.Create(
-        Drive.Named("drive")
+        Thruster.Named("thruster")
             .ThrustPerPower(10)
             .MaximumPower(5)));
 ```

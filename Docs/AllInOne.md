@@ -117,14 +117,14 @@ ModuleRack.Create(
 We already saw the modules related to energy generation and storage.  
 All other modules consume power. They are all powered modules.
   
-#### Drive
-A drive is needed to move your bot across the arena.
+#### Thruster
+A thruster is needed to move your bot across the arena.
 
 
 It is created with its thrust per power and maximum power, along with a ModuleId.
 Thrust per power determines how much force each unit of supplied power produces.  
 ```csharp
-Drive.Named("drive")
+Thruster.Named("thruster")
     .ThrustPerPower(10)
     .MaximumPower(5);
 ```
@@ -132,11 +132,11 @@ Call `Move` on the module info from your BotBrain to request a speed.
 The required power is the requested speed multiplied by the bot's loaded weight, divided by thrust per power and rounded up.
 
 For a bot weighing 50 with 10 thrust per power, every unit of speed needs 5 power.
-Requesting speed 2 allocates 10 power, which exceeds this drive's maximum power of 5.  
-A powered drive moves the bot in the direction it is facing.  
-Supplying more than the drive's maximum power overcharges it.
+Requesting speed 2 allocates 10 power, which exceeds this thruster's maximum power of 5.  
+A powered thruster moves the bot in the direction it is facing.  
+Supplying more than the thruster's maximum power overcharges it.
 The movement still happens, but every excess unit of power deals 3 damage to the bot.  
-A drive's base weight is 3.
+A thruster's base weight is 3.
 Supporting more power adds weight following the triangular number curve.  
 ```mermaid
 xychart-beta
@@ -329,7 +329,7 @@ Create one by inheriting from `BotBrain` and implementing `RoutePower`.
 Calling a module action creates a power intention; it does not immediately perform that action.
 Return those intentions together in a `PowerPlan`.
 
-This brain asks its drive to move one tile, then asks its reactor to generate exactly the power that movement requires:  
+This brain asks its thruster to move one tile, then asks its reactor to generate exactly the power that movement requires:  
 ```csharp
 public class MoveForwardBrain : BotBrain
 {
@@ -338,8 +338,8 @@ public class MoveForwardBrain : BotBrain
         BotObservation observation)
     {
         var reactor = modules.RequireModule<ReactorInfo>();
-        var drive = modules.RequireModule<DrivingInfo>();
-        var movement = drive.Move(speed: 1);
+        var thruster = modules.RequireModule<ThrusterInfo>();
+        var movement = thruster.Move(speed: 1);
 
         return PowerPlan.From(
             reactor.SetOutput(movement.Power),
@@ -356,33 +356,36 @@ public static Bot CreateBot() =>
         .Brain(new MoveForwardBrain())
         .Rack(ModuleRack.Create(
             Reactor.Named("reactor").MaximumOutput(1),
-            Drive.Named("drive")
+            Thruster.Named("thruster")
                 .ThrustPerPower(100)
                 .MaximumPower(1)));
 ```
 ### Example Module Racks
+#### Chassis Only
 Every module rack includes a chassis weighing 10, even when no modules are installed:  
 ```csharp
 ModuleRack.Create();
 ```
 This rack weighs **10**.  
-A small mobile rack combines a one-power reactor with a drive.
+#### Driving
+A small mobile rack combines a one-power reactor with a thruster.
 Its high thrust efficiency lets it move the loaded chassis using that single unit of power:  
 ```csharp
 ModuleRack.Create(
     Reactor.Named("reactor").MaximumOutput(1),
-    Drive.Named("drive")
+    Thruster.Named("thruster")
         .ThrustPerPower(100)
         .MaximumPower(1));
 ```
 This rack weighs **63**.  
+#### Brawler
 A close-combat rack can move, scan its surroundings, and strike an adjacent bot.
 Its battery stores unused reactor output for later turns:  
 ```csharp
 ModuleRack.Create(
     Reactor.Named("reactor").MaximumOutput(3),
     Battery.Named("battery").Capacity(10),
-    Drive.Named("drive")
+    Thruster.Named("thruster")
         .ThrustPerPower(100)
         .MaximumPower(1),
     Melee.Named("melee")
@@ -439,7 +442,7 @@ Using the following bot in that scenario:
 Bot.Named("Heavy")
     .Brain(new DummyBrain())
     .Rack(ModuleRack.Create(
-        Drive.Named("drive")
+        Thruster.Named("thruster")
             .ThrustPerPower(10)
             .MaximumPower(5)));
 ```

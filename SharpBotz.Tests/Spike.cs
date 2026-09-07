@@ -2,8 +2,8 @@ using SharpBotz.Arenas;
 using SharpBotz.Botz;
 using SharpBotz.Botz.BotModules;
 using SharpBotz.Botz.BotModules.Batteries;
-using SharpBotz.Botz.BotModules.Drives;
 using SharpBotz.Botz.BotModules.Reactors;
+using SharpBotz.Botz.BotModules.Thrusters;
 using SharpBotz.Scenarios;
 
 namespace SharpBotz.Tests;
@@ -75,16 +75,16 @@ public class Spike
             ModuleRack.Create(
                 Reactor.Named("reactor").MaximumOutput(15),
                 Battery.Named("battery").Capacity(10),
-                Drive.Named("drive").ThrustPerPower(14).MaximumPower(4)
+                Thruster.Named("thruster").ThrustPerPower(14).MaximumPower(4)
             );
         Assert.Equal(54, rack.TotalWeight);
         var control = rack.GetModuleControl();
         var plan = PowerPlan.From(
             control.RequireModule<ReactorInfo>().SetOutput(4),
-            control.RequireModule<DrivingInfo>().Move(1));
+            control.RequireModule<ThrusterInfo>().Move(1));
         var effects = rack.Resolve(plan);
         var effect = Assert.Single(effects);
-        var thrustEffect = Assert.IsType<DriveEffect>(effect);
+        var thrustEffect = Assert.IsType<ThrusterEffect>(effect);
         Assert.Equal(1, thrustEffect.Speed);
         Assert.Equal(0, rack.BatteryLevel);
     }
@@ -96,12 +96,12 @@ public class Spike
             ModuleRack.Create(
                 Reactor.Named("reactor").MaximumOutput(10),
                 Battery.Named("battery").Capacity(5),
-                Drive.Named("drive").ThrustPerPower(5).MaximumPower(10)
+                Thruster.Named("thruster").ThrustPerPower(5).MaximumPower(10)
             );
         var control = rack.GetModuleControl();
         var plan = PowerPlan.From(
             control.RequireModule<ReactorInfo>().SetOutput(1),
-            control.RequireModule<DrivingInfo>().Move(1));
+            control.RequireModule<ThrusterInfo>().Move(1));
         var effects = rack.Resolve(plan);
         var effect = Assert.Single(effects);
         Assert.IsType<BatteryDrainedEffect>(effect);

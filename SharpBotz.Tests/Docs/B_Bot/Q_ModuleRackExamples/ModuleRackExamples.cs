@@ -1,10 +1,10 @@
 using QuickPulse.Explains;
 using SharpBotz.Botz.BotModules;
 using SharpBotz.Botz.BotModules.Batteries;
-using SharpBotz.Botz.BotModules.Drives;
 using SharpBotz.Botz.BotModules.MeleeWeapons;
 using SharpBotz.Botz.BotModules.Reactors;
 using SharpBotz.Botz.BotModules.Scanners;
+using SharpBotz.Botz.BotModules.Thrusters;
 
 namespace SharpBotz.Tests.Docs.B_Bot.Q_ModuleRackExamples;
 
@@ -33,7 +33,7 @@ public class ModuleRackExamples
     [DocHeader("Driving")]
     [DocContent(
     """
-    A small mobile rack combines a one-power reactor with a drive.
+    A small mobile rack combines a one-power reactor with a thruster.
     Its high thrust efficiency lets it move the loaded chassis using that single unit of power:
     """)]
     [DocExample(typeof(ModuleRackExamples), nameof(Mobile))]
@@ -47,7 +47,7 @@ public class ModuleRackExamples
     public static ModuleRack Mobile() =>
         ModuleRack.Create(
             Reactor.Named("reactor").MaximumOutput(1),
-            Drive.Named("drive")
+            Thruster.Named("thruster")
                 .ThrustPerPower(100)
                 .MaximumPower(1));
 
@@ -70,7 +70,7 @@ public class ModuleRackExamples
         ModuleRack.Create(
             Reactor.Named("reactor").MaximumOutput(3),
             Battery.Named("battery").Capacity(10),
-            Drive.Named("drive")
+            Thruster.Named("thruster")
                 .ThrustPerPower(100)
                 .MaximumPower(1),
             Melee.Named("melee")

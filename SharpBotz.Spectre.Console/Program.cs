@@ -2,10 +2,10 @@ using SharpBotz.Arenas;
 using SharpBotz.Botz;
 using SharpBotz.Botz.BotModules;
 using SharpBotz.Botz.BotModules.Batteries;
-using SharpBotz.Botz.BotModules.Drives;
 using SharpBotz.Botz.BotModules.MeleeWeapons;
 using SharpBotz.Botz.BotModules.Reactors;
 using SharpBotz.Botz.BotModules.Scanners;
+using SharpBotz.Botz.BotModules.Thrusters;
 using SharpBotz.Scenarios;
 using SharpBotz.Spectre;
 
@@ -36,7 +36,7 @@ static Bot CreateDuelist(string name) =>
         .Rack(ModuleRack.Create(
             Reactor.Named("reactor").MaximumOutput(3),
             Battery.Named("battery").Capacity(10),
-            Drive.Named("drive")
+            Thruster.Named("thruster")
                 .ThrustPerPower(100)
                 .MaximumPower(1),
             Melee.Named("melee")
@@ -52,7 +52,7 @@ class DuelistBrain : BotBrain
         ModuleControl modules,
         BotObservation observation)
     {
-        var movement = modules.RequireModule<DrivingInfo>().Move(1);
+        var movement = modules.RequireModule<ThrusterInfo>().Move(1);
         var attack = modules.RequireModule<MeleeInfo>().Hit(20);
         var scan = modules.RequireModule<ScannerInfo>().Scan(1);
         var requiredPower = movement.Power + attack.Power + scan.Power;

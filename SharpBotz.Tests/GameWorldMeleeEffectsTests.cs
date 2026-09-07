@@ -2,9 +2,9 @@ using SharpBotz.Arenas;
 using SharpBotz.Botz;
 using SharpBotz.Botz.BotModules;
 using SharpBotz.Botz.BotModules.Batteries;
-using SharpBotz.Botz.BotModules.Drives;
 using SharpBotz.Botz.BotModules.MeleeWeapons;
 using SharpBotz.Botz.BotModules.Reactors;
+using SharpBotz.Botz.BotModules.Thrusters;
 using SharpBotz.Worlds;
 
 namespace SharpBotz.Tests;
@@ -94,7 +94,7 @@ public class GameWorldMeleeEffectsTests
         if (move)
         {
             modules.Add(
-                Drive.Named("drive")
+                Thruster.Named("thruster")
                     .ThrustPerPower(100)
                     .MaximumPower(1));
         }
@@ -117,7 +117,7 @@ public class GameWorldMeleeEffectsTests
 
             if (move)
             {
-                intentions.Add(modules.RequireModule<DrivingInfo>().Move(1));
+                intentions.Add(modules.RequireModule<ThrusterInfo>().Move(1));
             }
 
             if (attack)

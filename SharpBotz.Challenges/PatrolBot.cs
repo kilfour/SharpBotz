@@ -1,8 +1,8 @@
 using SharpBotz.Botz;
 using SharpBotz.Botz.BotModules;
-using SharpBotz.Botz.BotModules.Drives;
 using SharpBotz.Botz.BotModules.Reactors;
 using SharpBotz.Botz.BotModules.Rotators;
+using SharpBotz.Botz.BotModules.Thrusters;
 
 namespace SharpBotz.Challenges;
 
@@ -11,7 +11,7 @@ public class PatrolBot() : Bot(
     new PatrolBrain(),
     ModuleRack.Create(
         Reactor.Named("reactor").MaximumOutput(4),
-        Drive.Named("drive")
+        Thruster.Named("thruster")
             .ThrustPerPower(50)
             .MaximumPower(2),
         Rotator.Named("rotator")
@@ -28,7 +28,7 @@ public class PatrolBot() : Bot(
             BotObservation observation)
         {
             turn++;
-            var movement = modules.RequireModule<DrivingInfo>().Move(1);
+            var movement = modules.RequireModule<ThrusterInfo>().Move(1);
             if (turn % 4 != 0)
             {
                 return PowerPlan.From(

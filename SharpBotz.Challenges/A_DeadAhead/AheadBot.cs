@@ -1,16 +1,16 @@
 using SharpBotz.Botz;
 using SharpBotz.Botz.BotModules;
-using SharpBotz.Botz.BotModules.Drives;
 using SharpBotz.Botz.BotModules.MeleeWeapons;
 using SharpBotz.Botz.BotModules.Reactors;
 using SharpBotz.Botz.BotModules.Scanners;
+using SharpBotz.Botz.BotModules.Thrusters;
 
 namespace SharpBotz.Challenges.A_DeadAhead;
 
 public class AheadBot() : Bot(nameof(AheadBot), new AheadBrain(),
     ModuleRack.Create(
         Reactor.Named("reactor").MaximumOutput(12),
-        Drive.Named("drive").ThrustPerPower(11).MaximumPower(8),
+        Thruster.Named("thruster").ThrustPerPower(11).MaximumPower(8),
         Melee.Named("melee").DamagePerPower(20).MaximumPower(5),
         Scanner.Named("scanner").PowerPerRange(3).MaximumPower(3)
     ))
@@ -30,11 +30,11 @@ public class AheadBot() : Bot(nameof(AheadBot), new AheadBrain(),
                     melee
                 );
             }
-            var drive = modules.RequireModule<DrivingInfo>().Move(1);
+            var thruster = modules.RequireModule<ThrusterInfo>().Move(1);
             return PowerPlan.From(
-                modules.RequireModule<ReactorInfo>().SetOutput(drive.Power + scan.Power),
+                modules.RequireModule<ReactorInfo>().SetOutput(thruster.Power + scan.Power),
                 scan,
-                drive
+                thruster
             );
         }
     }

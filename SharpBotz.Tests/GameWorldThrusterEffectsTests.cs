@@ -2,13 +2,13 @@ using SharpBotz.Arenas;
 using SharpBotz.Botz;
 using SharpBotz.Botz.BotModules;
 using SharpBotz.Botz.BotModules.Batteries;
-using SharpBotz.Botz.BotModules.Drives;
 using SharpBotz.Botz.BotModules.Reactors;
+using SharpBotz.Botz.BotModules.Thrusters;
 using SharpBotz.Worlds;
 
 namespace SharpBotz.Tests;
 
-public class GameWorldDriveEffectsTests
+public class GameWorldThrusterEffectsTests
 {
     [Fact]
     public void MovesIndependentBotsInTheSameTurn()
@@ -80,16 +80,16 @@ public class GameWorldDriveEffectsTests
     }
 
     [Fact]
-    public void OverchargedDriveStillMovesAndDamagesItsBot()
+    public void OverchargedThrusterStillMovesAndDamagesItsBot()
     {
         var world = CreateWorld(
             new BotState(
-                Bot.Named("overcharged-drive")
+                Bot.Named("overcharged-thruster")
                     .Brain(new MovingBrain(speed: 1))
                     .Rack(ModuleRack.Create(
                         Reactor.Named("reactor").MaximumOutput(2),
                         Battery.Named("battery").Capacity(10),
-                        Drive.Named("drive")
+                        Thruster.Named("thruster")
                             .ThrustPerPower(20)
                             .MaximumPower(1))),
                 new Position(1, 1),
@@ -123,7 +123,7 @@ public class GameWorldDriveEffectsTests
                 .Rack(ModuleRack.Create(
                     Reactor.Named("reactor").MaximumOutput(2),
                     Battery.Named("battery").Capacity(10),
-                    Drive.Named("drive").ThrustPerPower(100).MaximumPower(2))),
+                    Thruster.Named("thruster").ThrustPerPower(100).MaximumPower(2))),
             new Position(x, y),
             facing);
 
@@ -142,7 +142,7 @@ public class GameWorldDriveEffectsTests
             ModuleControl modules,
             BotObservation observation)
         {
-            var movement = modules.RequireModule<DrivingInfo>().Move(speed);
+            var movement = modules.RequireModule<ThrusterInfo>().Move(speed);
             return PowerPlan.From(
                 modules.RequireModule<ReactorInfo>().SetOutput(movement.Power),
                 movement);

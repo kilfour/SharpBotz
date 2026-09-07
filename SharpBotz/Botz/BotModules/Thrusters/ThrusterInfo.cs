@@ -1,16 +1,16 @@
 using SharpBotz.Maths;
 
-namespace SharpBotz.Botz.BotModules.Drives;
+namespace SharpBotz.Botz.BotModules.Thrusters;
 
 
-public record DrivingInfo : PoweredModuleInfo
+public record ThrusterInfo : PoweredModuleInfo
 {
 
     public int ThrustPerPower { get; }
     public int MaximumPower { get; }
     private readonly int loadedWeight;
 
-    public DrivingInfo(
+    public ThrusterInfo(
         ModuleId id,
         int thrustPerPower,
         int maximumPower,

@@ -1,5 +1,5 @@
 using SharpBotz.Arenas;
-using SharpBotz.Botz.BotModules.Drives;
+using SharpBotz.Botz.BotModules.Thrusters;
 
 namespace SharpBotz.Worlds.EffectResolving;
 
@@ -10,10 +10,10 @@ public static class MovementEffectResolver
     public static void Handle(Arena arena, BotState[] botStates, BotStateEffect[] botStateEffects)
     {
         var intents = botStateEffects
-            .Select((botStateEffect, botIndex) => new DriveIntent(
+            .Select((botStateEffect, botIndex) => new ThrusterIntent(
                 botIndex,
-                checked((int)botStateEffect.Effects.DriveEffects
-                    .OfType<DriveEffect>()
+                checked((int)botStateEffect.Effects.ThrusterEffects
+                    .OfType<ThrusterEffect>()
                     .Sum(effect => (long)effect.Speed))))
             .ToArray();
         var stopped = new HashSet<int>();
@@ -29,7 +29,7 @@ public static class MovementEffectResolver
 
         foreach (var botStateEffect in botStateEffects)
         {
-            foreach (var effect in botStateEffect.Effects.DriveEffects.OfType<DriveOverChargedEffect>())
+            foreach (var effect in botStateEffect.Effects.ThrusterEffects.OfType<ThrusterOverChargedEffect>())
             {
                 botStateEffect.BotState.Bot.TakeDamage(effect.ExcessPower * 3);
             }
@@ -40,7 +40,7 @@ public static class MovementEffectResolver
         Arena arena,
         BotState[] botStates,
         BotStateEffect[] botStateEffects,
-        DriveIntent[] intents,
+        ThrusterIntent[] intents,
         HashSet<int> stopped,
         int step)
     {
@@ -122,5 +122,5 @@ public static class MovementEffectResolver
         }
     }
 
-    private record DriveIntent(int BotIndex, int Speed);
+    private record ThrusterIntent(int BotIndex, int Speed);
 }

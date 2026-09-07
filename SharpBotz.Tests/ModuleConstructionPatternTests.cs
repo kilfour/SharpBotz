@@ -1,11 +1,11 @@
 using System.Reflection;
 using SharpBotz.Botz.BotModules.Batteries;
-using SharpBotz.Botz.BotModules.Drives;
 using SharpBotz.Botz.BotModules.MeleeWeapons;
 using SharpBotz.Botz.BotModules.RangedWeapons;
 using SharpBotz.Botz.BotModules.Reactors;
 using SharpBotz.Botz.BotModules.Rotators;
 using SharpBotz.Botz.BotModules.Scanners;
+using SharpBotz.Botz.BotModules.Thrusters;
 
 namespace SharpBotz.Tests;
 
@@ -13,7 +13,7 @@ public class ModuleConstructionPatternTests
 {
     [Theory]
     [InlineData(typeof(Battery))]
-    [InlineData(typeof(Drive))]
+    [InlineData(typeof(Thruster))]
     [InlineData(typeof(Melee))]
     [InlineData(typeof(Ranged))]
     [InlineData(typeof(Reactor))]

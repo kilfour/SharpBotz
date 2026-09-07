@@ -7,7 +7,7 @@
       - [Reactor](B_Bot/A_Modules/A_Reactor/A_ReactorTests.md)
       - [Battery](B_Bot/A_Modules/B_Battery/A_BatteryTests.md)
       - [What Is A Powered Module](B_Bot/A_Modules/C_PoweredModules/A_WhatIsAPoweredModule.md)
-      - [Drive](B_Bot/A_Modules/C_PoweredModules/B_DriveTests.md)
+      - [Thruster](B_Bot/A_Modules/C_PoweredModules/B_ThrusterTests.md)
       - [Rotator](B_Bot/A_Modules/C_PoweredModules/C_RotatorTests.md)
       - [Melee](B_Bot/A_Modules/C_PoweredModules/D_MeleeTests.md)
       - [Ranged](B_Bot/A_Modules/C_PoweredModules/E_RangedTests.md)

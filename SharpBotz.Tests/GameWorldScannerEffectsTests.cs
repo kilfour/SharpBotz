@@ -2,9 +2,9 @@ using SharpBotz.Arenas;
 using SharpBotz.Botz;
 using SharpBotz.Botz.BotModules;
 using SharpBotz.Botz.BotModules.Batteries;
-using SharpBotz.Botz.BotModules.Drives;
 using SharpBotz.Botz.BotModules.Reactors;
 using SharpBotz.Botz.BotModules.Scanners;
+using SharpBotz.Botz.BotModules.Thrusters;
 using SharpBotz.Worlds;
 
 namespace SharpBotz.Tests;
@@ -193,7 +193,7 @@ public class GameWorldScannerEffectsTests
                 .Rack(ModuleRack.Create(
                     Reactor.Named("reactor").MaximumOutput(1),
                     Battery.Named("battery").Capacity(10),
-                    Drive.Named("drive")
+                    Thruster.Named("thruster")
                         .ThrustPerPower(100)
                         .MaximumPower(1))),
             new Position(x, y),
@@ -262,7 +262,7 @@ public class GameWorldScannerEffectsTests
             ModuleControl modules,
             BotObservation observation)
         {
-            var movement = modules.RequireModule<DrivingInfo>().Move(1);
+            var movement = modules.RequireModule<ThrusterInfo>().Move(1);
             return PowerPlan.From(
                 modules.RequireModule<ReactorInfo>().SetOutput(movement.Power),
                 movement);

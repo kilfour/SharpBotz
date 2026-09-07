@@ -3,40 +3,40 @@ using SharpBotz.Arenas;
 using SharpBotz.Botz;
 using SharpBotz.Botz.BotModules;
 using SharpBotz.Botz.BotModules.Batteries;
-using SharpBotz.Botz.BotModules.Drives;
 using SharpBotz.Botz.BotModules.Reactors;
+using SharpBotz.Botz.BotModules.Thrusters;
 using SharpBotz.Scenarios;
 using SharpBotz.Worlds;
 
 namespace SharpBotz.Tests.Docs.B_Bot.A_Modules.C_PoweredModules;
 
 [DocFile]
-public class B_DriveTests
+public class B_ThrusterTests
 {
     [Fact]
     [DocContent(
     """
-    A drive is needed to move your bot across the arena.
+    A thruster is needed to move your bot across the arena.
 
 
     It is created with its thrust per power and maximum power, along with a ModuleId.
     Thrust per power determines how much force each unit of supplied power produces.
     """)]
-    [DocExample(typeof(B_DriveTests), nameof(ConstructionExample))]
+    [DocExample(typeof(B_ThrusterTests), nameof(ConstructionExample))]
     public void Construction()
     {
-        var drive = ConstructionExample();
-        var info = (DrivingInfo)drive.GetInfo(totalWeight: 50);
+        var thruster = ConstructionExample();
+        var info = (ThrusterInfo)thruster.GetInfo(totalWeight: 50);
 
-        Assert.Equal("drive", drive.Id.ToString());
+        Assert.Equal("thruster", thruster.Id.ToString());
         Assert.Equal(10, info.ThrustPerPower);
         Assert.Equal(5, info.MaximumPower);
-        Assert.Equal(18, drive.Weight);
+        Assert.Equal(18, thruster.Weight);
     }
 
     [CodeSnippet]
-    private static Drive ConstructionExample() =>
-        Drive.Named("drive")
+    private static Thruster ConstructionExample() =>
+        Thruster.Named("thruster")
             .ThrustPerPower(10)
             .MaximumPower(5);
 
@@ -47,12 +47,12 @@ public class B_DriveTests
     The required power is the requested speed multiplied by the bot's loaded weight, divided by thrust per power and rounded up.
 
     For a bot weighing 50 with 10 thrust per power, every unit of speed needs 5 power.
-    Requesting speed 2 allocates 10 power, which exceeds this drive's maximum power of 5.
+    Requesting speed 2 allocates 10 power, which exceeds this thruster's maximum power of 5.
     """)]
     public void PowerConsumption()
     {
-        var drive = ConstructionExample();
-        var info = (DrivingInfo)drive.GetInfo(totalWeight: 50);
+        var thruster = ConstructionExample();
+        var info = (ThrusterInfo)thruster.GetInfo(totalWeight: 50);
 
         Assert.Equal(5, info.Move(1).Power);
         Assert.Equal(10, info.Move(2).Power);
@@ -63,7 +63,7 @@ public class B_DriveTests
     [Fact]
     [DocContent(
     """
-    A powered drive moves the bot in the direction it is facing.
+    A powered thruster moves the bot in the direction it is facing.
     """)]
     public void MoveOneTile()
     {
@@ -87,7 +87,7 @@ public class B_DriveTests
                     .Rack(ModuleRack.Create(
                             Reactor.Named("reactor").MaximumOutput(1),
                             Battery.Named("battery").Capacity(10),
-                            Drive.Named("drive")
+                            Thruster.Named("thruster")
                                 .ThrustPerPower(100)
                                 .MaximumPower(1))))
                 .At(1, 1)
@@ -97,7 +97,7 @@ public class B_DriveTests
     [Fact]
     [DocContent(
     """
-    Supplying more than the drive's maximum power overcharges it.
+    Supplying more than the thruster's maximum power overcharges it.
     The movement still happens, but every excess unit of power deals 3 damage to the bot.
     """)]
     public void Overcharge()
@@ -111,19 +111,19 @@ public class B_DriveTests
     }
 
     private static GameWorld CreateOverchargedWorld() =>
-        Scenario.Named("Overcharged drive")
+        Scenario.Named("Overcharged thruster")
             .Arena(Arena.Sized(
                     ArenaWidth.Is(5),
                     ArenaHeight.Is(3))
                 .Build())
             .MaximumTurns(1)
             .CompletesWhen(_ => false)
-            .Spawn(() => Bot.Named("overcharged-drive")
+            .Spawn(() => Bot.Named("overcharged-thruster")
                     .Brain(new MoveRightBrain())
                     .Rack(ModuleRack.Create(
                             Reactor.Named("reactor").MaximumOutput(2),
                             Battery.Named("battery").Capacity(10),
-                            Drive.Named("drive")
+                            Thruster.Named("thruster")
                                 .ThrustPerPower(20)
                                 .MaximumPower(1))))
                 .At(1, 1)
@@ -133,11 +133,11 @@ public class B_DriveTests
     [Fact]
     [DocContent(
     """
-    A drive's base weight is 3.
+    A thruster's base weight is 3.
     Supporting more power adds weight following the triangular number curve.
     """)]
     [DocBarChart(
-        typeof(B_DriveTests),
+        typeof(B_ThrusterTests),
         nameof(MaximumPowerWeightCurve),
         "Weight by maximum power",
         "Maximum Power",
@@ -149,7 +149,7 @@ public class B_DriveTests
     Above 10, every two additional thrust per power add 1 weight, rounded up.
     """)]
     [DocBarChart(
-        typeof(B_DriveTests),
+        typeof(B_ThrusterTests),
         nameof(ThrustPerPowerWeightCurve),
         "Weight by thrust per power",
         "Thrust Per Power",
@@ -159,12 +159,12 @@ public class B_DriveTests
     {
         foreach (var (maximumPower, weight) in MaximumPowerWeightCurve)
         {
-            Assert.Equal(weight, CreateDrive(thrustPerPower: 10, maximumPower).Weight);
+            Assert.Equal(weight, CreateThruster(thrustPerPower: 10, maximumPower).Weight);
         }
 
         foreach (var (thrustPerPower, weight) in ThrustPerPowerWeightCurve)
         {
-            Assert.Equal(weight, CreateDrive(thrustPerPower, maximumPower: 1).Weight);
+            Assert.Equal(weight, CreateThruster(thrustPerPower, maximumPower: 1).Weight);
         }
     }
 
@@ -187,8 +187,8 @@ public class B_DriveTests
             (15, 7)
         ];
 
-    private static Drive CreateDrive(int thrustPerPower, int maximumPower) =>
-        Drive.Named("drive")
+    private static Thruster CreateThruster(int thrustPerPower, int maximumPower) =>
+        Thruster.Named("thruster")
             .ThrustPerPower(thrustPerPower)
             .MaximumPower(maximumPower);
 
@@ -199,8 +199,8 @@ public class B_DriveTests
             BotObservation observation)
         {
             var reactor = modules.RequireModule<ReactorInfo>();
-            var drive = modules.RequireModule<DrivingInfo>();
-            var movement = drive.Move(1);
+            var thruster = modules.RequireModule<ThrusterInfo>();
+            var movement = thruster.Move(1);
 
             return PowerPlan.From(
                 reactor.SetOutput(movement.Power),

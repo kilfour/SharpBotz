@@ -2,7 +2,7 @@ using QuickPulse.Explains;
 using SharpBotz.Arenas;
 using SharpBotz.Botz;
 using SharpBotz.Botz.BotModules;
-using SharpBotz.Botz.BotModules.Drives;
+using SharpBotz.Botz.BotModules.Thrusters;
 using SharpBotz.Scenarios;
 
 namespace SharpBotz.Tests.Docs.C_Scenario.A_Construction;
@@ -49,7 +49,7 @@ public class D_MaximumBotWeight
         Bot.Named("Heavy")
             .Brain(new DummyBrain())
             .Rack(ModuleRack.Create(
-                Drive.Named("drive")
+                Thruster.Named("thruster")
                     .ThrustPerPower(10)
                     .MaximumPower(5)));
 
