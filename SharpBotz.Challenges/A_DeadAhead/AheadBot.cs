@@ -9,10 +9,10 @@ namespace SharpBotz.Challenges.A_DeadAhead;
 
 public class AheadBot() : Bot(nameof(AheadBot), new AheadBrain(),
     ModuleRack.Create(
-        Reactor.Named("reactor").MaximumOutput(12),
-        Thruster.Named("thruster").ThrustPerPower(11).MaximumPower(8),
-        Melee.Named("melee").DamagePerPower(20).MaximumPower(5),
-        Scanner.Named("scanner").PowerPerRange(3).MaximumPower(3)
+        Reactor.Named("reactor").MaximumOutput(10),
+        Thruster.Named("thruster").ThrustPerPower(20).MaximumPower(3),
+        Melee.Named("melee").DamagePerPower(10).MaximumPower(3),
+        Scanner.Named("scanner").PowerPerRange(5).MaximumPower(5)
     ))
 {
     public class AheadBrain : BotBrain
@@ -23,7 +23,7 @@ public class AheadBot() : Bot(nameof(AheadBot), new AheadBrain(),
             var ahead = observation.Scan[0, 1];
             if (ahead is ScanResult.Bot)
             {
-                var melee = modules.RequireModule<MeleeInfo>().Hit(100);
+                var melee = modules.RequireModule<MeleeInfo>().Hit(30);
                 return PowerPlan.From(
                     modules.RequireModule<ReactorInfo>().SetOutput(melee.Power + scan.Power),
                     scan,
