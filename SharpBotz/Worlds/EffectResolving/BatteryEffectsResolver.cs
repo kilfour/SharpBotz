@@ -5,15 +5,19 @@ namespace SharpBotz.Worlds.EffectResolving;
 
 public static class BatteryEffectsResolver
 {
-    public static void Handle(BotStateEffect[] botStateEffects)
+    public static void Handle(
+        BotStateEffect[] botStateEffects,
+        ICollection<WorldEvent> worldEvents)
     {
         foreach (var botStateEffect in botStateEffects)
         {
-            HandleEffect(botStateEffect);
+            HandleEffect(botStateEffect, worldEvents);
         }
     }
 
-    private static void HandleEffect(BotStateEffect botStateEffect)
+    private static void HandleEffect(
+        BotStateEffect botStateEffect,
+        ICollection<WorldEvent> worldEvents)
     {
         var bot = botStateEffect.BotState.Bot;
         var reactorEffects = botStateEffect.Effects.BatteryEffects;
@@ -22,15 +26,27 @@ public static class BatteryEffectsResolver
             switch (effect)
             {
                 case BatteryDrainedEffect batteryEffect:
-                    bot.TakeDamage(batteryEffect.ExcessPower * 2);
+                    DamageResolver.Handle(
+                        bot,
+                        batteryEffect.ExcessPower * 2,
+                        new DamageCause.BatteryDrained(batteryEffect.Id),
+                        worldEvents);
                     break;
 
                 case BatteryOverChargedEffect batteryEffect:
-                    bot.TakeDamage(batteryEffect.ExcessPower * 5);
+                    DamageResolver.Handle(
+                        bot,
+                        batteryEffect.ExcessPower * 5,
+                        new DamageCause.BatteryOvercharged(batteryEffect.Id),
+                        worldEvents);
                     break;
 
                 case PowerCannotBeStoredEffect batteryEffect:
-                    bot.TakeDamage(batteryEffect.ExcessPower * 10);
+                    DamageResolver.Handle(
+                        bot,
+                        batteryEffect.ExcessPower * 10,
+                        new DamageCause.PowerNotStored(batteryEffect.Id),
+                        worldEvents);
                     break;
 
                 default:

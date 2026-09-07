@@ -18,10 +18,31 @@ public class GameWorldMeleeEffectsTests
             CreateState(2, 2, Direction.Right, attack: true),
             CreateState(3, 2, Direction.Up));
 
-        world.Update();
+        var events = world.Update();
 
         Assert.Equal(100, world.Bots[0].Bot.HitPoints);
         Assert.Equal(80, world.Bots[1].Bot.HitPoints);
+        var damaged = Assert.IsType<BotDamaged>(Assert.Single(events));
+        Assert.Same(world.Bots[1].Bot, damaged.Bot);
+        Assert.Equal(20, damaged.Damage);
+        var cause = Assert.IsType<DamageCause.MeleeAttack>(damaged.Cause);
+        Assert.Same(world.Bots[0].Bot, cause.Attacker);
+        Assert.Equal(ModuleId.Is("melee"), cause.ModuleId);
+    }
+
+    [Fact]
+    public void DamageEventReportsActualHitPointsLost()
+    {
+        var world = CreateWorld(
+            CreateState(2, 2, Direction.Right, attack: true),
+            CreateState(3, 2, Direction.Up));
+        world.Bots[1].Bot.TakeDamage(90);
+
+        var events = world.Update();
+
+        var damaged = Assert.IsType<BotDamaged>(Assert.Single(events));
+        Assert.Equal(10, damaged.Damage);
+        Assert.False(damaged.Bot.IsAlive);
     }
 
     [Fact]

@@ -19,7 +19,8 @@ public static class ScannerEffectsResolver
 
     public static BotObservation[] Handle(
         Arena arena,
-        BotStateEffect[] botStateEffects)
+        BotStateEffect[] botStateEffects,
+        ICollection<WorldEvent> worldEvents)
     {
         var botStates = botStateEffects
             .Select(botStateEffect => botStateEffect.BotState)
@@ -29,7 +30,11 @@ public static class ScannerEffectsResolver
         {
             foreach (var effect in botStateEffect.Effects.ScannerEffects.OfType<ScannerOverChargedEffect>())
             {
-                botStateEffect.BotState.Bot.TakeDamage(effect.ExcessPower * 3);
+                DamageResolver.Handle(
+                    botStateEffect.BotState.Bot,
+                    effect.ExcessPower * 3,
+                    new DamageCause.ScannerOvercharged(effect.Id),
+                    worldEvents);
             }
         }
 

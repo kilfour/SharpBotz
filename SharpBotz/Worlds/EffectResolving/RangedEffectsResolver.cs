@@ -5,7 +5,10 @@ namespace SharpBotz.Worlds.EffectResolving;
 
 public static class RangedEffectsResolver
 {
-    public static void Handle(Arena arena, BotStateEffect[] botStateEffects)
+    public static void Handle(
+        Arena arena,
+        BotStateEffect[] botStateEffects,
+        ICollection<WorldEvent> worldEvents)
     {
         var occupants = botStateEffects.ToLookup(botStateEffect =>
             botStateEffect.BotState.Position.ToCoordinates());
@@ -17,11 +20,15 @@ public static class RangedEffectsResolver
 
             foreach (var effect in attacker.Effects.RangedEffects.OfType<RangedEffect>())
             {
-                Fire(arena, occupants, attacker, effect);
+                Fire(arena, occupants, attacker, effect, worldEvents);
             }
             foreach (var effect in attacker.Effects.RangedEffects.OfType<RangedOverChargedEffect>())
             {
-                attacker.BotState.Bot.TakeDamage(effect.ExcessPower * 3);
+                DamageResolver.Handle(
+                    attacker.BotState.Bot,
+                    effect.ExcessPower * 3,
+                    new DamageCause.RangedOvercharged(effect.Id),
+                    worldEvents);
             }
         }
     }
@@ -30,7 +37,8 @@ public static class RangedEffectsResolver
         Arena arena,
         ILookup<(int X, int Y), BotStateEffect> occupants,
         BotStateEffect attacker,
-        RangedEffect effect)
+        RangedEffect effect,
+        ICollection<WorldEvent> worldEvents)
     {
         var attackerState = attacker.BotState;
         var target = attackerState.Position;
@@ -56,7 +64,11 @@ public static class RangedEffectsResolver
 
             foreach (var receiver in receivers)
             {
-                receiver.BotState.Bot.TakeDamage(effect.Damage);
+                DamageResolver.Handle(
+                    receiver.BotState.Bot,
+                    effect.Damage,
+                    new DamageCause.RangedAttack(attackerState.Bot, effect.Id),
+                    worldEvents);
             }
             return;
         }

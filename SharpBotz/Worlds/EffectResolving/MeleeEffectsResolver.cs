@@ -4,7 +4,9 @@ namespace SharpBotz.Worlds.EffectResolving;
 
 public static class MeleeEffectsResolver
 {
-    public static void Handle(BotStateEffect[] botStateEffects)
+    public static void Handle(
+        BotStateEffect[] botStateEffects,
+        ICollection<WorldEvent> worldEvents)
     {
         var occupants = botStateEffects.ToLookup(botStateEffect =>
             botStateEffect.BotState.Position.ToCoordinates());
@@ -26,12 +28,20 @@ public static class MeleeEffectsResolver
 
                 foreach (var receiver in receivers)
                 {
-                    receiver.BotState.Bot.TakeDamage(effect.Damage);
+                    DamageResolver.Handle(
+                        receiver.BotState.Bot,
+                        effect.Damage,
+                        new DamageCause.MeleeAttack(attackerState.Bot, effect.Id),
+                        worldEvents);
                 }
             }
             foreach (var effect in attacker.Effects.MeleeEffects.OfType<MeleeOverChargedEffect>())
             {
-                attacker.BotState.Bot.TakeDamage(effect.ExcessPower * 3);
+                DamageResolver.Handle(
+                    attacker.BotState.Bot,
+                    effect.ExcessPower * 3,
+                    new DamageCause.MeleeOvercharged(effect.Id),
+                    worldEvents);
             }
         }
     }

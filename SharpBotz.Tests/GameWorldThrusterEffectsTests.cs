@@ -30,12 +30,18 @@ public class GameWorldThrusterEffectsTests
             CreateState(1, 2, Direction.Right),
             CreateState(3, 2, Direction.Left));
 
-        world.Update();
+        var events = world.Update();
 
         Assert.Equal(new Position(1, 2), world.Bots[0].Position);
         Assert.Equal(new Position(3, 2), world.Bots[1].Position);
         Assert.Equal(90, world.Bots[0].Bot.HitPoints);
         Assert.Equal(90, world.Bots[1].Bot.HitPoints);
+        Assert.Collection(
+            events,
+            worldEvent => Assert.IsType<DamageCause.Collision>(
+                Assert.IsType<BotDamaged>(worldEvent).Cause),
+            worldEvent => Assert.IsType<DamageCause.Collision>(
+                Assert.IsType<BotDamaged>(worldEvent).Cause));
     }
 
     [Fact]
@@ -95,10 +101,14 @@ public class GameWorldThrusterEffectsTests
                 new Position(1, 1),
                 Direction.Right));
 
-        world.Update();
+        var events = world.Update();
 
         Assert.Equal(new Position(2, 1), world.Bots[0].Position);
         Assert.Equal(97, world.Bots[0].Bot.HitPoints);
+        var damaged = Assert.IsType<BotDamaged>(Assert.Single(events));
+        Assert.Equal(3, damaged.Damage);
+        var cause = Assert.IsType<DamageCause.ThrusterOvercharged>(damaged.Cause);
+        Assert.Equal(ModuleId.Is("thruster"), cause.ModuleId);
     }
 
     private static GameWorld CreateWorld(params BotState[] botStates) =>

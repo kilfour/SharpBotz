@@ -5,18 +5,22 @@ namespace SharpBotz.Worlds.EffectResolving;
 
 public static class RotatorEffectsResolver
 {
-    public static void Handle(BotState[] botStates, BotStateEffect[] botStateEffects)
+    public static void Handle(
+        BotState[] botStates,
+        BotStateEffect[] botStateEffects,
+        ICollection<WorldEvent> worldEvents)
     {
         for (var botIndex = 0; botIndex < botStateEffects.Length; botIndex++)
         {
-            HandleEffect(botIndex, botStates, botStateEffects);
+            HandleEffect(botIndex, botStates, botStateEffects, worldEvents);
         }
     }
 
     private static void HandleEffect(
         int botIndex,
         BotState[] botStates,
-        BotStateEffect[] botStateEffects)
+        BotStateEffect[] botStateEffects,
+        ICollection<WorldEvent> worldEvents)
     {
         var botStateEffect = botStateEffects[botIndex];
         var effects = botStateEffect.Effects.RotatorEffects.OfType<RotateEffect>();
@@ -50,7 +54,11 @@ public static class RotatorEffectsResolver
 
         foreach (var effect in botStateEffect.Effects.RotatorEffects.OfType<RotatorOverChargedEffect>())
         {
-            botStateEffect.BotState.Bot.TakeDamage(effect.ExcessPower * 3);
+            DamageResolver.Handle(
+                botStateEffect.BotState.Bot,
+                effect.ExcessPower * 3,
+                new DamageCause.RotatorOvercharged(effect.Id),
+                worldEvents);
         }
     }
 }

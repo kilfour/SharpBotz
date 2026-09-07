@@ -57,10 +57,10 @@ public class GameWorld
         observations = ScannerEffectsResolver.Observe(Arena, this.botStates);
     }
 
-    public void Update()
+    public IReadOnlyList<WorldEvent> Update()
     {
         IncrementTurn();
-        HandleEffects([.. GetBotStateEffects()]);
+        return HandleEffects([.. GetBotStateEffects()]);
     }
 
     private IEnumerable<BotStateEffect> GetBotStateEffects() =>
@@ -80,14 +80,16 @@ public class GameWorld
     }
 
 
-    private void HandleEffects(BotStateEffect[] botEffects)
+    private IReadOnlyList<WorldEvent> HandleEffects(BotStateEffect[] botEffects)
     {
-        ReactorEffectsResolver.Handle(botEffects);
-        RotatorEffectsResolver.Handle(botStates, botEffects);
-        MovementEffectResolver.Handle(Arena, botStates, botEffects);
-        MeleeEffectsResolver.Handle(botEffects);
-        RangedEffectsResolver.Handle(Arena, botEffects);
-        BatteryEffectsResolver.Handle(botEffects);
-        observations = ScannerEffectsResolver.Handle(Arena, botEffects);
+        var worldEvents = new List<WorldEvent>();
+        ReactorEffectsResolver.Handle(botEffects, worldEvents);
+        RotatorEffectsResolver.Handle(botStates, botEffects, worldEvents);
+        MovementEffectResolver.Handle(Arena, botStates, botEffects, worldEvents);
+        MeleeEffectsResolver.Handle(botEffects, worldEvents);
+        RangedEffectsResolver.Handle(Arena, botEffects, worldEvents);
+        BatteryEffectsResolver.Handle(botEffects, worldEvents);
+        observations = ScannerEffectsResolver.Handle(Arena, botEffects, worldEvents);
+        return worldEvents.AsReadOnly();
     }
 }

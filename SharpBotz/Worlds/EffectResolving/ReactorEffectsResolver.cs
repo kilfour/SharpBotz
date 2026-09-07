@@ -5,15 +5,19 @@ namespace SharpBotz.Worlds.EffectResolving;
 
 public static class ReactorEffectsResolver
 {
-    public static void Handle(BotStateEffect[] botStateEffects)
+    public static void Handle(
+        BotStateEffect[] botStateEffects,
+        ICollection<WorldEvent> worldEvents)
     {
         foreach (var botStateEffect in botStateEffects)
         {
-            HandleEffect(botStateEffect);
+            HandleEffect(botStateEffect, worldEvents);
         }
     }
 
-    private static void HandleEffect(BotStateEffect botStateEffect)
+    private static void HandleEffect(
+        BotStateEffect botStateEffect,
+        ICollection<WorldEvent> worldEvents)
     {
         var bot = botStateEffect.BotState.Bot;
         var reactorEffects = botStateEffect.Effects.ReactorEffects;
@@ -22,7 +26,11 @@ public static class ReactorEffectsResolver
             switch (effect)
             {
                 case ReactorOverLoadedEffect overload:
-                    bot.TakeDamage(overload.ExcessPower * 2);
+                    DamageResolver.Handle(
+                        bot,
+                        overload.ExcessPower * 2,
+                        new DamageCause.ReactorOverload(overload.Id),
+                        worldEvents);
                     break;
 
                 default:

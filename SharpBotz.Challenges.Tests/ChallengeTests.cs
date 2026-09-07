@@ -1,3 +1,5 @@
+using QuickPulse;
+using QuickPulse.Arteries;
 using SharpBotz.Challenges.A_DeadAhead;
 using SharpBotz.Challenges.B_DifferentRoutes;
 using SharpBotz.Challenges.C_LongShot;
@@ -136,9 +138,12 @@ public class ChallengeTests
 
     private static GameWorld RunScenario(Scenario scenario)
     {
+        var signal = Signal
+            .From<WorldEvent>(a => Pulse.Trace(a))
+            .SetArtery(FileLog.Write($"{scenario.Name}.log"));
         var world = scenario.CreateWorld();
         while (!world.IsComplete)
-            world.Update();
+            signal.Pulse(world.Update());
         return world;
     }
 }

@@ -7,7 +7,11 @@ public static class MovementEffectResolver
 {
     private const int CollisionDamage = 10;
 
-    public static void Handle(Arena arena, BotState[] botStates, BotStateEffect[] botStateEffects)
+    public static void Handle(
+        Arena arena,
+        BotState[] botStates,
+        BotStateEffect[] botStateEffects,
+        ICollection<WorldEvent> worldEvents)
     {
         var intents = botStateEffects
             .Select((botStateEffect, botIndex) => new ThrusterIntent(
@@ -24,14 +28,25 @@ public static class MovementEffectResolver
 
         for (var step = 1; step <= maximumSpeed; step++)
         {
-            MoveOneStep(arena, botStates, botStateEffects, intents, stopped, step);
+            MoveOneStep(
+                arena,
+                botStates,
+                botStateEffects,
+                intents,
+                stopped,
+                step,
+                worldEvents);
         }
 
         foreach (var botStateEffect in botStateEffects)
         {
             foreach (var effect in botStateEffect.Effects.ThrusterEffects.OfType<ThrusterOverChargedEffect>())
             {
-                botStateEffect.BotState.Bot.TakeDamage(effect.ExcessPower * 3);
+                DamageResolver.Handle(
+                    botStateEffect.BotState.Bot,
+                    effect.ExcessPower * 3,
+                    new DamageCause.ThrusterOvercharged(effect.Id),
+                    worldEvents);
             }
         }
     }
@@ -42,7 +57,8 @@ public static class MovementEffectResolver
         BotStateEffect[] botStateEffects,
         ThrusterIntent[] intents,
         HashSet<int> stopped,
-        int step)
+        int step,
+        ICollection<WorldEvent> worldEvents)
     {
         var movers = intents
             .Where(intent =>
@@ -118,7 +134,11 @@ public static class MovementEffectResolver
 
         foreach (var victimIndex in collisionVictims)
         {
-            botStateEffects[victimIndex].BotState.Bot.TakeDamage(CollisionDamage);
+            DamageResolver.Handle(
+                botStateEffects[victimIndex].BotState.Bot,
+                CollisionDamage,
+                new DamageCause.Collision(),
+                worldEvents);
         }
     }
 
