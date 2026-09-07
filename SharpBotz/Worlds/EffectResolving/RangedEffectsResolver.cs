@@ -8,16 +8,22 @@ public static class RangedEffectsResolver
     public static void Handle(
         Arena arena,
         BotStateEffect[] botStateEffects,
+        ICollection<WorldEvent> worldEvents) =>
+        HandleParticipants(
+            arena,
+            [.. botStateEffects.Where(effect => effect.BotState.Bot.IsAlive)],
+            worldEvents);
+
+    internal static void HandleParticipants(
+        Arena arena,
+        IReadOnlyList<BotStateEffect> participants,
         ICollection<WorldEvent> worldEvents)
     {
-        var occupants = botStateEffects.ToLookup(botStateEffect =>
+        var occupants = participants.ToLookup(botStateEffect =>
             botStateEffect.BotState.Position.ToCoordinates());
 
-        foreach (var attacker in botStateEffects)
+        foreach (var attacker in participants)
         {
-            if (!attacker.BotState.Bot.IsAlive)
-                continue;
-
             foreach (var effect in attacker.Effects.RangedEffects.OfType<RangedEffect>())
             {
                 Fire(arena, occupants, attacker, effect, worldEvents);
@@ -53,7 +59,6 @@ public static class RangedEffectsResolver
 
             var receivers = occupants[target.ToCoordinates()]
                 .Where(receiver =>
-                    receiver.BotState.Bot.IsAlive &&
                     !ReferenceEquals(attackerState.Bot, receiver.BotState.Bot))
                 .ToArray();
 

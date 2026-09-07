@@ -17,7 +17,7 @@ internal static class WorldEventRenderer
         var relevantEntries = botFilter is null
             ? eventLog
             : eventLog.Where(entry => Concerns(entry.Event, botFilter));
-        var entries = relevantEntries.TakeLast(MaximumVisibleEntries).ToArray();
+        var entries = relevantEntries.TakeLast(MaximumVisibleEntries).Reverse().ToArray();
         IRenderable content = entries.Length == 0
             ? RenderEmptyMessage(botFilter)
             : new Rows(entries.Select(entry => Render(entry, bots)));

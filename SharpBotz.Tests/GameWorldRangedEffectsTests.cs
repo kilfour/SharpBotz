@@ -88,7 +88,7 @@ public class GameWorldRangedEffectsTests
     }
 
     [Fact]
-    public void BotDestroyedBeforeItsRangedAttackDoesNotFire()
+    public void BotsAttackSimultaneouslyDuringTheRangedPhase()
     {
         var world = CreateWorld(
             CreateArena(),
@@ -97,11 +97,11 @@ public class GameWorldRangedEffectsTests
         world.Bots[0].Bot.TakeDamage(80);
         world.Bots[1].Bot.TakeDamage(80);
 
-        world.Update();
+        var events = world.Update();
 
-        Assert.True(world.Bots[0].Bot.IsAlive);
-        Assert.Equal(20, world.Bots[0].Bot.HitPoints);
+        Assert.False(world.Bots[0].Bot.IsAlive);
         Assert.False(world.Bots[1].Bot.IsAlive);
+        Assert.Equal(2, events.Count);
     }
 
     [Fact]

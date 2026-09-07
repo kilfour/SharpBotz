@@ -86,8 +86,7 @@ public class GameWorld
         ReactorEffectsResolver.Handle(botEffects, worldEvents);
         RotatorEffectsResolver.Handle(botStates, botEffects, worldEvents);
         MovementEffectResolver.Handle(Arena, botStates, botEffects, worldEvents);
-        MeleeEffectsResolver.Handle(botEffects, worldEvents);
-        RangedEffectsResolver.Handle(Arena, botEffects, worldEvents);
+        CombatEffectsResolver.Handle(Arena, botEffects, worldEvents);
         BatteryEffectsResolver.Handle(botEffects, worldEvents);
         observations = ScannerEffectsResolver.Handle(Arena, botEffects, worldEvents);
         return worldEvents.AsReadOnly();

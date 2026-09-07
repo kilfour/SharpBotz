@@ -6,16 +6,20 @@ public static class MeleeEffectsResolver
 {
     public static void Handle(
         BotStateEffect[] botStateEffects,
+        ICollection<WorldEvent> worldEvents) =>
+        HandleParticipants(
+            [.. botStateEffects.Where(effect => effect.BotState.Bot.IsAlive)],
+            worldEvents);
+
+    internal static void HandleParticipants(
+        IReadOnlyList<BotStateEffect> participants,
         ICollection<WorldEvent> worldEvents)
     {
-        var occupants = botStateEffects.ToLookup(botStateEffect =>
+        var occupants = participants.ToLookup(botStateEffect =>
             botStateEffect.BotState.Position.ToCoordinates());
 
-        foreach (var attacker in botStateEffects)
+        foreach (var attacker in participants)
         {
-            if (!attacker.BotState.Bot.IsAlive)
-                continue;
-
             var attackerState = attacker.BotState;
             var target = attackerState.Position.Move(attackerState.Facing);
 
@@ -23,7 +27,6 @@ public static class MeleeEffectsResolver
             {
                 var receivers = occupants[target.ToCoordinates()]
                     .Where(receiver =>
-                        receiver.BotState.Bot.IsAlive &&
                         !ReferenceEquals(attackerState.Bot, receiver.BotState.Bot));
 
                 foreach (var receiver in receivers)
