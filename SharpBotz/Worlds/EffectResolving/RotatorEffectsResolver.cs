@@ -23,6 +23,11 @@ public static class RotatorEffectsResolver
         ICollection<WorldEvent> worldEvents)
     {
         var botStateEffect = botStateEffects[botIndex];
+        if (!botStateEffect.BotState.Bot.IsAlive)
+        {
+            return;
+        }
+
         var effects = botStateEffect.Effects.RotatorEffects.OfType<RotateEffect>();
         var rotateLeft = effects
             .Where(effect => effect.Rotation == Rotation.Left)

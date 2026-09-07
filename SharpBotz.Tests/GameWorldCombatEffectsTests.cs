@@ -45,6 +45,63 @@ public class GameWorldCombatEffectsTests
                 damaged.Cause is DamageCause.RangedAttack);
     }
 
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void SimultaneousDamageAttributionDoesNotDependOnBotOrder(
+        bool reverseAttackers)
+    {
+        var meleeBot = CreateMeleeBot();
+        var rangedBot = CreateRangedBot(range: 2);
+        var target = Bot.Named("target")
+            .Brain(new IdleBrain())
+            .Rack(ModuleRack.Create());
+        var meleeState = new BotState(
+            meleeBot,
+            new Position(1, 2),
+            Direction.Right);
+        var rangedState = new BotState(
+            rangedBot,
+            new Position(4, 2),
+            Direction.Left);
+        var targetState = new BotState(
+            target,
+            new Position(2, 2),
+            Direction.Up);
+        var botStates = reverseAttackers
+            ? new[] { rangedState, meleeState, targetState }
+            : [meleeState, rangedState, targetState];
+        var world = new GameWorld(
+            Arena.Sized(ArenaWidth.Is(6), ArenaHeight.Is(5)).Build(),
+            botStates,
+            maximumTurns: 10,
+            complete: _ => false,
+            seed: 1234);
+        target.TakeDamage(70);
+
+        var damaged = Assert.IsType<BotDamaged>(Assert.Single(world.Update()));
+
+        Assert.Equal(30, damaged.Damage);
+        Assert.False(target.IsAlive);
+        var combined = Assert.IsType<DamageCause.Combined>(damaged.Cause);
+        Assert.Collection(
+            combined.Contributions,
+            contribution =>
+            {
+                Assert.Equal(20, contribution.Damage);
+                var cause = Assert.IsType<DamageCause.MeleeAttack>(
+                    contribution.Cause);
+                Assert.Equal("melee", cause.Attacker.Name);
+            },
+            contribution =>
+            {
+                Assert.Equal(20, contribution.Damage);
+                var cause = Assert.IsType<DamageCause.RangedAttack>(
+                    contribution.Cause);
+                Assert.Equal("ranged", cause.Attacker.Name);
+            });
+    }
+
     private static Bot CreateMeleeBot() =>
         Bot.Named("melee")
             .Brain(new MeleeBrain())
@@ -53,18 +110,18 @@ public class GameWorldCombatEffectsTests
                 Battery.Named("battery").Capacity(10),
                 Melee.Named("melee").DamagePerPower(20).MaximumPower(1)));
 
-    private static Bot CreateRangedBot() =>
+    private static Bot CreateRangedBot(int range = 1) =>
         Bot.Named("ranged")
             .Brain(new RangedBrain())
             .Rack(ModuleRack.Create(
                 Reactor.Named("reactor").MaximumOutput(1),
                 Battery.Named("battery").Capacity(10),
                 Ranged.Named("ranged")
-                    .Range(1)
+                    .Range(range)
                     .DamagePerPower(20)
                     .MaximumPower(1)));
 
-    private sealed class MeleeBrain : BotBrain
+    private class MeleeBrain : BotBrain
     {
         protected override PowerPlan RoutePower(
             ModuleControl modules,
@@ -77,7 +134,7 @@ public class GameWorldCombatEffectsTests
         }
     }
 
-    private sealed class RangedBrain : BotBrain
+    private class RangedBrain : BotBrain
     {
         protected override PowerPlan RoutePower(
             ModuleControl modules,
@@ -88,5 +145,13 @@ public class GameWorldCombatEffectsTests
                 modules.RequireModule<ReactorInfo>().SetOutput(attack.Power),
                 attack);
         }
+    }
+
+    private class IdleBrain : BotBrain
+    {
+        protected override PowerPlan RoutePower(
+            ModuleControl modules,
+            BotObservation observation) =>
+            PowerPlan.Empty;
     }
 }

@@ -12,8 +12,10 @@ public static class CombatEffectsResolver
         var participants = botStateEffects
             .Where(botStateEffect => botStateEffect.BotState.Bot.IsAlive)
             .ToArray();
+        var pendingDamage = new List<PendingDamage>();
 
-        MeleeEffectsResolver.HandleParticipants(participants, worldEvents);
-        RangedEffectsResolver.HandleParticipants(arena, participants, worldEvents);
+        MeleeEffectsResolver.HandleParticipants(participants, pendingDamage);
+        RangedEffectsResolver.HandleParticipants(arena, participants, pendingDamage);
+        DamageResolver.Handle(pendingDamage, worldEvents);
     }
 }

@@ -6,14 +6,18 @@ public static class MeleeEffectsResolver
 {
     public static void Handle(
         BotStateEffect[] botStateEffects,
-        ICollection<WorldEvent> worldEvents) =>
+        ICollection<WorldEvent> worldEvents)
+    {
+        var pendingDamage = new List<PendingDamage>();
         HandleParticipants(
             [.. botStateEffects.Where(effect => effect.BotState.Bot.IsAlive)],
-            worldEvents);
+            pendingDamage);
+        DamageResolver.Handle(pendingDamage, worldEvents);
+    }
 
-    internal static void HandleParticipants(
+    public static void HandleParticipants(
         IReadOnlyList<BotStateEffect> participants,
-        ICollection<WorldEvent> worldEvents)
+        ICollection<PendingDamage> pendingDamage)
     {
         var occupants = participants.ToLookup(botStateEffect =>
             botStateEffect.BotState.Position.ToCoordinates());
@@ -31,20 +35,18 @@ public static class MeleeEffectsResolver
 
                 foreach (var receiver in receivers)
                 {
-                    DamageResolver.Handle(
+                    pendingDamage.Add(new(
                         receiver.BotState.Bot,
                         effect.Damage,
-                        new DamageCause.MeleeAttack(attackerState.Bot, effect.Id),
-                        worldEvents);
+                        new DamageCause.MeleeAttack(attackerState.Bot, effect.Id)));
                 }
             }
             foreach (var effect in attacker.Effects.MeleeEffects.OfType<MeleeOverChargedEffect>())
             {
-                DamageResolver.Handle(
+                pendingDamage.Add(new(
                     attacker.BotState.Bot,
                     effect.ExcessPower * 3,
-                    new DamageCause.MeleeOvercharged(effect.Id),
-                    worldEvents);
+                    new DamageCause.MeleeOvercharged(effect.Id)));
             }
         }
     }

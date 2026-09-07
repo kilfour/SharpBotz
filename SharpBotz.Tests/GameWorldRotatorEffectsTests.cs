@@ -11,6 +11,38 @@ namespace SharpBotz.Tests;
 public class GameWorldRotatorEffectsTests
 {
     [Fact]
+    public void BotDestroyedByReactorDoesNotRotate()
+    {
+        var world = new GameWorld(
+            Arena.Sized(
+                    ArenaWidth.Is(3),
+                    ArenaHeight.Is(3))
+                .Build(),
+            [
+                new BotState(
+                    Bot.Named("turning")
+                        .Brain(new ChargeThenOverloadBrain())
+                        .Rack(ModuleRack.Create(
+                            Reactor.Named("reactor").MaximumOutput(1),
+                            Battery.Named("battery").Capacity(1),
+                            Rotator.Named("rotator")
+                                .TorquePerPower(100)
+                                .MaximumPower(1)
+                                .Right())),
+                    new Position(1, 1),
+                    Direction.Up)
+            ],
+            maximumTurns: 10,
+            complete: _ => false);
+
+        world.Update();
+        world.Update();
+
+        Assert.False(world.Bots[0].Bot.IsAlive);
+        Assert.Equal(Direction.Up, world.Bots[0].Facing);
+    }
+
+    [Fact]
     public void OverchargedRotatorStillTurnsAndDamagesItsBot()
     {
         var world = new GameWorld(
@@ -53,6 +85,28 @@ public class GameWorldRotatorEffectsTests
             return PowerPlan.From(
                 reactor.SetOutput(2),
                 new PowerAllocation(rotator.Id, 2));
+        }
+    }
+
+    private class ChargeThenOverloadBrain : BotBrain
+    {
+        private bool batteryCharged;
+
+        protected override PowerPlan RoutePower(
+            ModuleControl modules,
+            BotObservation observation)
+        {
+            var reactor = modules.RequireModule<ReactorInfo>();
+            if (!batteryCharged)
+            {
+                batteryCharged = true;
+                return PowerPlan.From(reactor.SetOutput(1));
+            }
+
+            var rotator = modules.RequireModule<RightRotatorInfo>();
+            return PowerPlan.From(
+                reactor.SetOutput(51),
+                new PowerAllocation(rotator.Id, 1));
         }
     }
 }

@@ -1,6 +1,6 @@
 namespace SharpBotz.Botz;
 
-public sealed class BotScan
+public class BotScan
 {
     private readonly ScanResult[,] results;
 

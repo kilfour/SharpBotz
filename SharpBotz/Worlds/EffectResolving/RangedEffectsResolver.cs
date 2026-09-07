@@ -8,16 +8,20 @@ public static class RangedEffectsResolver
     public static void Handle(
         Arena arena,
         BotStateEffect[] botStateEffects,
-        ICollection<WorldEvent> worldEvents) =>
+        ICollection<WorldEvent> worldEvents)
+    {
+        var pendingDamage = new List<PendingDamage>();
         HandleParticipants(
             arena,
             [.. botStateEffects.Where(effect => effect.BotState.Bot.IsAlive)],
-            worldEvents);
+            pendingDamage);
+        DamageResolver.Handle(pendingDamage, worldEvents);
+    }
 
-    internal static void HandleParticipants(
+    public static void HandleParticipants(
         Arena arena,
         IReadOnlyList<BotStateEffect> participants,
-        ICollection<WorldEvent> worldEvents)
+        ICollection<PendingDamage> pendingDamage)
     {
         var occupants = participants.ToLookup(botStateEffect =>
             botStateEffect.BotState.Position.ToCoordinates());
@@ -26,15 +30,14 @@ public static class RangedEffectsResolver
         {
             foreach (var effect in attacker.Effects.RangedEffects.OfType<RangedEffect>())
             {
-                Fire(arena, occupants, attacker, effect, worldEvents);
+                Fire(arena, occupants, attacker, effect, pendingDamage);
             }
             foreach (var effect in attacker.Effects.RangedEffects.OfType<RangedOverChargedEffect>())
             {
-                DamageResolver.Handle(
+                pendingDamage.Add(new(
                     attacker.BotState.Bot,
                     effect.ExcessPower * 3,
-                    new DamageCause.RangedOvercharged(effect.Id),
-                    worldEvents);
+                    new DamageCause.RangedOvercharged(effect.Id)));
             }
         }
     }
@@ -44,7 +47,7 @@ public static class RangedEffectsResolver
         ILookup<(int X, int Y), BotStateEffect> occupants,
         BotStateEffect attacker,
         RangedEffect effect,
-        ICollection<WorldEvent> worldEvents)
+        ICollection<PendingDamage> pendingDamage)
     {
         var attackerState = attacker.BotState;
         var target = attackerState.Position;
@@ -69,11 +72,10 @@ public static class RangedEffectsResolver
 
             foreach (var receiver in receivers)
             {
-                DamageResolver.Handle(
+                pendingDamage.Add(new(
                     receiver.BotState.Bot,
                     effect.Damage,
-                    new DamageCause.RangedAttack(attackerState.Bot, effect.Id),
-                    worldEvents);
+                    new DamageCause.RangedAttack(attackerState.Bot, effect.Id)));
             }
             return;
         }

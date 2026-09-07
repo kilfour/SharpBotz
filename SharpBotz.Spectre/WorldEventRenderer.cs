@@ -5,7 +5,7 @@ using Spectre.Console.Rendering;
 
 namespace SharpBotz.Spectre;
 
-internal static class WorldEventRenderer
+public static class WorldEventRenderer
 {
     private const int MaximumVisibleEntries = 10;
 
@@ -35,10 +35,17 @@ internal static class WorldEventRenderer
         {
             BotDamaged damaged =>
                 ReferenceEquals(damaged.Bot, bot) ||
-                damaged.Cause is DamageCause.MeleeAttack melee &&
-                    ReferenceEquals(melee.Attacker, bot) ||
-                damaged.Cause is DamageCause.RangedAttack ranged &&
-                    ReferenceEquals(ranged.Attacker, bot),
+                CauseConcerns(damaged.Cause, bot),
+            _ => false,
+        };
+
+    private static bool CauseConcerns(DamageCause cause, Bot bot) =>
+        cause switch
+        {
+            DamageCause.MeleeAttack melee => ReferenceEquals(melee.Attacker, bot),
+            DamageCause.RangedAttack ranged => ReferenceEquals(ranged.Attacker, bot),
+            DamageCause.Combined combined => combined.Contributions
+                .Any(contribution => CauseConcerns(contribution.Cause, bot)),
             _ => false,
         };
 
@@ -82,9 +89,7 @@ internal static class WorldEventRenderer
             DamageCause.RangedAttack ranged => ranged.Attacker,
             _ => damaged.Bot,
         };
-        var messageColor = damaged.Cause is DamageCause.MeleeAttack or
-            DamageCause.RangedAttack or
-            DamageCause.Collision
+        var messageColor = IsCombat(damaged.Cause)
                 ? "yellow"
                 : "red";
 
@@ -94,9 +99,25 @@ internal static class WorldEventRenderer
             $"[{messageColor}]{Markup.Escape(Describe(damaged))}[/]");
     }
 
+    private static bool IsCombat(DamageCause cause) =>
+        cause switch
+        {
+            DamageCause.MeleeAttack or
+            DamageCause.RangedAttack or
+            DamageCause.Collision => true,
+            DamageCause.Combined combined =>
+                combined.Contributions.Any(contribution => IsCombat(contribution.Cause)),
+            _ => false,
+        };
+
     private static string Describe(BotDamaged damaged) =>
         damaged.Cause switch
         {
+            DamageCause.Combined combined =>
+                $"takes {damaged.Damage} damage from " +
+                string.Join(
+                    ", ",
+                    combined.Contributions.Select(DescribeContribution)),
             DamageCause.Collision =>
                 $"takes {damaged.Damage} collision damage",
             DamageCause.ReactorOverload cause =>
@@ -122,6 +143,20 @@ internal static class WorldEventRenderer
             DamageCause.ScannerOvercharged cause =>
                 $"overcharges {cause.ModuleId} for {damaged.Damage} damage",
             _ => $"takes {damaged.Damage} damage",
+        };
+
+    private static string DescribeContribution(DamageContribution contribution) =>
+        contribution.Cause switch
+        {
+            DamageCause.MeleeAttack cause =>
+                $"{cause.Attacker.Name} with {cause.ModuleId} ({contribution.Damage})",
+            DamageCause.RangedAttack cause =>
+                $"{cause.Attacker.Name} with {cause.ModuleId} ({contribution.Damage})",
+            DamageCause.MeleeOvercharged cause =>
+                $"{cause.ModuleId} overcharge ({contribution.Damage})",
+            DamageCause.RangedOvercharged cause =>
+                $"{cause.ModuleId} overcharge ({contribution.Damage})",
+            _ => $"{contribution.Cause.GetType().Name} ({contribution.Damage})",
         };
 
     private static string GetBotColor(Bot bot, IReadOnlyList<BotState> bots)

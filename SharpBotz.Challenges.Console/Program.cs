@@ -51,6 +51,6 @@ var world = scenario.CreateWorld();
 var display = new SpectreGameDisplay();
 await display.RunAsync(world, scenario.Name);
 
-internal sealed record ScenarioOption(
+public record ScenarioOption(
     string Name,
     Func<Scenario> CreateScenario);

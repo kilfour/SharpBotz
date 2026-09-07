@@ -178,7 +178,7 @@ public class SpectreGameDisplay
 
     private readonly record struct SimulationSpeed(string Label, TimeSpan Interval);
 
-    private sealed class DisplayState
+    private class DisplayState
     {
         public bool IsPaused { get; set; }
 
