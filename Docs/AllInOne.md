@@ -188,16 +188,16 @@ xychart-beta
     title "Weight by maximum power"
     x-axis "Maximum Power" [1, 2, 3, 4, 5]
     y-axis "Weight" 0 --> 18
-    bar [4, 6, 9, 13, 18]
+    bar [5, 7, 10, 14, 19]
 ```
 Torque per power up to 10 is included in that weight.
 Above 10, every two additional torque per power add 1 weight, rounded up.  
 ```mermaid
 xychart-beta
     title "Weight by torque per power"
-    x-axis "Torque Per Power" [10, 11, 12, 13, 14, 15]
+    x-axis "Torque Per Power" [10, 15, 20, 25, 50, 100]
     y-axis "Weight" 0 --> 7
-    bar [4, 5, 5, 6, 6, 7]
+    bar [5, 5, 6, 6, 9, 14]
 ```
 #### Melee
 A melee weapon damages the bot directly in front of your bot.
@@ -411,8 +411,7 @@ This can be achieved in the following way:
 Scenario.Named("Botz")
     .Arena(Arena.Sized(
             ArenaWidth.Is(5),
-            ArenaHeight.Is(3))
-        .Build())
+            ArenaHeight.Is(3)))
     .MaximumTurns(20)
     .CompletesWhen(_ => false)
     .Spawn(() => new DummyBot())
@@ -462,8 +461,7 @@ A seed can be supplied to make the game repeatable.
 Scenario.Named("Repeatable game")
     .Arena(Arena.Sized(
             ArenaWidth.Is(3),
-            ArenaHeight.Is(3))
-        .Build())
+            ArenaHeight.Is(3)))
     .MaximumTurns(20)
     .CompletesWhen(_ => false)
     .Spawn(() => new DummyBot())

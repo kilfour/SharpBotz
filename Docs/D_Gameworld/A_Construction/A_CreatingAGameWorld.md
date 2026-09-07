@@ -5,8 +5,7 @@ A seed can be supplied to make the game repeatable.
 Scenario.Named("Repeatable game")
     .Arena(Arena.Sized(
             ArenaWidth.Is(3),
-            ArenaHeight.Is(3))
-        .Build())
+            ArenaHeight.Is(3)))
     .MaximumTurns(20)
     .CompletesWhen(_ => false)
     .Spawn(() => new DummyBot())
