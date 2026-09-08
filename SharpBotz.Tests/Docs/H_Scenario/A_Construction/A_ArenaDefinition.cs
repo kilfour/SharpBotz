@@ -2,13 +2,13 @@ using QuickPulse.Explains;
 using SharpBotz.Arenas;
 using SharpBotz.Scenarios;
 
-namespace SharpBotz.Tests.Docs.C_Scenario.A_Construction;
+namespace SharpBotz.Tests.Docs.H_Scenario.A_Construction;
 
 [DocFile]
-public class A_ArenaDefinition
+public class F_ArenaDefinition
 {
     [Fact]
-    [DocExample(typeof(A_ArenaDefinition), nameof(GetScenario))]
+    [DocExample(typeof(F_ArenaDefinition), nameof(GetScenario))]
     public void Construction()
     {
         var arena =

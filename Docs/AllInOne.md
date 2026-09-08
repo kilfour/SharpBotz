@@ -1,57 +1,4 @@
 # SharpBotz
-## Arena
-### Creating A Simple Arena
-Begin constructing an `Arena` by calling the static `Sized` method,
-which takes an `ArenaWidth` and an `ArenaHeight`. Finish by calling `Build`:   
-```csharp
-Arena.Sized(
-        ArenaWidth.Is(3),
-        ArenaHeight.Is(3))
-    .Build();
-```
-This creates a 3 by 3 grid.  
-The outer tiles are set up as *Walls*  
-```text
-Wall Wall Wall
-Wall      Wall
-Wall Wall Wall
-```
-Both `ArenaWidth` and `ArenaHeight` must be greater than 2  
-### Adding Walls
-This can be achieved in the following way:  
-```csharp
-Arena
-    .Sized(
-        ArenaWidth.Is(5),
-        ArenaHeight.Is(3))
-    .AddWallAt(1, 1)
-    .AddWallAt(3, 1)
-    .Build();
-```
-This creates:  
-```text
-Wall Wall Wall Wall Wall
-Wall Wall      Wall Wall
-Wall Wall Wall Wall Wall
-```
-Placing a wall where one is already present:  
-```csharp
-Arena
-    .Sized(
-        ArenaWidth.Is(5),
-        ArenaHeight.Is(3))
-    .AddWallAt(1, 1)
-    .AddWallAt(1, 1)
-    .Build();
-```
-Throws a:  
-```csharp
-ArenaConstructionException
-```
-Containing the following message:  
-```text
-"Tried adding a wall to a non empty tile at [1, 1].";
-```
 ## Bot
 ### Modules
 Every module is defined by a `ModuleId`.  
@@ -396,15 +343,61 @@ ModuleRack.Create(
         .MaximumPower(1));
 ```
 This rack weighs **80**, leaving 20 weight available for future upgrades.  
+## Arena
+### Creating A Simple Arena
+Begin constructing an `Arena` by calling the static `Sized` method,
+which takes an `ArenaWidth` and an `ArenaHeight`. Finish by calling `Build`:   
+```csharp
+Arena.Sized(
+        ArenaWidth.Is(3),
+        ArenaHeight.Is(3))
+    .Build();
+```
+This creates a 3 by 3 grid.  
+The outer tiles are set up as *Walls*  
+```text
+Wall Wall Wall
+Wall      Wall
+Wall Wall Wall
+```
+Both `ArenaWidth` and `ArenaHeight` must be greater than 2  
+### Adding Walls
+This can be achieved in the following way:  
+```csharp
+Arena
+    .Sized(
+        ArenaWidth.Is(5),
+        ArenaHeight.Is(3))
+    .AddWallAt(1, 1)
+    .AddWallAt(3, 1)
+    .Build();
+```
+This creates:  
+```text
+Wall Wall Wall Wall Wall
+Wall Wall      Wall Wall
+Wall Wall Wall Wall Wall
+```
+Placing a wall where one is already present:  
+```csharp
+Arena
+    .Sized(
+        ArenaWidth.Is(5),
+        ArenaHeight.Is(3))
+    .AddWallAt(1, 1)
+    .AddWallAt(1, 1)
+    .Build();
+```
+Throws a:  
+```csharp
+ArenaConstructionException
+```
+Containing the following message:  
+```text
+"Tried adding a wall to a non empty tile at [1, 1].";
+```
 ## Scenario
 A scenario describes repeatable initial arena terrain and bot placement.  
-### Arena Definition
-```csharp
-Scenario.Named("My Scenario")
-    .Arena(arena)
-    .MaximumTurns(20)
-    .CompletesWhen(_ => false);
-```
 ### Adding Bots
 This can be achieved in the following way:  
 ```csharp
@@ -451,6 +444,13 @@ ArgumentException
 ```
 ```csharp
 $"A bot cannot weigh more than 1. Heavy's module rack weighs 28. (Parameter 'placement')";
+```
+### Arena Definition
+```csharp
+Scenario.Named("My Scenario")
+    .Arena(arena)
+    .MaximumTurns(20)
+    .CompletesWhen(_ => false);
 ```
 ## Game World
 A game world contains the mutable state of a running game.  

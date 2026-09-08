@@ -3,7 +3,7 @@ using SharpBotz.Arenas;
 using SharpBotz.Botz;
 using SharpBotz.Scenarios;
 
-namespace SharpBotz.Tests.Docs.C_Scenario.A_Construction;
+namespace SharpBotz.Tests.Docs.H_Scenario.A_Construction;
 
 [DocFile]
 public class C_AddingBots

@@ -1,6 +1,6 @@
 using QuickPulse.Explains;
 
-namespace SharpBotz.Tests.Docs.A_Arena;
+namespace SharpBotz.Tests.Docs.F_Arena;
 
 [DocFile]
 public class ArenaTests;

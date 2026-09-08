@@ -4,7 +4,7 @@ using SharpBotz.Botz;
 using SharpBotz.Botz.BotModules;
 using SharpBotz.Scenarios;
 
-namespace SharpBotz.Tests.Docs.C_Scenario;
+namespace SharpBotz.Tests.Docs.H_Scenario;
 
 [DocFile]
 public class ScenarioTests

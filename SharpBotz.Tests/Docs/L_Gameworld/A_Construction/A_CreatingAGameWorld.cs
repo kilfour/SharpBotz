@@ -4,7 +4,7 @@ using SharpBotz.Botz;
 using SharpBotz.Scenarios;
 using SharpBotz.Worlds;
 
-namespace SharpBotz.Tests.Docs.D_Gameworld.A_Construction;
+namespace SharpBotz.Tests.Docs.L_GameWorld.A_Construction;
 
 [DocFile]
 public class A_CreatingAGameWorld

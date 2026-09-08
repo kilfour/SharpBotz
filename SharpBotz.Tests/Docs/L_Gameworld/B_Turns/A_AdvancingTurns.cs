@@ -3,7 +3,7 @@ using SharpBotz.Arenas;
 using SharpBotz.Scenarios;
 using SharpBotz.Worlds;
 
-namespace SharpBotz.Tests.Docs.D_Gameworld.B_Turns;
+namespace SharpBotz.Tests.Docs.L_GameWorld.B_Turns;
 
 [DocFile]
 public class A_AdvancingTurns

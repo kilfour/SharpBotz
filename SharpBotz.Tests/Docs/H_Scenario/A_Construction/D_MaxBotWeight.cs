@@ -5,7 +5,7 @@ using SharpBotz.Botz.BotModules;
 using SharpBotz.Botz.BotModules.Thrusters;
 using SharpBotz.Scenarios;
 
-namespace SharpBotz.Tests.Docs.C_Scenario.A_Construction;
+namespace SharpBotz.Tests.Docs.H_Scenario.A_Construction;
 
 [DocFile]
 public class D_MaximumBotWeight
