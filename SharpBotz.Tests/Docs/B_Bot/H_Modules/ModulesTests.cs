@@ -1,7 +1,7 @@
 using QuickPulse.Explains;
 using SharpBotz.Botz.BotModules;
 
-namespace SharpBotz.Tests.Docs.B_Bot.A_Modules;
+namespace SharpBotz.Tests.Docs.B_Bot.H_Modules;
 
 [DocFile]
 public class ModulesTests

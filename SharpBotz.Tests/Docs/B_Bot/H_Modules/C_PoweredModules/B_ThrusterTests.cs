@@ -8,7 +8,7 @@ using SharpBotz.Botz.BotModules.Thrusters;
 using SharpBotz.Scenarios;
 using SharpBotz.Worlds;
 
-namespace SharpBotz.Tests.Docs.B_Bot.A_Modules.C_PoweredModules;
+namespace SharpBotz.Tests.Docs.B_Bot.H_Modules.C_PoweredModules;
 
 [DocFile]
 public class B_ThrusterTests

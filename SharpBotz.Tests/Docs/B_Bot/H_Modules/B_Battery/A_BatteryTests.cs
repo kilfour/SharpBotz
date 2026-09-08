@@ -2,7 +2,7 @@ using QuickPulse.Explains;
 using SharpBotz.Botz.BotModules;
 using SharpBotz.Botz.BotModules.Batteries;
 
-namespace SharpBotz.Tests.Docs.B_Bot.A_Modules.B_Battery;
+namespace SharpBotz.Tests.Docs.B_Bot.H_Modules.B_Battery;
 
 
 [DocFile]

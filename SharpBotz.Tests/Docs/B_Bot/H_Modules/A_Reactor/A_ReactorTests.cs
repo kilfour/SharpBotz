@@ -7,7 +7,7 @@ using SharpBotz.Botz.BotModules.Reactors;
 using SharpBotz.Scenarios;
 using SharpBotz.Worlds;
 
-namespace SharpBotz.Tests.Docs.B_Bot.A_Modules.A_Reactor;
+namespace SharpBotz.Tests.Docs.B_Bot.H_Modules.A_Reactor;
 
 
 [DocFile]
